@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://iemgseutkwau"]
+
+[ext_resource type="Script" uid="uid://d22jr3yl3wywu" path="res://scripts/checkout_desk.gd" id="1_gtf4q"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1fqmo"]
+size = Vector2(64, 80)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_b52xa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cnq0w"]
+size = Vector2(64, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l7wta"]
+size = Vector2(32, 32)
+
+[node name="CheckoutDesk" type="Area2D" unique_id=1181652669]
+script = ExtResource("1_gtf4q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=609892723]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_1fqmo")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=812905775]
+physics_material_override = SubResource("PhysicsMaterial_b52xa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2070029009]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_cnq0w")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D/CollisionShape2D" unique_id=1888792353]
+offset_left = -32.0
+offset_top = -48.0
+offset_bottom = -16.0
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1747127371]
+position = Vector2(-16, -16)
+shape = SubResource("RectangleShape2D_l7wta")
+
+[node name="ColorRect2" type="ColorRect" parent="StaticBody2D/CollisionShape2D2" unique_id=1332854445]
+offset_left = -16.0
+offset_top = 16.0
+offset_right = 48.0
+offset_bottom = 48.0
+
+[node name="SpriteMesa" type="Sprite2D" parent="." unique_id=186989239]
+
+[node name="SpriteCajero" type="Sprite2D" parent="." unique_id=780332096]

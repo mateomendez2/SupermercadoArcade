@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://7le6r5yuesr1"]
+
+[ext_resource type="Script" uid="uid://cv7883mckeuuj" path="res://scripts/main_menu.gd" id="1_sl1te"]
+
+[node name="MainMenu" type="Control" unique_id=2048693485]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sl1te")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=945979761]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.026944732, 4.2054244e-06, 0.18284875, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=731313772]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Titulo" type="Label" parent="VBoxContainer" unique_id=1649508902]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SUPERMERCADO ARCADE"
+
+[node name="BotonJugar" type="Button" parent="VBoxContainer" unique_id=156510508]
+layout_mode = 2
+text = "JUGAR"
+
+[node name="BotonSalir" type="Button" parent="VBoxContainer" unique_id=921560628]
+layout_mode = 2
+text = "SALIR"
+
+[connection signal="pressed" from="VBoxContainer/BotonJugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="VBoxContainer/BotonSalir" to="." method="_on_salir_pressed"]

@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://2p1pcvx3vjqv"]
+
+[ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="1_oa4jb"]
+[ext_resource type="Resource" uid="uid://cajqupe3i051c" path="res://resources/items/banana.tres" id="2_xg42o"]
+[ext_resource type="Shader" uid="uid://7i6acwqih0t8" path="res://scripts/light_reflex.gdshader" id="3_hdcvm"]
+[ext_resource type="Texture2D" uid="uid://cgfxeu5olh65n" path="res://assets/Banana.png" id="4_hdcvm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
+size = Vector2(56, 28)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51ki7"]
+shader = ExtResource("3_hdcvm")
+shader_parameter/shine_color = Color(1, 1, 1, 0.78431374)
+shader_parameter/shine_speed = 0.750000035625
+shader_parameter/shine_size = 0.10000000405148
+shader_parameter/shine_angle = 45.0
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_oa4jb")]
+item_content = ExtResource("2_xg42o")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+shape = SubResource("RectangleShape2D_nhkbj")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+region_rect = Rect2(64, 64, 64, 32)
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+material = SubResource("ShaderMaterial_51ki7")
+position = Vector2(18, 0)
+texture = ExtResource("4_hdcvm")
+region_enabled = false
+region_rect = Rect2(0, 0, 16, 16)

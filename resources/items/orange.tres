@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b365fjxeb47u8"]
+
+[ext_resource type="Texture2D" uid="uid://qsou8j1bhmcm" path="res://assets/Naranja.png" id="1_5jd5v"]
+[ext_resource type="Script" uid="uid://dxd5nknl72iln" path="res://scripts/item_data.gd" id="1_i12sq"]
+
+[resource]
+script = ExtResource("1_i12sq")
+item_name = "Naranja"
+icon = ExtResource("1_5jd5v")
+metadata/_custom_type_script = "uid://dxd5nknl72iln"

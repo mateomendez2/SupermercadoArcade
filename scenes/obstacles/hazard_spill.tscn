@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://nj44eb6n5i2"]
+
+[ext_resource type="Script" uid="uid://df1l615ct5q1m" path="res://scripts/hazard_spill.gd" id="1_ppktu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1tqy6"]
+size = Vector2(64, 64)
+
+[node name="HazardSpill" type="Area2D" unique_id=1949423888]
+script = ExtResource("1_ppktu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=924155765]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=657953818]
+shape = SubResource("RectangleShape2D_1tqy6")

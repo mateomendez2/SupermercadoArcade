@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://div0hovqwnvet"]
+
+[ext_resource type="Script" uid="uid://ump0wp3dfprf" path="res://scripts/interactable.gd" id="1_khwtm"]
+[ext_resource type="Texture2D" uid="uid://cnummiik1lhu4" path="res://assets/gondolas.png" id="2_5w31u"]
+[ext_resource type="Shader" uid="uid://7i6acwqih0t8" path="res://scripts/light_reflex.gdshader" id="3_p3rrf"]
+[ext_resource type="Texture2D" uid="uid://kd4p1rn4uwqb" path="res://assets/Manzana.png" id="4_p3rrf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
+size = Vector2(56, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_p3rrf"]
+size = Vector2(56, 24)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51ki7"]
+shader = ExtResource("3_p3rrf")
+shader_parameter/shine_color = Color(1, 1, 1, 0.5882353)
+shader_parameter/shine_speed = 0.750000035625
+shader_parameter/shine_size = 0.10000000405148
+shader_parameter/shine_angle = 45.0
+
+[node name="Interactable" type="Area2D" unique_id=1647453037]
+script = ExtResource("1_khwtm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=599446482]
+shape = SubResource("RectangleShape2D_nhkbj")
+
+[node name="SolidWall" type="StaticBody2D" parent="." unique_id=1867264389]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SolidWall" unique_id=875642291]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_p3rrf")
+
+[node name="ShelfVisual" type="Sprite2D" parent="." unique_id=1981411517]
+texture = ExtResource("2_5w31u")
+region_enabled = true
+region_rect = Rect2(64, 0, 64, 32)
+
+[node name="ItemVisual" type="Sprite2D" parent="." unique_id=126991651]
+material = SubResource("ShaderMaterial_51ki7")
+position = Vector2(21, 3)
+texture = ExtResource("4_p3rrf")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
