@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d4mmwy1i1atb"
-path="res://.godot/imported/CaminarIzq.png-37f92e5a9fe5ce9d5003da3d18002058.ctex"
+uid="uid://xda87s4wh6s6"
+path="res://.godot/imported/personajeagarraizquierda.png-396560e387413bc611d3f5b30516e482.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/CaminarIzq.png"
-dest_files=["res://.godot/imported/CaminarIzq.png-37f92e5a9fe5ce9d5003da3d18002058.ctex"]
+source_file="res://assets/personajeagarraizquierda.png"
+dest_files=["res://.godot/imported/personajeagarraizquierda.png-396560e387413bc611d3f5b30516e482.ctex"]
 
 [params]
 

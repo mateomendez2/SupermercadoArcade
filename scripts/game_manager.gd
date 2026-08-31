@@ -93,20 +93,27 @@ func intentar_pagar() -> void:
 var gondola_actual: Interactable = null
 signal start_qte_ui # Le avisa al Main que muestre el minijuego
 
-# 1. La góndola pide permiso para iniciar el minijuego
 func request_qte(gondola: Interactable) -> void:
 	gondola_actual = gondola
-	start_qte_ui.emit() # Gritamos que empiece la UI
+	
+	# NUEVO: Congelamos al jugador apenas sale la barrita
+	var jugador = get_tree().get_first_node_in_group("Player")
+	if jugador: jugador.is_frozen = true
+	
+	start_qte_ui.emit() 
 
-# 2. El minijuego avisa que ya terminó y si ganamos o no
 func resolve_qte(success: bool) -> void:
 	if success:
 		print("GameManager: ¡QTE Superado!")
-		gondola_actual.succesful_interaction() # Le decimos a la góndola que nos dé la fruta
+		gondola_actual.succesful_interaction() 
+		# No lo descongelamos acá porque ahora viene la animación de recoger
 	else:
 		print("GameManager: ¡Fallaste el QTE!")
-		# Opcional: Aquí podrías restar tiempo como penalización
-	
+		
+		# NUEVO: Si falló, lo descongelamos para que pueda volver a intentar o irse
+		var jugador = get_tree().get_first_node_in_group("Player")
+		if jugador: jugador.is_frozen = false
+		
 	gondola_actual = null
 
 func _process(delta: float) -> void:

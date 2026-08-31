@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://pbsipxs4l5st"
-path="res://.godot/imported/CaminarFren.png-e8ae77879da3ce37eb302e85989b04f6.ctex"
+uid="uid://drcsftcyv36pn"
+path="res://.godot/imported/personajeagarraderecha.png-60847d35fcc1caa9b797879fc39eb1e5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/CaminarFren.png"
-dest_files=["res://.godot/imported/CaminarFren.png-e8ae77879da3ce37eb302e85989b04f6.ctex"]
+source_file="res://assets/personajeagarraderecha.png"
+dest_files=["res://.godot/imported/personajeagarraderecha.png-60847d35fcc1caa9b797879fc39eb1e5.ctex"]
 
 [params]
 

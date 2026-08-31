@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cw4oq3sw6yvb3"
-path="res://.godot/imported/CaminarEsp.png-3224cb362fa81a07c24e4955996ead3d.ctex"
+uid="uid://clnj6vuj3y4x0"
+path="res://.godot/imported/personajeagarraarriba.png-0e8674b5e9818e39e85a4be48bdb2e24.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/CaminarEsp.png"
-dest_files=["res://.godot/imported/CaminarEsp.png-3224cb362fa81a07c24e4955996ead3d.ctex"]
+source_file="res://assets/personajeagarraarriba.png"
+dest_files=["res://.godot/imported/personajeagarraarriba.png-0e8674b5e9818e39e85a4be48bdb2e24.ctex"]
 
 [params]
 

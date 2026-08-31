@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bgl3u4blwd5d2"
-path="res://.godot/imported/CaminarDer.png-9dd0947489fbc6439f9bcf2fa1a39ec8.ctex"
+uid="uid://doim782u687si"
+path="res://.godot/imported/personajeagarraabajo.png-961897755a9cb8cbbe70793e0c156738.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/CaminarDer.png"
-dest_files=["res://.godot/imported/CaminarDer.png-9dd0947489fbc6439f9bcf2fa1a39ec8.ctex"]
+source_file="res://assets/personajeagarraabajo.png"
+dest_files=["res://.godot/imported/personajeagarraabajo.png-961897755a9cb8cbbe70793e0c156738.ctex"]
 
 [params]
 
