@@ -677,6 +677,7 @@ tile_map_data = PackedByteArray("AAAAAP7/AQAAAAAAAAAAAP//AQAAAAEAAAAAAAAAAQAAAAI
 tile_set = SubResource("TileSet_wndmy")
 
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("1_8qrae")]
+unique_name_in_owner = true
 position = Vector2(226, 188)
 
 [node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("7_uc16u")]

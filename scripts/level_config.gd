@@ -3,9 +3,13 @@ extends Node2D
 @export var frutas_del_nivel: Array[ItemData]
 @export var tiempo_del_nivel: float = 90.0
 @export var cajas_activas: int = 2 
+# NUEVA LÍNEA: Casillero para arrastrar al jugador
+@onready var jugador: CharacterBody2D = %Player
 
 # Guardamos la lista a nivel global del script para usarla varias veces
 var mis_cajas: Array = []
+# NUEVA LÍNEA: Memoria del turno anterior
+var cajas_viejas: Array = []
 
 func _ready() -> void:
 	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
@@ -26,39 +30,43 @@ func _ready() -> void:
 	bucle_de_tiempo_aleatorio()
 
 # --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
+# --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
 func mezclar_cajas() -> void:
 	mis_cajas.shuffle() # Mezclamos la baraja
 	
-	# Buscamos al jugador en el mapa
-	var jugador = get_tree().get_first_node_in_group("Player")
-	var cajas_encendidas = 0 # Llevamos la cuenta de cuántas vamos encendiendo
-	
-	# NUEVO PRINT CHISMOSO:
-	print("Buscando al jugador... Resultado: ", jugador)
+	var cajas_encendidas = 0 
+	var nuevas_cajas_viejas: Array = [] # Las que encendamos HOY, serán las viejas de MAÑANA
 	
 	for caja in mis_cajas:
 		var es_seguro_encender = true
 		
-		# Si el jugador existe, medimos la distancia matemática
+		# REGLA 1: Distancia al jugador
 		if jugador != null:
-			# global_position nos da la coordenada exacta en el mapa
 			var distancia = caja.global_position.distance_to(jugador.global_position)
-			
-			# Si la caja está a menos de 60 píxeles del jugador (casi tocándolo)
-			print("Posición Caja: ", caja.global_position, " | Posición Jugador: ", jugador.global_position)
-			if distancia < 200.0:
+			if distancia < 60.0:
 				es_seguro_encender = false
+				
+		# REGLA 2 (NUEVA): Anti-Repetición
+		# Si esta caja está en la memoria del turno anterior, la prohibimos
+		if caja in cajas_viejas:
+			es_seguro_encender = false
 		
-		# Si todavía nos faltan encender cajas Y el lugar es seguro...
+		# Evaluamos si la encendemos o la apagamos
 		if cajas_encendidas < cajas_activas and es_seguro_encender:
 			# ENCENDER CAJA
 			caja.show() 
 			caja.process_mode = Node.PROCESS_MODE_INHERIT 
-			cajas_encendidas += 1 # Contamos que encendimos una
+			cajas_encendidas += 1 
+			
+			# La anotamos en la lista de memoria
+			nuevas_cajas_viejas.append(caja)
 		else:
-			# APAGAR CAJA (O porque está muy cerca, o porque ya encendimos suficientes)
+			# APAGAR CAJA
 			caja.hide() 
 			caja.process_mode = Node.PROCESS_MODE_DISABLED
+
+	# Al final de todo el proceso, sobreescribimos la memoria para el PRÓXIMO turno
+	cajas_viejas = nuevas_cajas_viejas
 
 # --- LOS GATILLOS (Lo que provoca que se mezclen) ---
 
