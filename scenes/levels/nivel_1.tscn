@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="8_rh4ec"]
 [ext_resource type="PackedScene" uid="uid://iemgseutkwau" path="res://scenes/objects/checkout_desk.tscn" id="9_vhmxl"]
 [ext_resource type="PackedScene" uid="uid://ci0ckyftwdhly" path="res://scenes/obstacles/obstacle_box.tscn" id="14_11fms"]
+[ext_resource type="PackedScene" uid="uid://2hlx1cbdrxa1" path="res://scenes/obstacles/moving_npc.tscn" id="15_oopf4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uc16u"]
 texture = ExtResource("2_uc16u")
@@ -661,6 +662,7 @@ sources/1 = SubResource("TileSetAtlasSource_rh4ec")
 y_sort_enabled = true
 script = ExtResource("1_82jax")
 frutas_del_nivel = Array[ExtResource("2_72usu")]([ExtResource("3_11fms"), ExtResource("4_oopf4")])
+charcos_activos = 1
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1704604197]
 z_index = -1
@@ -679,9 +681,6 @@ tile_set = SubResource("TileSet_wndmy")
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("1_8qrae")]
 unique_name_in_owner = true
 position = Vector2(226, 188)
-
-[node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("7_uc16u")]
-position = Vector2(256, 64)
 
 [node name="Interactable4" parent="." unique_id=1759099896 instance=ExtResource("8_rh4ec")]
 position = Vector2(320, 16)
@@ -789,7 +788,7 @@ position = Vector2(208, 144)
 position = Vector2(336, 176)
 
 [node name="ObstacleBox3" parent="." unique_id=2052167080 instance=ExtResource("14_11fms")]
-position = Vector2(208, 272)
+position = Vector2(80, 240)
 
 [node name="ObstacleBox4" parent="." unique_id=1816402831 instance=ExtResource("14_11fms")]
 position = Vector2(80, 144)
@@ -802,3 +801,23 @@ position = Vector2(432, 272)
 
 [node name="ObstacleBox7" parent="." unique_id=670031186 instance=ExtResource("14_11fms")]
 position = Vector2(432, 208)
+
+[node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("7_uc16u")]
+position = Vector2(256, 64)
+
+[node name="HazardSpill2" parent="." unique_id=1312803059 instance=ExtResource("7_uc16u")]
+position = Vector2(96, 320)
+
+[node name="HazardSpill3" parent="." unique_id=524601528 instance=ExtResource("7_uc16u")]
+position = Vector2(448, 128)
+
+[node name="HazardSpill4" parent="." unique_id=694686905 instance=ExtResource("7_uc16u")]
+position = Vector2(384, 352)
+
+[node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
+position = Vector2(80, 272)
+
+[node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
+position = Vector2(192, 0)
+
+[editable path="MovingNPC"]

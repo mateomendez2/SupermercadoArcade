@@ -117,7 +117,7 @@ func set_slippery(is_slippery: bool) -> void:
 		acceleration = default_acceleration
 
 # --- ANIMACIÓN DE RECOLECCIÓN ---
-func _on_item_recolectado(item: ItemData) -> void:
+func _on_item_recolectado(_item: ItemData) -> void:
 	# 1. Congelamos al jugador para que no pueda caminar
 	is_frozen = true 
 	

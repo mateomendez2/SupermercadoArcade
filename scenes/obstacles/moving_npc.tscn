@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://2hlx1cbdrxa1"]
+
+[ext_resource type="Script" uid="uid://cgcskj5s35djk" path="res://scripts/moving_npc.gd" id="1_o4fq0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d47hv"]
+size = Vector2(32, 32)
+
+[node name="MovingNPC" type="Node2D" unique_id=1691588292]
+script = ExtResource("1_o4fq0")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1116084462]
+
+[node name="ColorRect" type="ColorRect" parent="Hitbox" unique_id=91969361]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.9019608, 0.2, 0.38039216, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1028322893]
+shape = SubResource("RectangleShape2D_d47hv")
+
+[node name="PuntoFinal" type="Marker2D" parent="." unique_id=1636385908]
+position = Vector2(64, 0)

@@ -5,28 +5,36 @@ extends Node2D
 @export var cajas_activas: int = 2 
 # NUEVA LÍNEA: Casillero para arrastrar al jugador
 @onready var jugador: CharacterBody2D = %Player
+@export var charcos_activos: int = 2
 
 # Guardamos la lista a nivel global del script para usarla varias veces
 var mis_cajas: Array = []
 # NUEVA LÍNEA: Memoria del turno anterior
 var cajas_viejas: Array = []
 
+var mis_charcos: Array = []
+var charcos_viejos: Array = []
+
 func _ready() -> void:
 	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
 	
-	# 1. Buscamos nuestras cajas (¡Esto ya lo sabes hacer!)
+	# Buscamos nuestras cajas
 	var todas_las_cajas = get_tree().get_nodes_in_group("CajasObstaculo")
 	for caja in todas_las_cajas:
 		if self.is_ancestor_of(caja):
 			mis_cajas.append(caja)
 			
-	# 2. Mezclamos por primera vez al arrancar el nivel
+	# Buscamos nuestros charcos
+	var todos_los_charcos = get_tree().get_nodes_in_group("CharcosObstaculo")
+	for charco in todos_los_charcos:
+		if self.is_ancestor_of(charco):
+			mis_charcos.append(charco)
+			
+	# Mezclamos AMBOS por primera vez al arrancar el nivel
 	mezclar_cajas()
+	mezclar_charcos()
 	
-	# 3. Le pedimos al GameManager que nos avise cuando se agarre una fruta
 	GameManager.item_collected.connect(_on_item_recolectado)
-	
-	# 4. Arrancamos el ciclo del reloj aleatorio
 	bucle_de_tiempo_aleatorio()
 
 # --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
@@ -71,22 +79,48 @@ func mezclar_cajas() -> void:
 # --- LOS GATILLOS (Lo que provoca que se mezclen) ---
 
 # Gatillo 1: Cuando agarramos una fruta
-func _on_item_recolectado(item: ItemData) -> void:
-	print("¡Fruta agarrada! Mezclando cajas...")
+func _on_item_recolectado(_item: ItemData) -> void:
+	print("¡Fruta agarrada! Mezclando obstáculos...")
 	mezclar_cajas()
+	mezclar_charcos() # Ahora también mezcla los charcos al ganar un QTE
 
 # Gatillo 2: El tiempo aleatorio
 func bucle_de_tiempo_aleatorio() -> void:
-	# Elegimos un tiempo al azar, por ejemplo entre 5 y 10 segundos
 	var tiempo_azar = randf_range(10.0, 15.0) 
 	
-	# Esperamos ese tiempo sin congelar el juego (Corrutina)
 	await get_tree().create_timer(tiempo_azar).timeout
 	
-	# Comprobamos que el juego no haya terminado
 	if GameManager.juego_activo:
-		print("¡Evento de Tiempo! Mezclando cajas...")
+		print("¡Evento de Tiempo! Mezclando obstáculos...")
 		mezclar_cajas()
+		mezclar_charcos() # Ahora el tiempo también mueve los charcos
 		
-		# Volvemos a llamarnos a nosotros mismos para crear un ciclo infinito
+		# Volvemos a llamarnos a nosotros mismos para crear el ciclo infinito
 		bucle_de_tiempo_aleatorio()
+
+# --- LA FUNCIÓN QUE MEZCLA LOS CHARCOS ---
+func mezclar_charcos() -> void:
+	mis_charcos.shuffle() 
+	
+	var charcos_encendidos = 0 
+	var nuevos_charcos_viejos: Array = [] 
+	
+	for charco in mis_charcos:
+		var es_seguro_encender = true
+		
+		# Anti-Repetición: Si estuvo prendido el turno anterior, lo prohibimos
+		if charco in charcos_viejos:
+			es_seguro_encender = false
+		
+		if charcos_encendidos < charcos_activos and es_seguro_encender:
+			# ENCENDER CHARCO
+			charco.show() 
+			charco.process_mode = Node.PROCESS_MODE_INHERIT 
+			charcos_encendidos += 1 
+			nuevos_charcos_viejos.append(charco)
+		else:
+			# APAGAR CHARCO
+			charco.hide() 
+			charco.process_mode = Node.PROCESS_MODE_DISABLED
+
+	charcos_viejos = nuevos_charcos_viejos
