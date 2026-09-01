@@ -16,12 +16,23 @@ func _ready() -> void:
 # Función que llama el GameManager para arrancar el minijuego
 func start_qte() -> void:
 	show()
-	cursor.position.x = barra_roja.position.x # Reiniciamos la aguja a la izquierda
+	# Reiniciamos la aguja a la izquierda
+	cursor.position.x = barra_roja.position.x 
 	direction = 1
 	
-	# TRUCO DE SENIOR: Esperamos un frame antes de activarlo. 
-	# Si no hacemos esto, la misma tecla "E" que usaste para abrir la góndola 
-	# cerrará el QTE en el mismo milisegundo.
+	# --- LÓGICA ALEATORIA PARA LA ZONA VERDE/NARANJA ---
+	# 1. Calculamos desde dónde hasta dónde se puede mover sin salirse de la barra
+	var limite_izquierdo = barra_roja.position.x
+	var limite_derecho = barra_roja.position.x + barra_roja.size.x - zona_verde.size.x
+	
+	# 2. Elegimos una posición X al azar (randf_range tira un número con decimales entre dos valores)
+	var nueva_posicion_x = randf_range(limite_izquierdo, limite_derecho)
+	
+	# 3. Movemos nuestra zona verde a esa nueva posición
+	zona_verde.position.x = nueva_posicion_x
+	# ---------------------------------------------------
+	
+	# Esperamos un frame para evitar que se cierre de golpe
 	await get_tree().process_frame 
 	is_active = true
 

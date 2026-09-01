@@ -28,31 +28,20 @@ func _ready() -> void:
 	pass # Ya no generamos la lista aquí automáticamente
 
 # --- LÓGICA DE GENERACIÓN ---
-func generate_random_list(amount: int) -> void:
+# Ahora recibimos la lista exacta de frutas y el tiempo
+func iniciar_nivel(items_necesarios: Array[ItemData], tiempo_asignado: float) -> void:
 	target_list.clear()
 	collected_items.clear()
 	
-	# Truco de Senior: Duplicamos la base de datos temporalmente
-	# para poder mezclarla y sacar cosas sin romper la original.
-	var temp_db = database.duplicate()
-	temp_db.shuffle() # Mezcla el arreglo aleatoriamente
-	
-	# Sacamos los primeros X objetos y los metemos a la lista objetivo
-	for i in range(amount):
-		if temp_db.size() > 0:
-			var random_item = temp_db.pop_front() # pop_front saca el primero y lo borra
-			target_list.append(random_item)
+	# Usamos EXACTAMENTE la lista que nos pasó el nivel
+	# Usamos duplicate() por seguridad para no modificar el archivo original
+	target_list = items_necesarios.duplicate()
 			
-	print("--- NUEVA PARTIDA ---")
-	print("Debes buscar: ")
-	for item in target_list:
-		print("- ", item.item_name)
-		
-	# Le avisamos a la interfaz gráfica cuáles son
+	# Le avisamos a la Interfaz para que escriba los nombres
 	list_generated.emit(target_list)
 	
 	# Encendemos el reloj
-	tiempo_restante = 90.0
+	tiempo_restante = tiempo_asignado
 	juego_activo = true
 
 # --- LÓGICA DE RECOLECCIÓN ---

@@ -1,8 +1,12 @@
 [gd_scene format=4 uid="uid://cr1l4dencybhe"]
 
 [ext_resource type="PackedScene" uid="uid://l6ce1m273n15" path="res://scenes/characters/player.tscn" id="1_8qrae"]
+[ext_resource type="Script" uid="uid://b18pyff1crh7e" path="res://scripts/level_config.gd" id="1_82jax"]
+[ext_resource type="Script" uid="uid://dxd5nknl72iln" path="res://scripts/item_data.gd" id="2_72usu"]
 [ext_resource type="Texture2D" uid="uid://cnummiik1lhu4" path="res://assets/gondolas.png" id="2_s28vq"]
 [ext_resource type="Texture2D" uid="uid://cn6eocf0dme6x" path="res://assets/ParedesySuelo.png" id="2_uc16u"]
+[ext_resource type="Resource" uid="uid://c2hcnm3r421sg" path="res://resources/items/apple.tres" id="3_11fms"]
+[ext_resource type="Resource" uid="uid://b365fjxeb47u8" path="res://resources/items/orange.tres" id="4_oopf4"]
 [ext_resource type="PackedScene" uid="uid://b4gscj3tiyrfp" path="res://scenes/objects/crate_orange.tscn" id="4_s28vq"]
 [ext_resource type="PackedScene" uid="uid://2p1pcvx3vjqv" path="res://scenes/objects/crate_banana.tscn" id="5_uc16u"]
 [ext_resource type="PackedScene" uid="uid://d2ji3487s2phx" path="res://scenes/objects/crate_apple.tscn" id="6_rh4ec"]
@@ -652,8 +656,10 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_rh4ec")
 
-[node name="Node2D" type="Node2D" unique_id=1358974874]
+[node name="Nivel_1" type="Node2D" unique_id=1358974874]
 y_sort_enabled = true
+script = ExtResource("1_82jax")
+frutas_del_nivel = Array[ExtResource("2_72usu")]([ExtResource("3_11fms"), ExtResource("4_oopf4")])
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1704604197]
 z_index = -1
@@ -670,7 +676,7 @@ tile_map_data = PackedByteArray("AAAAAP7/AQAAAAAAAAAAAP//AQAAAAEAAAAAAAAAAQAAAAI
 tile_set = SubResource("TileSet_wndmy")
 
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("1_8qrae")]
-position = Vector2(864, 128)
+position = Vector2(226, 188)
 
 [node name="Interactable" parent="." unique_id=1647453037 instance=ExtResource("5_uc16u")]
 position = Vector2(96, 264)

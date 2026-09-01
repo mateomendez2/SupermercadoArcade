@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pvppfdsw8t6b"]
 
-[ext_resource type="PackedScene" uid="uid://cr1l4dencybhe" path="res://scenes/levels/prueba_temporal.tscn" id="1_0ay0p"]
+[ext_resource type="PackedScene" uid="uid://cr1l4dencybhe" path="res://scenes/levels/nivel_1.tscn" id="1_0ay0p"]
 [ext_resource type="Script" uid="uid://bpl405whge16y" path="res://scripts/ui_manager.gd" id="2_2p1s2"]
 [ext_resource type="PackedScene" uid="uid://cfr8u4ga4ww1u" path="res://scenes/ui/qte_minigame.tscn" id="3_02nsg"]
 

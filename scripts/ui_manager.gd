@@ -12,24 +12,18 @@ var etiquetas_items: Dictionary = {}
 @onready var reloj_visual: Label = %RelojVisual
 
 func _ready() -> void:
-	# 1. Nos suscribimos a las señales
+	# 1. Nos suscribimos a todas las señales
 	GameManager.list_generated.connect(_on_lista_generada)
 	GameManager.item_collected.connect(_on_item_recolectado)
-	
-	# 2. AHORA que ya estamos escuchando, le decimos al Gestor que arme la lista
-	GameManager.generate_random_list(3)
-	
-	# Conectamos la señal global con la función de la barrita
-	GameManager.start_qte_ui.connect(%QTE_Minigame.start_qte)
-	# Cuando la barrita termine, le avisa al GameManager
-	%QTE_Minigame.qte_finished.connect(GameManager.resolve_qte)
-	
-	GameManager.game_won.connect(_on_victoria)
-	
 	GameManager.time_updated.connect(_on_tiempo_actualizado)
 	GameManager.game_over_reached.connect(_on_game_over)
+	GameManager.game_won.connect(_on_victoria)
 	
-	GameManager.generate_random_list(3)
+	GameManager.start_qte_ui.connect(%QTE_Minigame.start_qte)
+	%QTE_Minigame.qte_finished.connect(GameManager.resolve_qte)
+	
+	# NUEVA LÍNEA: Le decimos a la UI que lea la lista del GameManager directamente por si no escuchó el grito
+	_on_lista_generada(GameManager.target_list)
 
 # 1. Cuando arranca el nivel y el GameManager elige los 3 objetos al azar:
 func _on_lista_generada(target_list: Array[ItemData]) -> void:
