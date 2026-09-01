@@ -66,7 +66,7 @@ canvas_item_default_texture_filter = 0
 size = Vector2i(352, 306)
 render_target_update_mode = 4
 
-[node name="Node2D" parent="VBoxContainer/HBoxContainer/GameScreen/SubViewport" unique_id=1358974874 instance=ExtResource("1_0ay0p")]
+[node name="Nivel_1" parent="VBoxContainer/HBoxContainer/GameScreen/SubViewport" unique_id=1358974874 instance=ExtResource("1_0ay0p")]
 
 [node name="RightUI" type="Panel" parent="VBoxContainer/HBoxContainer" unique_id=1242660594]
 custom_minimum_size = Vector2(140, 0)
