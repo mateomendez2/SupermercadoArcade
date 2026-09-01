@@ -657,7 +657,7 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_rh4ec")
 
-[node name="Nivel_1" type="Node2D" unique_id=1358974874]
+[node name="Nivel_1" type="Node2D" unique_id=1358974874 groups=["CajasObstaculo"]]
 y_sort_enabled = true
 script = ExtResource("1_82jax")
 frutas_del_nivel = Array[ExtResource("2_72usu")]([ExtResource("3_11fms"), ExtResource("4_oopf4")])

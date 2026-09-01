@@ -46,7 +46,7 @@ func mezclar_cajas() -> void:
 			
 			# Si la caja está a menos de 60 píxeles del jugador (casi tocándolo)
 			print("Posición Caja: ", caja.global_position, " | Posición Jugador: ", jugador.global_position)
-			if distancia < 120.0:
+			if distancia < 200.0:
 				es_seguro_encender = false
 		
 		# Si todavía nos faltan encender cajas Y el lugar es seguro...
