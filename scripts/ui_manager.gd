@@ -1,4 +1,4 @@
-extends Panel
+extends TextureRect
 
 @onready var lista_visual: VBoxContainer = $ListaVisual
 @onready var pantalla_resultados: ColorRect = %PantallaResultados
@@ -38,6 +38,8 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 		var nuevo_texto = Label.new()
 		nuevo_texto.text = "[ ] " + item.item_name # Arrancan con una cajita vacía
 		
+		nuevo_texto.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+		
 		# Lo añadimos a la pantalla
 		lista_visual.add_child(nuevo_texto)
 		
@@ -46,14 +48,12 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 
 # 2. Cuando el jugador agarra el objeto correcto de la góndola:
 func _on_item_recolectado(item: ItemData) -> void:
-	
-	# Buscamos la etiqueta de ese ítem en nuestro diccionario
 	if etiquetas_items.has(item.item_name):
 		var etiqueta: Label = etiquetas_items[item.item_name]
 		
-		# Le ponemos una X y lo pintamos de verde (¡Game Feel!)
 		etiqueta.text = "[X] " + item.item_name
-		etiqueta.modulate = Color.GREEN
+		# Cambiamos el color a un rojo birome o lo dejamos oscuro, pero tachado!
+		etiqueta.add_theme_color_override("font_color", Color(0.6, 0.1, 0.1))
 		
 
 func mostrar_resultados(mensaje: String) -> void:

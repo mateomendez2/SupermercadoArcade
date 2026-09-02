@@ -11,6 +11,8 @@ extends Node2D
 
 func _ready() -> void:
 	iniciar_patrullaje()
+	# Conectamos la señal de la Hitbox
+	hitbox.body_entered.connect(_on_hitbox_body_entered)
 
 func iniciar_patrullaje() -> void:
 	# Creamos una animación por código que se repita infinitamente
@@ -27,3 +29,9 @@ func iniciar_patrullaje() -> void:
 	
 	# 4. Esperar antes de volver a arrancar
 	patrulla_tween.tween_interval(tiempo_espera)
+
+func _on_hitbox_body_entered(body: Node2D) -> void:
+	# Si lo que chocó con nosotros es el Jugador...
+	if body is Player:
+		# Le aplicamos 5 segundos de castigo
+		body.apply_penalty(3.0)

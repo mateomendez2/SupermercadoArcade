@@ -95,11 +95,12 @@ func resolve_qte(success: bool) -> void:
 	if success:
 		print("GameManager: ¡QTE Superado!")
 		gondola_actual.succesful_interaction() 
-		# No lo descongelamos acá porque ahora viene la animación de recoger
 	else:
 		print("GameManager: ¡Fallaste el QTE!")
 		
-		# NUEVO: Si falló, lo descongelamos para que pueda volver a intentar o irse
+		# NUEVA LÍNEA: Le avisamos a la góndola para que sume el fallo
+		gondola_actual.failed_interaction() 
+		
 		var jugador = get_tree().get_first_node_in_group("Player")
 		if jugador: jugador.is_frozen = false
 		

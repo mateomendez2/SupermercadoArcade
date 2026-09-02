@@ -23,6 +23,8 @@ var current_interactable: Interactable = null
 # Variable para recordar hacia dónde miramos por última vez (por defecto a la derecha)
 var last_direction: Vector2 = Vector2(1, 0)
 
+var is_penalized: bool = false
+
 func _ready() -> void:
 	interaction_area.area_entered.connect(_on_area_entered)
 	interaction_area.area_exited.connect(_on_area_exited)
@@ -106,8 +108,8 @@ func set_slippery(is_slippery: bool) -> void:
 	if is_slippery:
 		# Modo Patinaje torpe: 
 		# Fricción baja (resbala), Aceleración baja (le cuesta arrancar)...
-		friction = 200.0 
-		acceleration = 400.0
+		friction = 100.0 
+		acceleration = 200.0
 		# ¡Y cortamos la velocidad a la mitad!
 		speed = default_speed / 2.0
 	else:
@@ -138,3 +140,29 @@ func _on_item_recolectado(_item: ItemData) -> void:
 	# 4. Le devolvemos el control al jugador
 	is_frozen = false 
 	update_animation(false) # Forzamos a que vuelva al estado Idle (respirar)
+
+# --- SISTEMA DE PENALIZACIÓN ---
+func apply_penalty(duracion: float) -> void:
+	# Si ya estamos castigados, ignoramos el nuevo choque
+	if is_penalized: return 
+	
+	is_penalized = true
+	print("¡Jugador golpeado! Castigo de ", duracion, " segundos.")
+	
+	# 1. Reducimos la velocidad a la mitad
+	speed = default_speed / 2.0
+	
+	# 2. Efecto de parpadeo (Blinking) con un Tween infinito
+	var blink_tween = create_tween().set_loops()
+	# modulate:a modifica el "Alpha" (Transparencia) del sprite
+	blink_tween.tween_property(anim_sprite, "modulate:a", 0.3, 0.15) # Se hace casi invisible
+	blink_tween.tween_property(anim_sprite, "modulate:a", 1.0, 0.15) # Vuelve a ser visible
+	
+	# 3. Esperamos el tiempo del castigo (5 segundos)
+	await get_tree().create_timer(duracion).timeout
+	
+	# 4. Volvemos a la normalidad
+	speed = default_speed
+	blink_tween.kill() # Destruimos la animación de parpadeo
+	anim_sprite.modulate.a = 1.0 # Nos aseguramos de que quede 100% visible
+	is_penalized = false

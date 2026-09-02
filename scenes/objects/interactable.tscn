@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cnummiik1lhu4" path="res://assets/gondolas.png" id="2_5w31u"]
 [ext_resource type="Shader" uid="uid://7i6acwqih0t8" path="res://scripts/light_reflex.gdshader" id="3_p3rrf"]
 [ext_resource type="Texture2D" uid="uid://kd4p1rn4uwqb" path="res://assets/Manzana.png" id="4_p3rrf"]
+[ext_resource type="Texture2D" uid="uid://dhnaagb34uo0r" path="res://assets/relojdetiempo.png" id="5_51ki7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
 size = Vector2(56, 32)
@@ -41,3 +42,9 @@ position = Vector2(21, 3)
 texture = ExtResource("4_p3rrf")
 region_enabled = true
 region_rect = Rect2(16, 0, 16, 16)
+
+[node name="CooldownClock" type="Sprite2D" parent="." unique_id=128490287]
+visible = false
+position = Vector2(0, -16)
+texture = ExtResource("5_51ki7")
+hframes = 8

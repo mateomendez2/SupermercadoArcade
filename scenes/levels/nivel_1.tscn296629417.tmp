@@ -816,8 +816,6 @@ position = Vector2(384, 352)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
 position = Vector2(80, 272)
-tiempo_caminando = null
-tiempo_espera = null
 
 [node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
 position = Vector2(192, 0)
