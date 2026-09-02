@@ -31,6 +31,7 @@ shape = SubResource("RectangleShape2D_cnq0w")
 offset_left = -32.0
 offset_top = -48.0
 offset_bottom = -16.0
+color = Color(1, 0.14117648, 1, 1)
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1747127371]
 position = Vector2(-16, -16)
@@ -41,6 +42,7 @@ offset_left = -16.0
 offset_top = 16.0
 offset_right = 48.0
 offset_bottom = 48.0
+color = Color(1, 0.14117648, 1, 1)
 
 [node name="SpriteMesa" type="Sprite2D" parent="." unique_id=186989239]
 

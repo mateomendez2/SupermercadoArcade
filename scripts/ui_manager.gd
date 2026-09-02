@@ -36,14 +36,16 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 	# Creamos un texto nuevo por cada ítem que nos pide el juego
 	for item in target_list:
 		var nuevo_texto = Label.new()
-		nuevo_texto.text = "[ ] " + item.item_name # Arrancan con una cajita vacía
+		nuevo_texto.text = "[ ] " + item.item_name 
 		
+		# Cambiamos el color de la letra
 		nuevo_texto.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
+		
+		# NUEVA LÍNEA: Forzamos un tamaño de letra más pequeño (ej: 12 o 14)
+		nuevo_texto.add_theme_font_size_override("font_size", 12)
 		
 		# Lo añadimos a la pantalla
 		lista_visual.add_child(nuevo_texto)
-		
-		# Lo guardamos en el diccionario para poder tacharlo después
 		etiquetas_items[item.item_name] = nuevo_texto
 
 # 2. Cuando el jugador agarra el objeto correcto de la góndola:
@@ -52,8 +54,10 @@ func _on_item_recolectado(item: ItemData) -> void:
 		var etiqueta: Label = etiquetas_items[item.item_name]
 		
 		etiqueta.text = "[X] " + item.item_name
-		# Cambiamos el color a un rojo birome o lo dejamos oscuro, pero tachado!
-		etiqueta.add_theme_color_override("font_color", Color(0.6, 0.1, 0.1))
+		etiqueta.add_theme_color_override("font_color", Color(0.6, 0.1, 0.1)) 
+		
+		# NUEVA LÍNEA ACÁ TAMBIÉN:
+		etiqueta.add_theme_font_size_override("font_size", 12)
 		
 
 func mostrar_resultados(mensaje: String) -> void:

@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://5tdi3k6hkkg8"]
+
+[ext_resource type="Script" uid="uid://dsxfqrbe03s6o" path="res://scripts/automatic_door.gd" id="1_l7j14"]
+[ext_resource type="Texture2D" uid="uid://b3c1f48ohrnq8" path="res://assets/puerta_corrediza.png" id="2_5iuc4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20n7v"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 0, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k3oib"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 50, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tr7d7"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 100, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s664v"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 150, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3n03t"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 200, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0g3j"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 250, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ncc4w"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 300, 64, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bn15t"]
+atlas = ExtResource("2_5iuc4")
+region = Rect2(0, 350, 64, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_s5d55"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20n7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k3oib")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tr7d7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s664v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3n03t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c0g3j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ncc4w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bn15t")
+}],
+"loop": false,
+"name": &"open",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_es0aq"]
+size = Vector2(128, 128)
+
+[node name="AutomaticDoor" type="Area2D" unique_id=1890407894]
+z_index = 1
+script = ExtResource("1_l7j14")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1268987279]
+sprite_frames = SubResource("SpriteFrames_s5d55")
+animation = &"open"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2017208048]
+shape = SubResource("RectangleShape2D_es0aq")

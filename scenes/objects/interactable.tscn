@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dhnaagb34uo0r" path="res://assets/relojdetiempo.png" id="5_51ki7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
-size = Vector2(56, 32)
+size = Vector2(64, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p3rrf"]
 size = Vector2(56, 24)
