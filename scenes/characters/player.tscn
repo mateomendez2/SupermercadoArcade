@@ -418,7 +418,7 @@ radius = 5.0
 height = 10.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yewv4"]
-size = Vector2(32, 32)
+size = Vector2(32, 7)
 
 [node name="Player" type="CharacterBody2D" unique_id=177984774]
 script = ExtResource("1_rp718")
@@ -426,17 +426,23 @@ speed = 125.0
 friction = 1400.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=892306982]
+position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_xhtjm")
 animation = &"pickup_left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1597456713]
-position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_yewv4")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=1550479637]
+position = Vector2(0, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=2054934080]
+position = Vector2(0, -12.5)
 shape = SubResource("RectangleShape2D_yewv4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=105120721]
 position = Vector2(0, 12)
+limit_left = 0
+limit_top = -64
+limit_right = 384
+limit_bottom = 384
