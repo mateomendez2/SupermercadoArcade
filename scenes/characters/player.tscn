@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://xda87s4wh6s6" path="res://assets/personajeagarraizquierda.png" id="7_k4v7y"]
 [ext_resource type="Texture2D" uid="uid://drcsftcyv36pn" path="res://assets/personajeagarraderecha.png" id="8_xrqxk"]
 [ext_resource type="Texture2D" uid="uid://clnj6vuj3y4x0" path="res://assets/personajeagarraarriba.png" id="9_g66nw"]
+[ext_resource type="AudioStream" uid="uid://2nqg0ynecw7a" path="res://assets/audio/SonidoRecoger.wav" id="14_k4v7y"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_inhyd"]
 atlas = ExtResource("2_qgnko")
@@ -446,3 +447,11 @@ limit_left = 0
 limit_top = -80
 limit_right = 384
 limit_bottom = 400
+
+[node name="SonidoRecoger" type="AudioStreamPlayer2D" parent="." unique_id=1038823411]
+stream = ExtResource("14_k4v7y")
+volume_db = 10.0
+
+[node name="SonidoRecoger2" type="AudioStreamPlayer2D" parent="." unique_id=2109883941]
+stream = ExtResource("14_k4v7y")
+volume_db = 10.0

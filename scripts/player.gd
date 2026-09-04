@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Player
 
+@onready var sonido_recoger: AudioStreamPlayer2D = $SonidoRecoger
+
 @export var speed: float = 250.0
 @export var acceleration: float = 1500.0
 @export var friction: float = 1200.0
@@ -120,6 +122,8 @@ func set_slippery(is_slippery: bool) -> void:
 
 # --- ANIMACIÓN DE RECOLECCIÓN ---
 func _on_item_recolectado(_item: ItemData) -> void:
+	sonido_recoger.play()
+	
 	# 1. Congelamos al jugador para que no pueda caminar
 	is_frozen = true 
 	
