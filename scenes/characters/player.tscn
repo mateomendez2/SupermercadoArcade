@@ -443,6 +443,6 @@ shape = SubResource("RectangleShape2D_yewv4")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=105120721]
 position = Vector2(0, 12)
 limit_left = 0
-limit_top = -64
+limit_top = -80
 limit_right = 384
-limit_bottom = 384
+limit_bottom = 400
