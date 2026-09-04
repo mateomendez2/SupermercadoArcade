@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dn52t8wv5x8f5"]
+
+[ext_resource type="Texture2D" uid="uid://bkd0omwdvsf4m" path="res://assets/heladera_leche.png" id="1_3s0eo"]
+[ext_resource type="Script" uid="uid://drr16mhnikuje" path="res://scripts/heladera_animada.gd" id="1_wspp2"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_3s0eo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wspp2"]
+size = Vector2(64, 41)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3s0eo"]
+size = Vector2(74, 64)
+
+[node name="HeladeraObstaculo" type="StaticBody2D" unique_id=783320094]
+physics_material_override = SubResource("PhysicsMaterial_3s0eo")
+script = ExtResource("1_wspp2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=275858961]
+texture = ExtResource("1_3s0eo")
+hframes = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1200443223]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_wspp2")
+
+[node name="SensorPuertas" type="Area2D" parent="." unique_id=1398442787]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SensorPuertas" unique_id=363175279]
+position = Vector2(0, 16)
+shape = SubResource("RectangleShape2D_3s0eo")
