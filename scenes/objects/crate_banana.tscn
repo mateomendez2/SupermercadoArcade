@@ -3,10 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="1_oa4jb"]
 [ext_resource type="Resource" uid="uid://cajqupe3i051c" path="res://resources/items/banana.tres" id="2_xg42o"]
 [ext_resource type="Shader" uid="uid://7i6acwqih0t8" path="res://scripts/light_reflex.gdshader" id="3_hdcvm"]
-[ext_resource type="Texture2D" uid="uid://cgfxeu5olh65n" path="res://assets/Banana.png" id="4_hdcvm"]
+[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="3_ikdtu"]
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="4_hdcvm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
-size = Vector2(56, 28)
+size = Vector2(32, 32)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_51ki7"]
 shader = ExtResource("3_hdcvm")
@@ -19,14 +20,15 @@ shader_parameter/shine_angle = 45.0
 item_content = ExtResource("2_xg42o")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_nhkbj")
 
 [node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
-region_rect = Rect2(64, 64, 64, 32)
+texture = ExtResource("3_ikdtu")
+region_rect = Rect2(448, 352, 32, 32)
 
 [node name="ItemVisual" parent="." index="3" unique_id=126991651]
 material = SubResource("ShaderMaterial_51ki7")
-position = Vector2(18, 0)
+position = Vector2(4, 1)
 texture = ExtResource("4_hdcvm")
-region_enabled = false
-region_rect = Rect2(0, 0, 16, 16)
+region_rect = Rect2(32, 0, 16, 16)

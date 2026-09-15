@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dwivh6axmxos"]
+
+[ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="1_tr0qb"]
+[ext_resource type="Resource" uid="uid://bl2edpqoxl1fc" path="res://resources/items/lemon.tres" id="2_jhkgq"]
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_tr0qb")]
+item_content = ExtResource("2_jhkgq")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+region_rect = Rect2(256, 288, 32, 32)
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+region_rect = Rect2(32, 16, 16, 16)

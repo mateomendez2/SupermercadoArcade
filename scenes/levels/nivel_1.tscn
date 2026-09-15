@@ -3,21 +3,25 @@
 [ext_resource type="PackedScene" uid="uid://l6ce1m273n15" path="res://scenes/characters/player.tscn" id="1_8qrae"]
 [ext_resource type="Script" uid="uid://b18pyff1crh7e" path="res://scripts/level_config.gd" id="1_82jax"]
 [ext_resource type="Script" uid="uid://dxd5nknl72iln" path="res://scripts/item_data.gd" id="2_72usu"]
-[ext_resource type="Texture2D" uid="uid://cnummiik1lhu4" path="res://assets/gondolas.png" id="2_s28vq"]
 [ext_resource type="Texture2D" uid="uid://cn6eocf0dme6x" path="res://assets/ParedesySuelo.png" id="2_uc16u"]
 [ext_resource type="Resource" uid="uid://c2hcnm3r421sg" path="res://resources/items/apple.tres" id="3_11fms"]
 [ext_resource type="Resource" uid="uid://b365fjxeb47u8" path="res://resources/items/orange.tres" id="4_oopf4"]
 [ext_resource type="PackedScene" uid="uid://b4gscj3tiyrfp" path="res://scenes/objects/crate_orange.tscn" id="4_s28vq"]
 [ext_resource type="Texture2D" uid="uid://7cj62ghthl0b" path="res://assets/pasto.png" id="5_e73x4"]
-[ext_resource type="PackedScene" uid="uid://d2ji3487s2phx" path="res://scenes/objects/crate_apple.tscn" id="6_rh4ec"]
+[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="7_7prpn"]
 [ext_resource type="PackedScene" uid="uid://nj44eb6n5i2" path="res://scenes/obstacles/hazard_spill.tscn" id="7_uc16u"]
-[ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="8_rh4ec"]
 [ext_resource type="PackedScene" uid="uid://iemgseutkwau" path="res://scenes/objects/checkout_desk.tscn" id="9_vhmxl"]
 [ext_resource type="PackedScene" uid="uid://ci0ckyftwdhly" path="res://scenes/obstacles/obstacle_box.tscn" id="14_11fms"]
 [ext_resource type="PackedScene" uid="uid://5tdi3k6hkkg8" path="res://scenes/objects/automatic_door.tscn" id="15_e73x4"]
 [ext_resource type="PackedScene" uid="uid://2hlx1cbdrxa1" path="res://scenes/obstacles/moving_npc.tscn" id="15_oopf4"]
 [ext_resource type="PackedScene" uid="uid://dn52t8wv5x8f5" path="res://scenes/obstacles/heladera_obstaculo.tscn" id="17_0ew28"]
 [ext_resource type="Texture2D" uid="uid://ddof8l3bm7itl" path="res://assets/heladera_yogurt.png" id="18_7prpn"]
+[ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="19_lx63y"]
+[ext_resource type="PackedScene" uid="uid://cxnrnrvnjrehj" path="res://scenes/objects/shelf_can.tscn" id="20_1nojv"]
+[ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="20_b7im0"]
+[ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="21_1nojv"]
+[ext_resource type="PackedScene" uid="uid://cu8074ke55jg5" path="res://scenes/obstacles/mueble_decorativo_largo.tscn" id="22_tiu8x"]
+[ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="23_ut33o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_e73x4")
@@ -343,69 +347,6 @@ tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
 sources/1 = SubResource("TileSetAtlasSource_uc16u")
 sources/0 = SubResource("TileSetAtlasSource_0ew28")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s28vq"]
-texture = ExtResource("2_s28vq")
-texture_region_size = Vector2i(32, 32)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10.666666, -10.666666, 16, -10.666666, 16, 16, -10.666666, 16)
-1:0/0 = 0
-1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -10.666666, 10.666668, -10.666666, 10.666668, 16, -16, 16)
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-0:1/0 = 0
-0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10.666666, -10.666666, 16, -10.666666, 16, 16, -10.666666, 16)
-1:1/0 = 0
-1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -10.666666, 10.666668, -10.666666, 10.666668, 16, -16, 16)
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-7:1/0 = 0
-0:2/0 = 0
-0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10.666666, -10.666666, 16, -10.666666, 16, 16, -10.666666, 16)
-1:2/0 = 0
-1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, -10.666666, 10.666668, -10.666666, 10.666668, 16, -16, 16)
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
-7:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-7:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-7:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-5:5/0 = 0
-6:5/0 = 0
-7:5/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_uc16u"]
-tile_size = Vector2i(32, 32)
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_s28vq")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rh4ec"]
 texture = ExtResource("2_uc16u")
@@ -1058,10 +999,6 @@ z_index = -1
 tile_map_data = PackedByteArray("AAAAAAAAAQATAAgAAAAAAAEAAQATAAkAAAAAAAIAAQATAAgAAAAAAAMAAQATAAkAAAAAAAQAAQATAAgAAAAAAAUAAQATAAkAAAAAAAYAAQATAAgAAAAAAAcAAQATAAkAAAAAAAgAAQATAAgAAAAAAAkAAQATAAkAAAABAAAAAQAUAAgAAAABAAEAAQAUAAkAAAABAAIAAQAUAAgAAAABAAMAAQAUAAkAAAABAAQAAQAUAAgAAAABAAUAAQAUAAkAAAABAAYAAQAUAAgAAAABAAcAAQAUAAkAAAABAAgAAQAUAAgAAAABAAkAAQAUAAkAAAACAAAAAQATAAgAAAACAAEAAQATAAkAAAACAAIAAQATAAgAAAACAAMAAQATAAkAAAACAAQAAQATAAgAAAACAAUAAQATAAkAAAACAAYAAQATAAgAAAACAAcAAQATAAkAAAACAAgAAQATAAgAAAACAAkAAQATAAkAAAADAAAAAQAUAAgAAAADAAEAAQAUAAkAAAADAAIAAQAUAAgAAAADAAMAAQAUAAkAAAADAAQAAQAUAAgAAAADAAUAAQAUAAkAAAADAAYAAQAUAAgAAAADAAcAAQAUAAkAAAADAAgAAQAUAAgAAAADAAkAAQAUAAkAAAAEAAAAAQATAAgAAAAEAAEAAQATAAkAAAAEAAIAAQATAAgAAAAEAAMAAQATAAkAAAAEAAQAAQATAAgAAAAEAAUAAQATAAkAAAAEAAYAAQATAAgAAAAEAAcAAQATAAkAAAAEAAgAAQATAAgAAAAEAAkAAQATAAkAAAAFAAAAAQAUAAgAAAAFAAEAAQAUAAkAAAAFAAIAAQAUAAgAAAAFAAMAAQAUAAkAAAAFAAQAAQAUAAgAAAAFAAUAAQAUAAkAAAAFAAYAAQAUAAgAAAAFAAcAAQAUAAkAAAAFAAgAAQAUAAgAAAAFAAkAAQAUAAkAAAAGAAAAAQATAAgAAAAGAAEAAQATAAkAAAAGAAIAAQATAAgAAAAGAAMAAQATAAkAAAAGAAQAAQATAAgAAAAGAAUAAQATAAkAAAAGAAYAAQATAAgAAAAGAAcAAQATAAkAAAAGAAgAAQATAAgAAAAGAAkAAQATAAkAAAAHAAAAAQAUAAgAAAAHAAEAAQAUAAkAAAAHAAIAAQAUAAgAAAAHAAMAAQAUAAkAAAAHAAQAAQAUAAgAAAAHAAUAAQAUAAkAAAAHAAYAAQAUAAgAAAAHAAcAAQAUAAkAAAAHAAgAAQAUAAgAAAAHAAkAAQAUAAkAAAAIAAEAAQATAAkAAAAIAAIAAQATAAgAAAAIAAMAAQATAAkAAAAIAAQAAQATAAgAAAAIAAUAAQATAAkAAAAIAAYAAQATAAgAAAAIAAcAAQATAAkAAAAIAAgAAQATAAgAAAAIAAkAAQATAAkAAAAJAAAAAQAUAAgAAAAJAAEAAQAUAAkAAAAJAAIAAQAUAAgAAAAJAAMAAQAUAAkAAAAJAAQAAQAUAAgAAAAJAAUAAQAUAAkAAAAJAAYAAQAUAAgAAAAJAAcAAQAUAAkAAAAJAAgAAQAUAAgAAAAJAAkAAQAUAAkAAAAKAAAAAQATAAgAAAAKAAEAAQATAAkAAAAKAAIAAQATAAgAAAAKAAMAAQATAAkAAAAKAAQAAQATAAgAAAAKAAUAAQATAAkAAAAKAAYAAQATAAgAAAAKAAcAAQATAAkAAAAKAAgAAQATAAgAAAAKAAkAAQATAAkAAAALAAAAAQAUAAgAAAALAAEAAQAUAAkAAAALAAIAAQAUAAgAAAALAAMAAQAUAAkAAAALAAQAAQAUAAgAAAALAAUAAQAUAAkAAAALAAYAAQAUAAgAAAALAAcAAQAUAAkAAAALAAgAAQAUAAgAAAALAAkAAQAUAAkAAAD/////AAAAAAAAAAAAAP//AAAAAAAAAAAAAP7/AAAAAAAAAAD///7/AAAAAAAAAAABAP7/AAAAAAAAAAACAP7/AAAAAAAAAAADAP7/AAAAAAAAAAAEAP7/AAAAAAAAAAAFAP7/AAAAAAAAAAAGAP7/AAAAAAAAAAAHAP7/AAAAAAAAAAAIAP7/AAAAAAAAAAADAP//AAAAAAAAAAACAP//AAAAAAAAAAABAP//AAAAAAAAAAAEAP//AAAAAAAAAAAFAP//AAAAAAAAAAAGAP//AAAAAAAAAAAHAP//AAAAAAAAAAAIAP//AAAAAAAAAAAJAP//AAAAAAAAAAAKAP//AAAAAAAAAAALAP//AAAAAAAAAAAMAP//AAAAAAAAAAALAP7/AAAAAAAAAAAKAP7/AAAAAAAAAAAMAP7/AAAAAAAAAAAJAP7/AAAAAAAAAAANAP7/AAAAAAAAAAANAAEAAAAAAAAAAAANAAIAAAAAAAAAAAAMAAAAAAAAAAAAAAAMAAEAAAAAAAAAAAAMAAIAAAAAAAAAAAAMAAMAAAAAAAAAAAAMAAQAAAAAAAAAAAANAAUAAAAAAAAAAAANAAYAAAAAAAAAAAANAAQAAAAAAAAAAAANAAMAAAAAAAAAAAAMAAYAAAAAAAAAAAAMAAcAAAAAAAAAAAAMAAUAAAAAAAAAAAAMAAgAAAAAAAAAAAAMAAkAAAAAAAAAAAANAAkAAAAAAAAAAAANAAgAAAAAAAAAAAANAAcAAAAAAAAAAAANAAoAAAAAAAAAAAANAAsAAAAAAAAAAAAMAAsAAAAAAAAAAAAMAAoAAAAAAAAAAAAMAAwAAAAAAAAAAAANAAwAAAAAAAAAAAACAAwAAAAAAAAAAAABAAwAAAAAAAAAAAAAAAwAAAAAAAAAAAADAAwAAAAAAAAAAAAEAAwAAAAAAAAAAAAFAAwAAAAAAAAAAAAGAAwAAAAAAAAAAAAHAAwAAAAAAAAAAAAIAAwAAAAAAAAAAAAJAAwAAAAAAAAAAAAKAAwAAAAAAAAAAAALAAwAAAAAAAAAAAD//wwAAAAAAAAAAAD+/wwAAAAAAAAAAAD+/wsAAAAAAAAAAAD+/woAAAAAAAAAAAD+/wkAAAAAAAAAAAD+/wgAAAAAAAAAAAD+/wcAAAAAAAAAAAD+/wYAAAAAAAAAAAD+/wUAAAAAAAAAAAD//wYAAAAAAAAAAAD//wcAAAAAAAAAAAD//wgAAAAAAAAAAAD//wkAAAAAAAAAAAD//woAAAAAAAAAAAD//wsAAAAAAAAAAAD//wUAAAAAAAAAAAD+/wQAAAAAAAAAAAD+/wMAAAAAAAAAAAD+/wIAAAAAAAAAAAD+/wEAAAAAAAAAAAD+/wAAAAAAAAAAAAD//wAAAAAAAAAAAAD+//7/AAAAAAAAAAD+////AAAAAAAAAAD//wQAAAAAAAAAAAD//wMAAAAAAAAAAAD//wIAAAAAAAAAAAD//wEAAAAAAAAAAAALAP3/AAAAAAAAAAAMAP3/AAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAAAAAAAAAAOAAQAAAAAAAAAAAAOAAUAAAAAAAAAAAAOAAYAAAAAAAAAAAAOAAcAAAAAAAAAAAAOAAgAAAAAAAAAAAAOAAkAAAAAAAAAAAAOAAoAAAAAAAAAAAAOAAwAAAAAAAAAAAAOAAsAAAAAAAAAAAAOAP7/AAAAAAAAAAD9//7/AAAAAAAAAAD9////AAAAAAAAAAD9/wAAAAAAAAAAAAD9/wEAAAAAAAAAAAD9/wIAAAAAAAAAAAD9/wMAAAAAAAAAAAD9/wQAAAAAAAAAAAD9/wUAAAAAAAAAAAD9/wYAAAAAAAAAAAD9/wcAAAAAAAAAAAD9/wgAAAAAAAAAAAD9/wkAAAAAAAAAAAD9/woAAAAAAAAAAAD9/wsAAAAAAAAAAAD9/wwAAAAAAAAAAAANAAAAAAAAAAAAAAANAP//AAAAAAAAAAAOAAEAAAAAAAAAAAAOAAAAAAAAAAAAAAAOAP//AAAAAAAAAAANAP3/AAAAAAAAAAAOAP3/AAAAAAAAAAAGAP3/AAAAAAAAAAAHAP3/AAAAAAAAAAAIAP3/AAAAAAAAAAAJAP3/AAAAAAAAAAAKAP3/AAAAAAAAAAD9//3/AAAAAAAAAAD+//3/AAAAAAAAAAD///3/AAAAAAAAAAAAAP3/AAAAAAAAAAABAP3/AAAAAAAAAAACAP3/AAAAAAAAAAADAP3/AAAAAAAAAAAEAP3/AAAAAAAAAAAFAP3/AAAAAAAAAAAIAAAAAQATAAgAAAA=")
 tile_set = SubResource("TileSet_mheu6")
 
-[node name="Furniture" type="TileMapLayer" parent="." unique_id=2103217762]
-y_sort_enabled = true
-tile_set = SubResource("TileSet_uc16u")
-
 [node name="Walls" type="TileMapLayer" parent="." unique_id=1782685451]
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAAAP7/AQAAAAAAAAAAAP//AQAAAAEAAAAAAAAAAQAAAAIAAAAAAAEAAQAAAAIAAAAAAAIAAQAAAAIAAAAAAAMAAQAAAAIAAAAAAAQAAQAAAAIAAAAAAAUAAQAAAAIAAAAAAAYAAQAAAAIAAAAAAAcAAQAAAAIAAAAAAAgAAQAAAAIAAAAAAAkAAQAAAAIAAAAAAAoAAQAAAAMAAAABAP7/AQABAAAAAAABAP//AQABAAEAAAACAP7/AQABAAAAAAACAP//AQABAAEAAAADAP7/AQABAAAAAAADAP//AQABAAEAAAAIAP7/AQABAAAAAAAIAP//AQABAAEAAAAJAP7/AQABAAAAAAAJAP//AQABAAEAAAAKAP7/AQABAAAAAAAKAP//AQABAAEAAAALAP7/AQACAAAAAAALAP//AQACAAEAAAALAAoAAQACAAMAAAALAAkAAQACAAIAAAALAAgAAQACAAIAAAALAAcAAQACAAIAAAALAAYAAQACAAIAAAALAAUAAQACAAIAAAALAAQAAQACAAIAAAALAAMAAQACAAIAAAALAAIAAQACAAIAAAALAAEAAQACAAIAAAALAAAAAQACAAIAAAABAAoAAQABAAMAAAACAAoAAQABAAMAAAADAAoAAQABAAMAAAAEAAoAAQABAAMAAAAFAAoAAQABAAMAAAAGAAoAAQABAAMAAAAHAAoAAQABAAMAAAAIAAoAAQABAAMAAAAJAAoAAQABAAMAAAAKAAoAAQABAAMAAAAAAAsAAQAAAAQAAAABAAsAAQABAAQAAAACAAsAAQABAAQAAAADAAsAAQABAAQAAAAEAAsAAQABAAQAAAAFAAsAAQABAAQAAAAGAAsAAQABAAQAAAAHAAsAAQABAAQAAAAIAAsAAQABAAQAAAAJAAsAAQABAAQAAAAKAAsAAQABAAQAAAALAAsAAQACAAQAAAAEAP//AQABAAEAAAAEAP7/AQABAAAAAAAHAP7/AQABAAAAAAAHAP//AQABAAEAAAA=")
@@ -1076,87 +1013,11 @@ tile_set = SubResource("TileSet_lx63y")
 unique_name_in_owner = true
 position = Vector2(192, 32)
 
-[node name="Interactable5" parent="." unique_id=1644467260 instance=ExtResource("8_rh4ec")]
-position = Vector2(352, 16)
-
-[node name="Interactable6" parent="." unique_id=1079915724 instance=ExtResource("8_rh4ec")]
-position = Vector2(64, 304)
-
-[node name="Interactable7" parent="." unique_id=1232327596 instance=ExtResource("8_rh4ec")]
-position = Vector2(16, 192)
-rotation = -1.5707964
-
-[node name="Interactable8" parent="." unique_id=795361124 instance=ExtResource("8_rh4ec")]
-position = Vector2(16, 256)
-rotation = -1.5707964
-
-[node name="Interactable9" parent="." unique_id=1287304333 instance=ExtResource("8_rh4ec")]
-position = Vector2(32, 144)
-
-[node name="Interactable10" parent="." unique_id=1281462266 instance=ExtResource("8_rh4ec")]
-position = Vector2(32, 304)
-
-[node name="Interactable11" parent="." unique_id=585439283 instance=ExtResource("8_rh4ec")]
-position = Vector2(128, 144)
-
-[node name="Interactable13" parent="." unique_id=2015567169 instance=ExtResource("8_rh4ec")]
-position = Vector2(288, 112)
-
-[node name="Interactable14" parent="." unique_id=820091631 instance=ExtResource("8_rh4ec")]
-position = Vector2(224, 176)
-
-[node name="Interactable15" parent="." unique_id=388078892 instance=ExtResource("8_rh4ec")]
-position = Vector2(368, 192)
-rotation = 1.5707964
-
-[node name="Interactable16" parent="." unique_id=366838341 instance=ExtResource("8_rh4ec")]
-position = Vector2(352, 304)
-
-[node name="Interactable17" parent="." unique_id=854918498 instance=ExtResource("8_rh4ec")]
-position = Vector2(256, 272)
-
-[node name="Interactable18" parent="." unique_id=1310666597 instance=ExtResource("8_rh4ec")]
-position = Vector2(208, 128)
-rotation = -1.5707964
-
-[node name="Interactable19" parent="." unique_id=125662649 instance=ExtResource("8_rh4ec")]
-position = Vector2(80, 224)
-rotation = -1.5707964
-
-[node name="Interactable22" parent="." unique_id=1845217787 instance=ExtResource("8_rh4ec")]
-position = Vector2(352, 176)
-
-[node name="Interactable23" parent="." unique_id=84940782 instance=ExtResource("8_rh4ec")]
-position = Vector2(352, 240)
-
-[node name="Interactable24" parent="." unique_id=2109187072 instance=ExtResource("8_rh4ec")]
-position = Vector2(208, 192)
-rotation = -1.5707964
-
-[node name="Interactable25" parent="." unique_id=67023800 instance=ExtResource("8_rh4ec")]
-position = Vector2(272, 192)
-rotation = -1.5707964
-
-[node name="Interactable26" parent="." unique_id=1364379195 instance=ExtResource("8_rh4ec")]
-position = Vector2(144, 192)
-rotation = -1.5707964
-
-[node name="Interactable27" parent="." unique_id=861656160 instance=ExtResource("8_rh4ec")]
-position = Vector2(368, 32)
-rotation = -1.5707964
-
-[node name="Interactable28" parent="." unique_id=524477564 instance=ExtResource("8_rh4ec")]
-position = Vector2(368, 288)
-rotation = -1.5707964
-
-[node name="Interactable29" parent="." unique_id=234386628 instance=ExtResource("6_rh4ec")]
-position = Vector2(352, 112)
-
 [node name="Interactable31" parent="." unique_id=213418887 instance=ExtResource("4_s28vq")]
-position = Vector2(160, 272)
+position = Vector2(182, 271)
 
 [node name="CheckoutDesk" parent="." unique_id=1181652669 instance=ExtResource("9_vhmxl")]
-position = Vector2(32, 32)
+position = Vector2(38, 22)
 
 [node name="ObstacleBox" parent="." unique_id=2106728863 instance=ExtResource("14_11fms")]
 position = Vector2(176, 144)
@@ -1171,7 +1032,7 @@ position = Vector2(112, 208)
 position = Vector2(80, 272)
 
 [node name="ObstacleBox6" parent="." unique_id=579991991 instance=ExtResource("14_11fms")]
-position = Vector2(304, 176)
+position = Vector2(304, 205)
 
 [node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("7_uc16u")]
 position = Vector2(240, 208)
@@ -1187,11 +1048,6 @@ position = Vector2(272, 304)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
 position = Vector2(112, 240)
-tiempo_caminando = null
-tiempo_espera = null
-
-[node name="ColorRect" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="0" unique_id=91969361]
-metadata/_edit_use_anchors_ = true
 
 [node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
 position = Vector2(192, 0)
@@ -1206,10 +1062,543 @@ position = Vector2(304, 80)
 position = Vector2(192, -25)
 
 [node name="HeladeraObstaculo" parent="." unique_id=783320094 instance=ExtResource("17_0ew28")]
-position = Vector2(288, 6)
+position = Vector2(279, 6)
 
 [node name="HeladeraObstaculo2" parent="." unique_id=442184802 instance=ExtResource("17_0ew28")]
-position = Vector2(128, 6)
+position = Vector2(345, 6)
 textura_variante = ExtResource("18_7prpn")
 
+[node name="Props" type="Node2D" parent="." unique_id=328304417]
+y_sort_enabled = true
+
+[node name="MuebleDecorativo" parent="." unique_id=1289041173 instance=ExtResource("19_lx63y")]
+position = Vector2(129, 131)
+
+[node name="Sprite2D" parent="MuebleDecorativo" index="0" unique_id=2001655473]
+region_rect = Rect2(512, 392, 64, 56)
+
+[node name="CollisionShape2D" parent="MuebleDecorativo" index="1" unique_id=1461097310]
+position = Vector2(-1, 12)
+
+[node name="MuebleDecorativo4" parent="." unique_id=848884421 instance=ExtResource("19_lx63y")]
+position = Vector2(129, 131)
+
+[node name="Sprite2D" parent="MuebleDecorativo4" index="0" unique_id=2001655473]
+region_rect = Rect2(512, 392, 64, 56)
+
+[node name="CollisionShape2D" parent="MuebleDecorativo4" index="1" unique_id=1461097310]
+position = Vector2(-1, 12)
+
+[node name="MuebleDecorativo2" parent="." unique_id=189643135 instance=ExtResource("19_lx63y")]
+position = Vector2(225, 163)
+textura_mueble = ExtResource("7_7prpn")
+
+[node name="Sprite2D" parent="MuebleDecorativo2" index="0" unique_id=2001655473]
+region_rect = Rect2(512, 392, 64, 56)
+
+[node name="CollisionShape2D" parent="MuebleDecorativo2" index="1" unique_id=1461097310]
+position = Vector2(0, 12)
+
+[node name="MuebleDecorativo5" parent="." unique_id=2136657039 instance=ExtResource("19_lx63y")]
+position = Vector2(225, 163)
+textura_mueble = ExtResource("7_7prpn")
+
+[node name="Sprite2D" parent="MuebleDecorativo5" index="0" unique_id=2001655473]
+region_rect = Rect2(256, 400, 64, 48)
+
+[node name="CollisionShape2D" parent="MuebleDecorativo5" index="1" unique_id=1461097310]
+position = Vector2(0, 12)
+
+[node name="CanastoDecorativo" parent="." unique_id=405200317 instance=ExtResource("20_b7im0")]
+position = Vector2(64, 303)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo" index="0" unique_id=1039621797]
+region_rect = Rect2(416, 280, 32, 40)
+
+[node name="CanastoDecorativo7" parent="." unique_id=1865766800 instance=ExtResource("20_b7im0")]
+position = Vector2(141, 271)
+metadata/_edit_group_ = true
+
+[node name="CanastoDecorativo8" parent="." unique_id=2111785222 instance=ExtResource("20_b7im0")]
+position = Vector2(235, 271)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo8" index="0" unique_id=1039621797]
+region_rect = Rect2(256, 288, 32, 32)
+
+[node name="CanastoDecorativo9" parent="." unique_id=317407078 instance=ExtResource("20_b7im0")]
+position = Vector2(257, 269)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo9" index="0" unique_id=1039621797]
+position = Vector2(0, -2)
+region_rect = Rect2(288, 344, 32, 40)
+
+[node name="CollisionShape2D" parent="CanastoDecorativo9" index="1" unique_id=490326072]
+position = Vector2(0, 3)
+
+[node name="CanastoDecorativo10" parent="." unique_id=915175443 instance=ExtResource("20_b7im0")]
+position = Vector2(280, 271)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo10" index="0" unique_id=1039621797]
+position = Vector2(0, 1)
+region_rect = Rect2(160, 128, 32, 32)
+
+[node name="CanastoDecorativo6" parent="." unique_id=1268491596 instance=ExtResource("20_b7im0")]
+position = Vector2(86, 311)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo6" index="0" unique_id=1039621797]
+region_rect = Rect2(416, 216, 32, 40)
+
+[node name="CanastoDecorativo5" parent="." unique_id=1977268200 instance=ExtResource("20_b7im0")]
+position = Vector2(41, 303)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo5" index="0" unique_id=1039621797]
+region_rect = Rect2(160, 344, 32, 40)
+
+[node name="CanastoDecorativo3" parent="." unique_id=1667640411 instance=ExtResource("20_b7im0")]
+position = Vector2(19, 303)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" parent="CanastoDecorativo3" index="0" unique_id=1039621797]
+region_rect = Rect2(160, 280, 32, 40)
+
+[node name="CanastoDecorativo2" parent="." unique_id=392675262 instance=ExtResource("20_b7im0")]
+position = Vector2(80, 229)
+
+[node name="Sprite2D" parent="CanastoDecorativo2" index="0" unique_id=1039621797]
+region_rect = Rect2(256, 288, 32, 32)
+
+[node name="CanastoDecorativo4" parent="." unique_id=1837666492 instance=ExtResource("20_b7im0")]
+position = Vector2(80, 206)
+
+[node name="Sprite2D" parent="CanastoDecorativo4" index="0" unique_id=1039621797]
+region_rect = Rect2(288, 280, 32, 40)
+
+[node name="MuebleDecorativo3" parent="." unique_id=1900367712 instance=ExtResource("19_lx63y")]
+position = Vector2(346, 104)
+
+[node name="MuebleDecorativo6" parent="." unique_id=1429924948 instance=ExtResource("19_lx63y")]
+position = Vector2(346, 168)
+
+[node name="Sprite2D" parent="MuebleDecorativo6" index="0" unique_id=2001655473]
+region_rect = Rect2(448, 392, 64, 56)
+
+[node name="Interactable" parent="." unique_id=1647453037 instance=ExtResource("20_1nojv")]
+position = Vector2(288, 104)
+
+[node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 190)
+
+[node name="mueble_mitad_decorativo4" parent="." unique_id=370973118 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 174)
+
+[node name="mueble_mitad_decorativo6" parent="." unique_id=1448173708 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 238)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo6" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo7" parent="." unique_id=619517811 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 254)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo7" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo8" parent="." unique_id=725367661 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 270)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo8" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo9" parent="." unique_id=682917709 instance=ExtResource("21_1nojv")]
+position = Vector2(152, 167)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo9" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo16" parent="." unique_id=1540647579 instance=ExtResource("21_1nojv")]
+position = Vector2(152, 151)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo16" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo11" parent="." unique_id=1500730194 instance=ExtResource("21_1nojv")]
+position = Vector2(152, 183)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo11" index="0" unique_id=1182334053]
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo10" parent="." unique_id=2140467221 instance=ExtResource("21_1nojv")]
+position = Vector2(138, 167)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo10" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo15" parent="." unique_id=1562657166 instance=ExtResource("21_1nojv")]
+position = Vector2(138, 151)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo15" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo27" parent="." unique_id=861522666 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 304)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo27" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(128, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo28" parent="." unique_id=1191408406 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 288)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo28" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(128, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo29" parent="." unique_id=643128944 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 272)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo29" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(96, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo30" parent="." unique_id=306242708 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 256)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo30" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(96, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo31" parent="." unique_id=992481214 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 211)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo31" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+
+[node name="mueble_mitad_decorativo32" parent="." unique_id=2067816253 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 195)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo32" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+
+[node name="mueble_mitad_decorativo33" parent="." unique_id=1140822552 instance=ExtResource("21_1nojv")]
+position = Vector2(370, 179)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo33" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(0, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo17" parent="." unique_id=419525373 instance=ExtResource("21_1nojv")]
+position = Vector2(216, 199)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo17" index="0" unique_id=1182334053]
+region_rect = Rect2(96, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo18" parent="." unique_id=2140326484 instance=ExtResource("21_1nojv")]
+position = Vector2(216, 183)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo18" index="0" unique_id=1182334053]
+region_rect = Rect2(128, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo19" parent="." unique_id=1330804520 instance=ExtResource("21_1nojv")]
+position = Vector2(202, 199)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo19" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(96, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo20" parent="." unique_id=1204597327 instance=ExtResource("21_1nojv")]
+position = Vector2(202, 183)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo20" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(128, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo25" parent="." unique_id=1824652809 instance=ExtResource("21_1nojv")]
+position = Vector2(344, 232)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo25" index="0" unique_id=1182334053]
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="CollisionShape2D" parent="mueble_mitad_decorativo25" index="1" unique_id=868496563]
+position = Vector2(0, 7)
+
+[node name="mueble_mitad_decorativo26" parent="." unique_id=1448434032 instance=ExtResource("21_1nojv")]
+position = Vector2(330, 232)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo26" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="CollisionShape2D" parent="mueble_mitad_decorativo26" index="1" unique_id=868496563]
+position = Vector2(0, 7)
+
+[node name="mueble_mitad_decorativo12" parent="." unique_id=657776993 instance=ExtResource("21_1nojv")]
+position = Vector2(138, 183)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo12" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo21" parent="." unique_id=207709380 instance=ExtResource("21_1nojv")]
+position = Vector2(280, 172)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo21" index="0" unique_id=1182334053]
+region_rect = Rect2(0, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo22" parent="." unique_id=395223334 instance=ExtResource("21_1nojv")]
+position = Vector2(280, 188)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo22" index="0" unique_id=1182334053]
+region_rect = Rect2(0, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo23" parent="." unique_id=1002097439 instance=ExtResource("21_1nojv")]
+position = Vector2(266, 172)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo23" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(0, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo24" parent="." unique_id=954948610 instance=ExtResource("21_1nojv")]
+position = Vector2(266, 188)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo24" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(0, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo13" parent="." unique_id=2144281892 instance=ExtResource("21_1nojv")]
+position = Vector2(152, 199)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo13" index="0" unique_id=1182334053]
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo14" parent="." unique_id=531856652 instance=ExtResource("21_1nojv")]
+position = Vector2(138, 199)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo14" index="0" unique_id=1182334053]
+position = Vector2(-1, 0)
+flip_h = true
+region_rect = Rect2(160, 528, 16, 48)
+
+[node name="mueble_mitad_decorativo2" parent="." unique_id=782412770 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 206)
+
+[node name="mueble_mitad_decorativo3" parent="." unique_id=1275208060 instance=ExtResource("21_1nojv")]
+position = Vector2(16, 222)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo3" index="0" unique_id=1182334053]
+region_rect = Rect2(64, 528, 16, 48)
+
+[node name="mueble_decorativo_largo" parent="." unique_id=647677798 instance=ExtResource("22_tiu8x")]
+position = Vector2(200, 130)
+
+[node name="mueble_decorativo_largo3" parent="." unique_id=1180236362 instance=ExtResource("22_tiu8x")]
+position = Vector2(200, 141)
+
+[node name="mueble_decorativo_largo5" parent="." unique_id=545305205 instance=ExtResource("22_tiu8x")]
+position = Vector2(15, 132)
+
+[node name="mueble_decorativo_largo6" parent="." unique_id=801001542 instance=ExtResource("22_tiu8x")]
+position = Vector2(15, 143)
+
+[node name="mueble_decorativo_largo7" parent="." unique_id=2067114979 instance=ExtResource("22_tiu8x")]
+position = Vector2(55, 132)
+
+[node name="mueble_decorativo_largo8" parent="." unique_id=1401803078 instance=ExtResource("22_tiu8x")]
+position = Vector2(55, 147)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo8" index="0" unique_id=169645178]
+region_rect = Rect2(232, 552, 16, 24)
+
+[node name="CollisionShape2D" parent="mueble_decorativo_largo8" index="1" unique_id=866261493]
+position = Vector2(0, 3)
+
+[node name="mueble_decorativo_largo9" parent="." unique_id=84823696 instance=ExtResource("22_tiu8x")]
+position = Vector2(35, 132)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo9" index="0" unique_id=169645178]
+region_rect = Rect2(200, 544, 16, 32)
+
+[node name="mueble_decorativo_largo10" parent="." unique_id=2100112513 instance=ExtResource("22_tiu8x")]
+position = Vector2(35, 147)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo10" index="0" unique_id=169645178]
+region_rect = Rect2(264, 520, 16, 24)
+
+[node name="CollisionShape2D" parent="mueble_decorativo_largo10" index="1" unique_id=866261493]
+position = Vector2(0, 3)
+
+[node name="mueble_decorativo_largo2" parent="." unique_id=1249305096 instance=ExtResource("22_tiu8x")]
+position = Vector2(216, 130)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo2" index="0" unique_id=169645178]
+position = Vector2(0, 5)
+region_rect = Rect2(232, 552, 16, 24)
+
+[node name="mueble_decorativo_largo13" parent="." unique_id=315543173 instance=ExtResource("22_tiu8x")]
+position = Vector2(366, 45)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo13" index="0" unique_id=169645178]
+position = Vector2(1, -15)
+region_rect = Rect2(488, 104, 16, 56)
+
+[node name="CollisionShape2D" parent="mueble_decorativo_largo13" index="1" unique_id=866261493]
+position = Vector2(0, 6)
+
+[node name="mueble_decorativo_largo11" parent="." unique_id=466808766 instance=ExtResource("22_tiu8x")]
+position = Vector2(214, 108)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo11" index="0" unique_id=169645178]
+position = Vector2(0, 5)
+region_rect = Rect2(232, 552, 16, 24)
+
+[node name="mueble_decorativo_largo12" parent="." unique_id=1890800133 instance=ExtResource("22_tiu8x")]
+position = Vector2(202, 102)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo12" index="0" unique_id=169645178]
+position = Vector2(0, 5)
+region_rect = Rect2(232, 552, 16, 24)
+
+[node name="mueble_decorativo_largo4" parent="." unique_id=608147413 instance=ExtResource("22_tiu8x")]
+position = Vector2(216, 138)
+
+[node name="Sprite2D" parent="mueble_decorativo_largo4" index="0" unique_id=169645178]
+position = Vector2(0, 5)
+region_rect = Rect2(232, 552, 16, 24)
+
+[node name="CartelOfertas" parent="." unique_id=886368352 instance=ExtResource("23_ut33o")]
+position = Vector2(209, 108)
+
+[node name="CartelOfertas2" parent="." unique_id=222613788 instance=ExtResource("23_ut33o")]
+position = Vector2(80, 238)
+
+[node name="Sprite2D" parent="CartelOfertas2" index="0" unique_id=1648568606]
+flip_h = false
+region_rect = Rect2(480, 544, 32, 32)
+
+[node name="CollisionShape2D" parent="CartelOfertas2" index="1" unique_id=1693288273]
+position = Vector2(0, 3)
+
+[node name="CartelOfertas4" parent="." unique_id=1633318226 instance=ExtResource("23_ut33o")]
+position = Vector2(273, 205)
+
+[node name="Sprite2D" parent="CartelOfertas4" index="0" unique_id=1648568606]
+position = Vector2(0, 2)
+flip_h = false
+region_rect = Rect2(448, 544, 32, 32)
+
+[node name="CollisionShape2D" parent="CartelOfertas4" index="1" unique_id=1693288273]
+position = Vector2(0, 3)
+
+[node name="CartelOfertas5" parent="." unique_id=537822014 instance=ExtResource("23_ut33o")]
+position = Vector2(366, 236)
+
+[node name="Sprite2D" parent="CartelOfertas5" index="0" unique_id=1648568606]
+position = Vector2(0, 1)
+flip_h = false
+region_rect = Rect2(512, 544, 32, 32)
+
+[node name="CollisionShape2D" parent="CartelOfertas5" index="1" unique_id=1693288273]
+position = Vector2(0, 3)
+
+[node name="CartelOfertas6" parent="." unique_id=1082220105 instance=ExtResource("23_ut33o")]
+position = Vector2(342, 305)
+
+[node name="Sprite2D" parent="CartelOfertas6" index="0" unique_id=1648568606]
+position = Vector2(0, 1)
+flip_h = false
+region_rect = Rect2(392, 512, 16, 32)
+
+[node name="CollisionShape2D" parent="CartelOfertas6" index="1" unique_id=1693288273]
+position = Vector2(0, 3)
+
+[node name="CartelOfertas3" parent="." unique_id=1794178058 instance=ExtResource("23_ut33o")]
+position = Vector2(161, 269)
+
+[node name="Sprite2D" parent="CartelOfertas3" index="0" unique_id=1648568606]
+flip_h = false
+region_rect = Rect2(392, 512, 16, 32)
+
+[node name="CollisionShape2D" parent="CartelOfertas3" index="1" unique_id=1693288273]
+position = Vector2(0, 3)
+
 [editable path="MovingNPC"]
+[editable path="MuebleDecorativo"]
+[editable path="MuebleDecorativo4"]
+[editable path="MuebleDecorativo2"]
+[editable path="MuebleDecorativo5"]
+[editable path="CanastoDecorativo"]
+[editable path="CanastoDecorativo7"]
+[editable path="CanastoDecorativo8"]
+[editable path="CanastoDecorativo9"]
+[editable path="CanastoDecorativo10"]
+[editable path="CanastoDecorativo6"]
+[editable path="CanastoDecorativo5"]
+[editable path="CanastoDecorativo3"]
+[editable path="CanastoDecorativo2"]
+[editable path="CanastoDecorativo4"]
+[editable path="MuebleDecorativo6"]
+[editable path="Interactable"]
+[editable path="mueble_mitad_decorativo6"]
+[editable path="mueble_mitad_decorativo7"]
+[editable path="mueble_mitad_decorativo8"]
+[editable path="mueble_mitad_decorativo9"]
+[editable path="mueble_mitad_decorativo16"]
+[editable path="mueble_mitad_decorativo11"]
+[editable path="mueble_mitad_decorativo10"]
+[editable path="mueble_mitad_decorativo15"]
+[editable path="mueble_mitad_decorativo27"]
+[editable path="mueble_mitad_decorativo28"]
+[editable path="mueble_mitad_decorativo29"]
+[editable path="mueble_mitad_decorativo30"]
+[editable path="mueble_mitad_decorativo31"]
+[editable path="mueble_mitad_decorativo32"]
+[editable path="mueble_mitad_decorativo33"]
+[editable path="mueble_mitad_decorativo17"]
+[editable path="mueble_mitad_decorativo18"]
+[editable path="mueble_mitad_decorativo19"]
+[editable path="mueble_mitad_decorativo20"]
+[editable path="mueble_mitad_decorativo25"]
+[editable path="mueble_mitad_decorativo26"]
+[editable path="mueble_mitad_decorativo12"]
+[editable path="mueble_mitad_decorativo21"]
+[editable path="mueble_mitad_decorativo22"]
+[editable path="mueble_mitad_decorativo23"]
+[editable path="mueble_mitad_decorativo24"]
+[editable path="mueble_mitad_decorativo13"]
+[editable path="mueble_mitad_decorativo14"]
+[editable path="mueble_mitad_decorativo3"]
+[editable path="mueble_decorativo_largo8"]
+[editable path="mueble_decorativo_largo9"]
+[editable path="mueble_decorativo_largo10"]
+[editable path="mueble_decorativo_largo2"]
+[editable path="mueble_decorativo_largo13"]
+[editable path="mueble_decorativo_largo11"]
+[editable path="mueble_decorativo_largo12"]
+[editable path="mueble_decorativo_largo4"]
+[editable path="CartelOfertas2"]
+[editable path="CartelOfertas4"]
+[editable path="CartelOfertas5"]
+[editable path="CartelOfertas6"]
+[editable path="CartelOfertas3"]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kd4p1rn4uwqb"
-path="res://.godot/imported/Manzana.png-a5ce37321c067b83e196d1f4735d5a32.ctex"
+uid="uid://bqnpcy4c1spj7"
+path="res://.godot/imported/Mobiliario_Tilemap.png-5cdc170e98e0256217636532245dc015.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Manzana.png"
-dest_files=["res://.godot/imported/Manzana.png-a5ce37321c067b83e196d1f4735d5a32.ctex"]
+source_file="res://assets/Mobiliario_Tilemap.png"
+dest_files=["res://.godot/imported/Mobiliario_Tilemap.png-5cdc170e98e0256217636532245dc015.ctex"]
 
 [params]
 

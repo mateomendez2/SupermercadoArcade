@@ -419,7 +419,7 @@ radius = 5.0
 height = 10.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yewv4"]
-size = Vector2(32, 7)
+size = Vector2(32, 25.5)
 
 [node name="Player" type="CharacterBody2D" unique_id=177984774]
 script = ExtResource("1_rp718")
@@ -438,7 +438,7 @@ shape = SubResource("CapsuleShape2D_yewv4")
 position = Vector2(0, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=2054934080]
-position = Vector2(0, -12.5)
+position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_yewv4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=105120721]

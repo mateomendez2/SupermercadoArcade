@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cu8074ke55jg5"]
+
+[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="1_u2m05"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w2wt4"]
+size = Vector2(16, 18)
+
+[node name="mueble_decorativo_largo" type="StaticBody2D" unique_id=647677798]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=169645178]
+texture = ExtResource("1_u2m05")
+region_enabled = true
+region_rect = Rect2(200, 512, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=866261493]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_w2wt4")

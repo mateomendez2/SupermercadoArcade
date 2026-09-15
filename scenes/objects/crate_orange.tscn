@@ -1,12 +1,24 @@
 [gd_scene format=3 uid="uid://b4gscj3tiyrfp"]
 
 [ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="1_cldwo"]
-[ext_resource type="Texture2D" uid="uid://qsou8j1bhmcm" path="res://assets/Naranja.png" id="2_12co8"]
 [ext_resource type="Resource" uid="uid://b365fjxeb47u8" path="res://resources/items/orange.tres" id="2_qnsva"]
+[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="3_f1yds"]
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="3_qnsva"]
 
 [node name="Interactable" unique_id=1647453037 instance=ExtResource("1_cldwo")]
 item_content = ExtResource("2_qnsva")
 
+[node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+position = Vector2(0, 2)
+
+[node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
+position = Vector2(0, 3)
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+texture = ExtResource("3_f1yds")
+region_rect = Rect2(64, 352, 32, 32)
+
 [node name="ItemVisual" parent="." index="3" unique_id=126991651]
-texture = ExtResource("2_12co8")
-region_enabled = false
+position = Vector2(6, 2)
+texture = ExtResource("3_qnsva")
+region_rect = Rect2(32, 48, 16, 16)
