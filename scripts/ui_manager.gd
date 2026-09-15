@@ -38,11 +38,12 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 		var nuevo_texto = Label.new()
 		nuevo_texto.text = "[ ] " + item.item_name 
 		
-		# Cambiamos el color de la letra
+		# Cambiamos el color y tamaño
 		nuevo_texto.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
-		
-		# NUEVA LÍNEA: Forzamos un tamaño de letra más pequeño (ej: 12 o 14)
 		nuevo_texto.add_theme_font_size_override("font_size", 12)
+		
+		# ¡NUEVA LÍNEA! Activamos el salto de línea inteligente
+		nuevo_texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		
 		# Lo añadimos a la pantalla
 		lista_visual.add_child(nuevo_texto)
