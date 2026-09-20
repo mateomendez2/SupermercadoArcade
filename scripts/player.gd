@@ -85,11 +85,17 @@ func update_animation(is_moving: bool) -> void:
 		else:
 			anim_sprite.play("idle_up")
 
+# --- INPUT DE INTERACCIÓN ---
 func _unhandled_input(event: InputEvent) -> void:
-	# NUEVO: Si estamos congelados, ignoramos los botones
 	if is_frozen: return 
 	
 	if event.is_action_pressed("interact") and current_interactable != null:
+		get_viewport().set_input_as_handled() 
+		
+		# --- NUEVO: TRUCO ANTI-DESLIZAMIENTO ---
+		# Forzamos la inercia a cero absoluto para que no resbale por la fricción
+		velocity = Vector2.ZERO 
+		
 		current_interactable.interact()
 
 # --- FUNCIONES DE SEÑALES ---

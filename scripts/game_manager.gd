@@ -4,6 +4,7 @@ extends Node
 signal list_generated(target_items: Array[ItemData]) # Se emite al inicio
 signal item_collected(item: ItemData) # Se emite cuando tachamos uno de la lista
 signal game_won
+signal start_qte_colores 
 
 # 1. LA BASE DE DATOS (Nuestra lista maestra)
 # preload() carga los archivos a la memoria en cuanto el juego arranca.
@@ -23,6 +24,7 @@ var tiempo_restante: float = 90.0 # Bastante tiempo para probar tranquilos
 var juego_activo: bool = false
 signal time_updated(tiempo: int)
 signal game_over_reached
+signal qte_cancelled # NUEVA SEÑAL
 
 func _ready() -> void:
 	pass # Ya no generamos la lista aquí automáticamente
@@ -82,28 +84,46 @@ func intentar_pagar() -> void:
 var gondola_actual: Interactable = null
 signal start_qte_ui # Le avisa al Main que muestre el minijuego
 
+signal qte_failed # NUEVA SEÑAL: Avisará que perdimos
+
 func request_qte(gondola: Interactable) -> void:
+	# NUEVO CANDADO: Si ya estamos jugando un minijuego (gondola_actual tiene algo), 
+	# rechazamos cualquier otra petición de inmediato.
+	if gondola_actual != null: 
+		return 
+	
+	# Si pasamos el candado, registramos esta góndola
 	gondola_actual = gondola
 	
-	# NUEVO: Congelamos al jugador apenas sale la barrita
-	var jugador = get_tree().get_first_node_in_group("Player")
-	if jugador: jugador.is_frozen = true
+	# ¿La góndola ya tiene un minijuego guardado en su memoria?
+	if gondola_actual.minijuego_guardado == "":
+		# Tiramos la moneda por PRIMERA VEZ
+		var moneda = randf()
+		if moneda > 0.5:
+			gondola_actual.minijuego_guardado = "barrita"
+		else:
+			gondola_actual.minijuego_guardado = "colores"
 	
-	start_qte_ui.emit() 
+	# Ahora simplemente leemos la memoria de la góndola y abrimos el correcto
+	if gondola_actual.minijuego_guardado == "barrita":
+		print("Abriendo la Barrita...")
+		start_qte_ui.emit() 
+	elif gondola_actual.minijuego_guardado == "colores":
+		print("Abriendo los Colores...")
+		start_qte_colores.emit()
 
 func resolve_qte(success: bool) -> void:
-	if success:
-		print("GameManager: ¡QTE Superado!")
-		gondola_actual.succesful_interaction() 
-	else:
-		print("GameManager: ¡Fallaste el QTE!")
-		
-		# NUEVA LÍNEA: Le avisamos a la góndola para que sume el fallo
-		gondola_actual.failed_interaction() 
-		
-		var jugador = get_tree().get_first_node_in_group("Player")
-		if jugador: jugador.is_frozen = false
-		
+	# GUARDIA DE SEGURIDAD (Evita el crash rojo por si acaso)
+	if gondola_actual != null:
+		if success:
+			print("GameManager: ¡QTE Superado!")
+			gondola_actual.succesful_interaction()
+		else:
+			print("GameManager: ¡Fallaste el QTE!")
+			gondola_actual.failed_interaction()
+			# Gritamos a todo el mundo que fallamos
+			qte_failed.emit() 
+			
 	gondola_actual = null
 
 func _process(delta: float) -> void:
@@ -116,3 +136,14 @@ func _process(delta: float) -> void:
 			juego_activo = false
 			print("¡SE ACABÓ EL TIEMPO!")
 			game_over_reached.emit()
+
+func cancelar_qte() -> void:
+	# Cerramos la UI
+	qte_cancelled.emit()
+	
+	# Le sumamos un fallo a la góndola por huir (opcional, si quieres castigarlo)
+	if gondola_actual != null:
+		gondola_actual.failed_interaction()
+		
+	# Limpiamos todo
+	gondola_actual = null

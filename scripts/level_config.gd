@@ -15,6 +15,8 @@ var cajas_viejas: Array = []
 var mis_charcos: Array = []
 var charcos_viejos: Array = []
 
+var duracion_turno_actual: float = 15.0
+
 func _ready() -> void:
 	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
 	
@@ -86,16 +88,19 @@ func _on_item_recolectado(_item: ItemData) -> void:
 
 # Gatillo 2: El tiempo aleatorio
 func bucle_de_tiempo_aleatorio() -> void:
-	var tiempo_azar = randf_range(10.0, 15.0) 
+	# 1. Calculamos y GUARDAMOS el tiempo para este turno (ej: 20 segundos)
+	duracion_turno_actual = randf_range(15.0, 25.0) 
 	
-	await get_tree().create_timer(tiempo_azar).timeout
+	# 2. Esperamos ESE tiempo exacto (Corrutina)
+	await get_tree().create_timer(duracion_turno_actual).timeout
 	
+	# 3. Cuando termina la espera, verificamos si el juego sigue vivo
 	if GameManager.juego_activo:
 		print("¡Evento de Tiempo! Mezclando obstáculos...")
 		mezclar_cajas()
-		mezclar_charcos() # Ahora el tiempo también mueve los charcos
+		mezclar_charcos() 
 		
-		# Volvemos a llamarnos a nosotros mismos para crear el ciclo infinito
+		# 4. Volvemos a llamarnos a nosotros mismos para el SIGUIENTE turno
 		bucle_de_tiempo_aleatorio()
 
 # --- LA FUNCIÓN QUE MEZCLA LOS CHARCOS ---
@@ -116,6 +121,11 @@ func mezclar_charcos() -> void:
 			# ENCENDER CHARCO
 			charco.show() 
 			charco.process_mode = Node.PROCESS_MODE_INHERIT 
+			
+			# ¡NUEVA LÍNEA! Le mandamos el tiempo para que se anime
+			if charco.has_method("animar_ciclo"):
+				charco.animar_ciclo(duracion_turno_actual)
+				
 			charcos_encendidos += 1 
 			nuevos_charcos_viejos.append(charco)
 		else:

@@ -21,6 +21,8 @@ var is_locked: bool = false # Para saber si está bloqueada
 @onready var reloj_pos_y_original: float = cooldown_clock.position.y
 var reloj_tween: Tween
 
+var minijuego_guardado: String = "" # Puede ser "barrita", "colores" o ""
+
 func interact() -> ItemData:
 	# NUEVO: Si está bloqueada, no hacemos nada y rechazamos la interacción
 	if is_locked:
@@ -36,6 +38,7 @@ func interact() -> ItemData:
 
 # Esta función SOLO se llama si el GameManager dice que ganaste el QTE
 func succesful_interaction() -> void:
+	minijuego_guardado = "" # Borramos la memoria al ganar
 	is_empty = true 
 	item_visual.hide() 
 	
@@ -49,6 +52,7 @@ func failed_interaction() -> void:
 	print("Góndola: Fallaste. Llevas ", fallos, " fallos.")
 	
 	if fallos >= 5:
+		minijuego_guardado = "" # Borramos la memoria
 		iniciar_cooldown()
 
 # La rutina que bloquea y anima el reloj
@@ -84,3 +88,14 @@ func iniciar_cooldown() -> void:
 	fallos = 0 
 	is_locked = false
 	print("Góndola: ¡Desbloqueada!")
+
+# Cuando el jugador se aleja de la góndola
+func _on_area_exited(area: Area2D) -> void:
+	
+	# NUEVO GUARDIA: ¿El dueño de esta área es el Jugador?
+	if area.get_parent() is Player:
+		
+		# Si era el jugador, verificamos si estábamos jugando
+		if GameManager.gondola_actual == self:
+			print("🏃 Góndola: Cerrando por ALEJAMIENTO DEL JUGADOR.")
+			GameManager.cancelar_qte()

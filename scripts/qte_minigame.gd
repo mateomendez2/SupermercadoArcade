@@ -51,8 +51,10 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
-	# Cuando el jugador toca la "E" para frenar la aguja
 	if event.is_action_pressed("interact"):
+		# ¡NUEVA LÍNEA! Esto "consume" el botón para que no haga eco hacia el jugador
+		get_viewport().set_input_as_handled() 
+		
 		is_active = false
 		check_win()
 

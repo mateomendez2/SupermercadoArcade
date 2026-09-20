@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dhnaagb34uo0r" path="res://assets/relojdetiempo.png" id="5_51ki7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nhkbj"]
-size = Vector2(29, 39)
+size = Vector2(48, 42)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p3rrf"]
 size = Vector2(24, 26)
@@ -23,7 +23,7 @@ shader_parameter/shine_angle = 45.0
 script = ExtResource("1_khwtm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=599446482]
-position = Vector2(0, 3)
+position = Vector2(0, 5)
 shape = SubResource("RectangleShape2D_nhkbj")
 
 [node name="SolidWall" type="StaticBody2D" parent="." unique_id=1867264389]
@@ -49,3 +49,5 @@ visible = false
 position = Vector2(0, -16)
 texture = ExtResource("5_51ki7")
 hframes = 8
+
+[connection signal="area_exited" from="." to="." method="_on_area_exited"]

@@ -420,10 +420,7 @@ animations = [{
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_b52xa"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cnq0w"]
-size = Vector2(64, 24)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_l7wta"]
-size = Vector2(64, 32)
+size = Vector2(64, 64)
 
 [node name="CheckoutDesk" type="Area2D" unique_id=1181652669]
 script = ExtResource("1_gtf4q")
@@ -433,7 +430,8 @@ position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_1fqmo")
 
 [node name="SpriteCajero" type="AnimatedSprite2D" parent="." unique_id=845598636]
-position = Vector2(0, -9)
+z_index = 1
+position = Vector2(10, 0)
 sprite_frames = SubResource("SpriteFrames_n2ria")
 animation = &"idle_down"
 autoplay = "idle_down"
@@ -443,15 +441,10 @@ frame_progress = 0.832688
 physics_material_override = SubResource("PhysicsMaterial_b52xa")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=2070029009]
-position = Vector2(0, 12)
 shape = SubResource("RectangleShape2D_cnq0w")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1747127371]
-position = Vector2(0, -16)
-shape = SubResource("RectangleShape2D_l7wta")
 
 [node name="SpriteMesa" type="Sprite2D" parent="." unique_id=186989239]
 texture = ExtResource("2_1fqmo")
 flip_h = true
 region_enabled = true
-region_rect = Rect2(0, 80, 64, 48)
+region_rect = Rect2(16, 128, 48, 64)

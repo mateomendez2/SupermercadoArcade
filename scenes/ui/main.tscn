@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bpl405whge16y" path="res://scripts/ui_manager.gd" id="2_2p1s2"]
 [ext_resource type="Texture2D" uid="uid://c10ck7dy1bqcy" path="res://assets/anotadorobjetos.png" id="2_vspwy"]
 [ext_resource type="PackedScene" uid="uid://cfr8u4ga4ww1u" path="res://scenes/ui/qte_minigame.tscn" id="3_02nsg"]
+[ext_resource type="PackedScene" uid="uid://dgvvbtl2w4wsi" path="res://scenes/ui/qte_colores.tscn" id="5_7n028"]
 
 [node name="Main" type="Control" unique_id=1195027389]
 layout_mode = 3
@@ -32,9 +33,9 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -96.0
+offset_left = -89.0
 offset_top = -128.0
-offset_right = -16.0
+offset_right = -8.0
 offset_bottom = -16.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -46,10 +47,10 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 6.0
-offset_top = 16.0
-offset_right = -6.0
-offset_bottom = -10.0
+offset_left = 19.0
+offset_top = 4.0
+offset_right = -3.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = -4
@@ -109,6 +110,11 @@ layout_mode = 2
 text = "VOLVER AL MENÚ"
 
 [node name="QTE_Minigame" parent="CanvasLayer/InterfazFlotante" unique_id=620292326 instance=ExtResource("3_02nsg")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="QTE_Colores" parent="CanvasLayer/InterfazFlotante" unique_id=1789568607 instance=ExtResource("5_7n028")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

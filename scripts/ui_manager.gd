@@ -22,6 +22,16 @@ func _ready() -> void:
 	GameManager.start_qte_ui.connect(%QTE_Minigame.start_qte)
 	%QTE_Minigame.qte_finished.connect(GameManager.resolve_qte)
 	
+	GameManager.start_qte_colores.connect(%QTE_Colores.start_qte)
+	%QTE_Colores.qte_finished.connect(GameManager.resolve_qte)
+	
+	# NUEVO: Si huyen, escondemos las dos pantallas a la fuerza y las desactivamos
+	GameManager.qte_cancelled.connect(%QTE_Minigame.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Minigame.is_active = false)
+	
+	GameManager.qte_cancelled.connect(%QTE_Colores.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Colores.is_active = false)
+	
 	# NUEVA LÍNEA: Le decimos a la UI que lea la lista del GameManager directamente por si no escuchó el grito
 	_on_lista_generada(GameManager.target_list)
 

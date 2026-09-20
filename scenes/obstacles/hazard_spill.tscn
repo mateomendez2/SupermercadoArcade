@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://nj44eb6n5i2"]
 
 [ext_resource type="Script" uid="uid://df1l615ct5q1m" path="res://scripts/hazard_spill.gd" id="1_ppktu"]
-[ext_resource type="Texture2D" uid="uid://dv0rppc8rs8pj" path="res://assets/charcoagua.png" id="2_ei84u"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ppktu"]
+load_path = "res://.godot/imported/charcoagua.png-a9c681ba6bd3e1dbe4c0532fd535f3a1.ctex"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1tqy6"]
 size = Vector2(62, 60)
@@ -11,8 +13,10 @@ z_index = -1
 script = ExtResource("1_ppktu")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=924155765]
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_ei84u")
+position = Vector2(0, -5)
+texture = SubResource("CompressedTexture2D_ppktu")
+hframes = 5
+frame = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=657953818]
 scale = Vector2(0.5, 0.5)
