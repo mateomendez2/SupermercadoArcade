@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="20_b7im0"]
 [ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="21_1nojv"]
 [ext_resource type="PackedScene" uid="uid://cu8074ke55jg5" path="res://scenes/obstacles/mueble_decorativo_largo.tscn" id="22_tiu8x"]
+[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/objects/letrero.tscn" id="23_5c5jg"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="23_ut33o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
@@ -1001,12 +1002,12 @@ tile_set = SubResource("TileSet_mheu6")
 
 [node name="Walls" type="TileMapLayer" parent="." unique_id=1782685451]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAAAP7/AQAAAAAAAAAAAP//AQAAAAEAAAAAAAAAAQAAAAIAAAAAAAEAAQAAAAIAAAAAAAIAAQAAAAIAAAAAAAMAAQAAAAIAAAAAAAQAAQAAAAIAAAAAAAUAAQAAAAIAAAAAAAYAAQAAAAIAAAAAAAcAAQAAAAIAAAAAAAgAAQAAAAIAAAAAAAkAAQAAAAIAAAAAAAoAAQAAAAMAAAABAP7/AQABAAAAAAABAP//AQABAAEAAAACAP7/AQABAAAAAAACAP//AQABAAEAAAADAP7/AQABAAAAAAADAP//AQABAAEAAAAIAP7/AQABAAAAAAAIAP//AQABAAEAAAAJAP7/AQABAAAAAAAJAP//AQABAAEAAAAKAP7/AQABAAAAAAAKAP//AQABAAEAAAALAP7/AQACAAAAAAALAP//AQACAAEAAAALAAoAAQACAAMAAAALAAkAAQACAAIAAAALAAgAAQACAAIAAAALAAcAAQACAAIAAAALAAYAAQACAAIAAAALAAUAAQACAAIAAAALAAQAAQACAAIAAAALAAMAAQACAAIAAAALAAIAAQACAAIAAAALAAEAAQACAAIAAAALAAAAAQACAAIAAAABAAoAAQABAAMAAAACAAoAAQABAAMAAAADAAoAAQABAAMAAAAEAAoAAQABAAMAAAAFAAoAAQABAAMAAAAGAAoAAQABAAMAAAAHAAoAAQABAAMAAAAIAAoAAQABAAMAAAAJAAoAAQABAAMAAAAKAAoAAQABAAMAAAAAAAsAAQAAAAQAAAABAAsAAQABAAQAAAACAAsAAQABAAQAAAADAAsAAQABAAQAAAAEAAsAAQABAAQAAAAFAAsAAQABAAQAAAAGAAsAAQABAAQAAAAHAAsAAQABAAQAAAAIAAsAAQABAAQAAAAJAAsAAQABAAQAAAAKAAsAAQABAAQAAAALAAsAAQACAAQAAAAEAP//AQABAAEAAAAEAP7/AQABAAAAAAAHAP7/AQABAAAAAAAHAP//AQABAAEAAAA=")
+tile_map_data = PackedByteArray("AAAAAP7/AQAAAAAAAAAAAP//AQAAAAEAAAAAAAAAAQAAAAIAAAAAAAEAAQAAAAIAAAAAAAIAAQAAAAIAAAAAAAMAAQAAAAIAAAAAAAQAAQAAAAIAAAAAAAUAAQAAAAIAAAAAAAYAAQAAAAIAAAAAAAcAAQAAAAIAAAAAAAgAAQAAAAIAAAAAAAkAAQAAAAIAAAAAAAoAAQAAAAMAAAABAP7/AQABAAAAAAABAP//AQABAAEAAAACAP7/AQABAAAAAAACAP//AQABAAEAAAADAP7/AQABAAAAAAADAP//AQABAAEAAAAKAP7/AQABAAAAAAAKAP//AQABAAEAAAALAP7/AQACAAAAAAALAP//AQACAAEAAAALAAoAAQACAAMAAAALAAkAAQACAAIAAAALAAgAAQACAAIAAAALAAcAAQACAAIAAAALAAYAAQACAAIAAAALAAUAAQACAAIAAAALAAQAAQACAAIAAAALAAMAAQACAAIAAAALAAIAAQACAAIAAAALAAEAAQACAAIAAAALAAAAAQACAAIAAAABAAoAAQABAAMAAAACAAoAAQABAAMAAAADAAoAAQABAAMAAAAEAAoAAQABAAMAAAAFAAoAAQABAAMAAAAGAAoAAQABAAMAAAAHAAoAAQABAAMAAAAIAAoAAQABAAMAAAAJAAoAAQABAAMAAAAKAAoAAQABAAMAAAAAAAsAAQAAAAQAAAABAAsAAQABAAQAAAACAAsAAQABAAQAAAADAAsAAQABAAQAAAAEAAsAAQABAAQAAAAFAAsAAQABAAQAAAAGAAsAAQABAAQAAAAHAAsAAQABAAQAAAAIAAsAAQABAAQAAAAJAAsAAQABAAQAAAAKAAsAAQABAAQAAAALAAsAAQACAAQAAAAEAP//AQABAAEAAAAEAP7/AQABAAAAAAAHAP7/AQABAAAAAAAHAP//AQABAAEAAAAFAP//AQABAAEAAAAGAP//AQABAAEAAAAFAP7/AQABAAAAAAAGAP7/AQABAAAAAAA=")
 tile_set = SubResource("TileSet_wndmy")
 
 [node name="Foreground" type="TileMapLayer" parent="." unique_id=514567453]
 z_index = 5
-tile_map_data = PackedByteArray("AAAFAP7/AQAYAAoAAAAGAP7/AQAYAAoAAAA=")
+tile_map_data = PackedByteArray("AAAIAP7/AQAYAAoAAAAJAP7/AQAYAAoAAAA=")
 tile_set = SubResource("TileSet_lx63y")
 
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("1_8qrae")]
@@ -1017,7 +1018,7 @@ position = Vector2(192, 32)
 position = Vector2(182, 271)
 
 [node name="CheckoutDesk" parent="." unique_id=1181652669 instance=ExtResource("9_vhmxl")]
-position = Vector2(38, 22)
+position = Vector2(32, 64)
 
 [node name="ObstacleBox" parent="." unique_id=2106728863 instance=ExtResource("14_11fms")]
 position = Vector2(176, 144)
@@ -1059,13 +1060,13 @@ position = Vector2(240, 112)
 position = Vector2(304, 80)
 
 [node name="AutomaticDoor" parent="." unique_id=1890407894 instance=ExtResource("15_e73x4")]
-position = Vector2(192, -25)
+position = Vector2(288, -25)
 
 [node name="HeladeraObstaculo" parent="." unique_id=783320094 instance=ExtResource("17_0ew28")]
-position = Vector2(279, 6)
+position = Vector2(435, 12)
 
 [node name="HeladeraObstaculo2" parent="." unique_id=442184802 instance=ExtResource("17_0ew28")]
-position = Vector2(345, 6)
+position = Vector2(430, 72)
 textura_variante = ExtResource("18_7prpn")
 
 [node name="Props" type="Node2D" parent="." unique_id=328304417]
@@ -1456,16 +1457,6 @@ position = Vector2(216, 130)
 position = Vector2(0, 5)
 region_rect = Rect2(232, 552, 16, 24)
 
-[node name="mueble_decorativo_largo13" parent="." unique_id=315543173 instance=ExtResource("22_tiu8x")]
-position = Vector2(366, 45)
-
-[node name="Sprite2D" parent="mueble_decorativo_largo13" index="0" unique_id=169645178]
-position = Vector2(1, -15)
-region_rect = Rect2(488, 104, 16, 56)
-
-[node name="CollisionShape2D" parent="mueble_decorativo_largo13" index="1" unique_id=866261493]
-position = Vector2(0, 6)
-
 [node name="mueble_decorativo_largo11" parent="." unique_id=466808766 instance=ExtResource("22_tiu8x")]
 position = Vector2(214, 108)
 
@@ -1488,24 +1479,22 @@ position = Vector2(0, 5)
 region_rect = Rect2(232, 552, 16, 24)
 
 [node name="CartelOfertas" parent="." unique_id=886368352 instance=ExtResource("23_ut33o")]
-position = Vector2(209, 108)
+position = Vector2(118, 28)
 
 [node name="CartelOfertas2" parent="." unique_id=222613788 instance=ExtResource("23_ut33o")]
-position = Vector2(80, 238)
+position = Vector2(23, 28)
 
 [node name="Sprite2D" parent="CartelOfertas2" index="0" unique_id=1648568606]
-flip_h = false
-region_rect = Rect2(480, 544, 32, 32)
+region_rect = Rect2(512, 112, 32, 48)
 
 [node name="CollisionShape2D" parent="CartelOfertas2" index="1" unique_id=1693288273]
-position = Vector2(0, 3)
+position = Vector2(-1, 8)
 
 [node name="CartelOfertas4" parent="." unique_id=1633318226 instance=ExtResource("23_ut33o")]
 position = Vector2(273, 205)
 
 [node name="Sprite2D" parent="CartelOfertas4" index="0" unique_id=1648568606]
 position = Vector2(0, 2)
-flip_h = false
 region_rect = Rect2(448, 544, 32, 32)
 
 [node name="CollisionShape2D" parent="CartelOfertas4" index="1" unique_id=1693288273]
@@ -1516,7 +1505,6 @@ position = Vector2(366, 236)
 
 [node name="Sprite2D" parent="CartelOfertas5" index="0" unique_id=1648568606]
 position = Vector2(0, 1)
-flip_h = false
 region_rect = Rect2(512, 544, 32, 32)
 
 [node name="CollisionShape2D" parent="CartelOfertas5" index="1" unique_id=1693288273]
@@ -1527,7 +1515,6 @@ position = Vector2(342, 305)
 
 [node name="Sprite2D" parent="CartelOfertas6" index="0" unique_id=1648568606]
 position = Vector2(0, 1)
-flip_h = false
 region_rect = Rect2(392, 512, 16, 32)
 
 [node name="CollisionShape2D" parent="CartelOfertas6" index="1" unique_id=1693288273]
@@ -1537,11 +1524,17 @@ position = Vector2(0, 3)
 position = Vector2(161, 269)
 
 [node name="Sprite2D" parent="CartelOfertas3" index="0" unique_id=1648568606]
-flip_h = false
 region_rect = Rect2(392, 512, 16, 32)
 
 [node name="CollisionShape2D" parent="CartelOfertas3" index="1" unique_id=1693288273]
 position = Vector2(0, 3)
+
+[node name="Letrero" parent="." unique_id=1947392158 instance=ExtResource("23_5c5jg")]
+z_index = 1
+position = Vector2(80, -32)
+
+[node name="CheckoutDesk2" parent="." unique_id=1421087247 instance=ExtResource("9_vhmxl")]
+position = Vector2(128, 64)
 
 [editable path="MovingNPC"]
 [editable path="MuebleDecorativo"]
@@ -1593,7 +1586,6 @@ position = Vector2(0, 3)
 [editable path="mueble_decorativo_largo9"]
 [editable path="mueble_decorativo_largo10"]
 [editable path="mueble_decorativo_largo2"]
-[editable path="mueble_decorativo_largo13"]
 [editable path="mueble_decorativo_largo11"]
 [editable path="mueble_decorativo_largo12"]
 [editable path="mueble_decorativo_largo4"]

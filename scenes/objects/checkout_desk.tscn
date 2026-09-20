@@ -431,7 +431,7 @@ shape = SubResource("RectangleShape2D_1fqmo")
 
 [node name="SpriteCajero" type="AnimatedSprite2D" parent="." unique_id=845598636]
 z_index = 1
-position = Vector2(10, 0)
+position = Vector2(-8, -7)
 sprite_frames = SubResource("SpriteFrames_n2ria")
 animation = &"idle_down"
 autoplay = "idle_down"
@@ -445,6 +445,5 @@ shape = SubResource("RectangleShape2D_cnq0w")
 
 [node name="SpriteMesa" type="Sprite2D" parent="." unique_id=186989239]
 texture = ExtResource("2_1fqmo")
-flip_h = true
 region_enabled = true
 region_rect = Rect2(16, 128, 48, 64)

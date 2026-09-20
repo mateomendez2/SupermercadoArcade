@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bg1rx5irmcw1l"]
+
+[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="1_o4sg7"]
+
+[node name="Letrero" type="Sprite2D" unique_id=1947392158]
+texture = ExtResource("1_o4sg7")
+region_enabled = true
+region_rect = Rect2(320, 128, 128, 32)

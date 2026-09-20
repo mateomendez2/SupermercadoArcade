@@ -3,16 +3,16 @@
 [ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="1_xxf0v"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u85mk"]
-size = Vector2(30, 30)
+size = Vector2(30, 8)
 
 [node name="CartelOfertas" type="StaticBody2D" unique_id=886368352]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1648568606]
+position = Vector2(0, -14)
 texture = ExtResource("1_xxf0v")
-flip_h = true
 region_enabled = true
 region_rect = Rect2(544, 112, 32, 48)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1693288273]
-position = Vector2(-1, 9)
+position = Vector2(0, 8)
 shape = SubResource("RectangleShape2D_u85mk")
