@@ -18,28 +18,45 @@ var charcos_viejos: Array = []
 var duracion_turno_actual: float = 15.0
 
 func _ready() -> void:
+	# 1. CONGELAMOS AL JUGADOR PARA LA CINEMÁTICA
+	jugador.is_frozen = true
+	
+	# Forzamos la animación de caminar hacia abajo
+	jugador.anim_sprite.play("walk_down")
+	
+	# 2. EL TWEEN: Lo hacemos caminar 64 píxeles hacia abajo en 1.5 segundos
+	var intro_tween = create_tween()
+	var destino_y = jugador.position.y + 64.0 # Cuánto avanza hacia abajo
+	intro_tween.tween_property(jugador, "position:y", destino_y, 1.5)
+	
+	# PAUSAMOS EL CÓDIGO HASTA QUE TERMINE DE CAMINAR
+	await intro_tween.finished
+	
+	# 3. LO FREMAMOS Y LE DEVOLVEMOS EL CONTROL
+	jugador.anim_sprite.play("idle_down")
+	jugador.is_frozen = false
+	
+	# -------------------------------------------------------------
+	# 4. AHORA SÍ, ¡ARRANCA EL JUEGO OFICIAL! (Reloj, listas, etc.)
+	# -------------------------------------------------------------
 	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
 	
-	# Buscamos nuestras cajas
 	var todas_las_cajas = get_tree().get_nodes_in_group("CajasObstaculo")
 	for caja in todas_las_cajas:
 		if self.is_ancestor_of(caja):
 			mis_cajas.append(caja)
 			
-	# Buscamos nuestros charcos
 	var todos_los_charcos = get_tree().get_nodes_in_group("CharcosObstaculo")
 	for charco in todos_los_charcos:
 		if self.is_ancestor_of(charco):
 			mis_charcos.append(charco)
 			
-	# Mezclamos AMBOS por primera vez al arrancar el nivel
 	mezclar_cajas()
 	mezclar_charcos()
 	
 	GameManager.item_collected.connect(_on_item_recolectado)
 	bucle_de_tiempo_aleatorio()
-
-# --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
+	
 # --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
 func mezclar_cajas() -> void:
 	mis_cajas.shuffle() # Mezclamos la baraja
@@ -113,23 +130,21 @@ func mezclar_charcos() -> void:
 	for charco in mis_charcos:
 		var es_seguro_encender = true
 		
-		# Anti-Repetición: Si estuvo prendido el turno anterior, lo prohibimos
+		# Anti-Repetición
 		if charco in charcos_viejos:
 			es_seguro_encender = false
 		
 		if charcos_encendidos < charcos_activos and es_seguro_encender:
-			# ENCENDER CHARCO
 			charco.show() 
 			charco.process_mode = Node.PROCESS_MODE_INHERIT 
 			
-			# ¡NUEVA LÍNEA! Le mandamos el tiempo para que se anime
+			# ¡NUEVA LÍNEA! Le avisamos al charco cuánto tiempo tiene para animarse
 			if charco.has_method("animar_ciclo"):
 				charco.animar_ciclo(duracion_turno_actual)
 				
 			charcos_encendidos += 1 
 			nuevos_charcos_viejos.append(charco)
 		else:
-			# APAGAR CHARCO
 			charco.hide() 
 			charco.process_mode = Node.PROCESS_MODE_DISABLED
 
