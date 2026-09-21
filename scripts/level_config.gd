@@ -18,29 +18,9 @@ var charcos_viejos: Array = []
 var duracion_turno_actual: float = 15.0
 
 func _ready() -> void:
-	# 1. CONGELAMOS AL JUGADOR PARA LA CINEMÁTICA
-	jugador.is_frozen = true
-	
-	# Forzamos la animación de caminar hacia abajo
-	jugador.anim_sprite.play("walk_down")
-	
-	# 2. EL TWEEN: Lo hacemos caminar 64 píxeles hacia abajo en 1.5 segundos
-	var intro_tween = create_tween()
-	var destino_y = jugador.position.y + 64.0 # Cuánto avanza hacia abajo
-	intro_tween.tween_property(jugador, "position:y", destino_y, 1.5)
-	
-	# PAUSAMOS EL CÓDIGO HASTA QUE TERMINE DE CAMINAR
-	await intro_tween.finished
-	
-	# 3. LO FREMAMOS Y LE DEVOLVEMOS EL CONTROL
-	jugador.anim_sprite.play("idle_down")
-	jugador.is_frozen = false
-	
 	# -------------------------------------------------------------
-	# 4. AHORA SÍ, ¡ARRANCA EL JUEGO OFICIAL! (Reloj, listas, etc.)
+	# 1. SETUP DE OBSTÁCULOS SILENCIOSO (¡Antes de la peli!)
 	# -------------------------------------------------------------
-	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
-	
 	var todas_las_cajas = get_tree().get_nodes_in_group("CajasObstaculo")
 	for caja in todas_las_cajas:
 		if self.is_ancestor_of(caja):
@@ -51,10 +31,37 @@ func _ready() -> void:
 		if self.is_ancestor_of(charco):
 			mis_charcos.append(charco)
 			
+	# Mezclamos y apagamos lo que sobra instantáneamente
 	mezclar_cajas()
 	mezclar_charcos()
 	
+	# -------------------------------------------------------------
+	# 2. CINEMÁTICA DE ENTRADA
+	# -------------------------------------------------------------
+	jugador.is_frozen = true
+	jugador.anim_sprite.play("walk_down")
+	
+	var intro_tween = create_tween()
+	var destino_y = jugador.position.y + 64.0 
+	intro_tween.tween_property(jugador, "position:y", destino_y, 1.5)
+	
+	await intro_tween.finished
+	
+	jugador.last_direction = Vector2(0, 1)
+	jugador.update_animation(false)
+	jugador.is_frozen = false
+	
+	var puerta = get_tree().get_first_node_in_group("PuertaEntrada")
+	if puerta and puerta.has_method("sellar_puerta"):
+		puerta.sellar_puerta()
+	
+	# -------------------------------------------------------------
+	# 3. AHORA SÍ, ¡ARRANCA EL JUEGO OFICIAL! 
+	# -------------------------------------------------------------
+	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
 	GameManager.item_collected.connect(_on_item_recolectado)
+	
+	# Prendemos el reloj para que empiecen a cambiar de lugar
 	bucle_de_tiempo_aleatorio()
 	
 # --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---

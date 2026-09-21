@@ -70,7 +70,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_es0aq"]
 size = Vector2(128, 128)
 
-[node name="AutomaticDoor" type="Area2D" unique_id=1890407894]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l7j14"]
+size = Vector2(64, 12)
+
+[node name="AutomaticDoor" type="Area2D" unique_id=1890407894 groups=["PuertaEntrada"]]
+y_sort_enabled = true
 script = ExtResource("1_l7j14")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1268987279]
@@ -81,3 +85,9 @@ frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2017208048]
 shape = SubResource("RectangleShape2D_es0aq")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1066497677]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=470004597]
+position = Vector2(0, 19)
+shape = SubResource("RectangleShape2D_l7j14")

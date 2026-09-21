@@ -1049,7 +1049,7 @@ tile_set = SubResource("TileSet_lx63y")
 
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("1_8qrae")]
 unique_name_in_owner = true
-position = Vector2(288, -38)
+position = Vector2(288, -32)
 
 [node name="Interactable31" parent="." unique_id=213418887 instance=ExtResource("4_s28vq")]
 position = Vector2(66, 271)
@@ -1120,6 +1120,15 @@ z_index = 1
 position = Vector2(80, -32)
 region_rect = Rect2(320, 96, 128, 32)
 
+[node name="Label" type="Label" parent="Letrero" unique_id=357049464]
+offset_left = -57.0
+offset_top = -6.0
+offset_right = 57.0
+offset_bottom = 17.0
+theme_override_font_sizes/font_size = 14
+text = "SECTOR COBRO"
+horizontal_alignment = 1
+
 [node name="CheckoutDesk2" parent="." unique_id=1421087247 instance=ExtResource("9_vhmxl")]
 position = Vector2(124, 63)
 
@@ -1141,6 +1150,15 @@ position = Vector2(196, 63)
 [node name="Letrero2" parent="." unique_id=300993351 instance=ExtResource("23_5c5jg")]
 z_index = 1
 position = Vector2(64, 140)
+
+[node name="Label" type="Label" parent="Letrero2" unique_id=1229198475]
+offset_left = -57.0
+offset_top = -8.0
+offset_right = 57.0
+offset_bottom = 15.0
+theme_override_font_sizes/font_size = 15
+text = "YOGURT"
+horizontal_alignment = 1
 
 [node name="Carrito_Vacio" parent="." unique_id=717150398 instance=ExtResource("25_0plqf")]
 position = Vector2(357, 79)
@@ -1209,6 +1227,17 @@ region_rect = Rect2(128, 288, 32, 32)
 [node name="Cartel_Amarillo" parent="." unique_id=1683338028 instance=ExtResource("24_o0o1h")]
 position = Vector2(114, 274)
 
+[node name="Label" type="Label" parent="Cartel_Amarillo" unique_id=131870513]
+offset_left = -12.0
+offset_top = -22.0
+offset_right = 14.0
+offset_bottom = 5.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 13
+text = "2x1"
+horizontal_alignment = 1
+
 [node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("25_6d0ty")]
 position = Vector2(181, 263)
 
@@ -1250,6 +1279,20 @@ position = Vector2(372, 239)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo12" index="0" unique_id=1182334053]
 region_rect = Rect2(1408, 464, 32, 48)
+
+[node name="mueble_mitad_decorativo17" parent="." unique_id=2134321022 instance=ExtResource("25_6d0ty")]
+position = Vector2(379, 222)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo17" index="0" unique_id=1182334053]
+flip_h = true
+region_rect = Rect2(32, 528, 24, 48)
+
+[node name="mueble_mitad_decorativo18" parent="." unique_id=1259766678 instance=ExtResource("25_6d0ty")]
+position = Vector2(379, 206)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo18" index="0" unique_id=1182334053]
+flip_h = true
+region_rect = Rect2(32, 528, 24, 48)
 
 [node name="mueble_mitad_decorativo7" parent="." unique_id=600081566 instance=ExtResource("25_6d0ty")]
 position = Vector2(300, 263)
@@ -1316,6 +1359,8 @@ position = Vector2(319, 142)
 [editable path="mueble_mitad_decorativo6"]
 [editable path="mueble_mitad_decorativo11"]
 [editable path="mueble_mitad_decorativo12"]
+[editable path="mueble_mitad_decorativo17"]
+[editable path="mueble_mitad_decorativo18"]
 [editable path="mueble_mitad_decorativo7"]
 [editable path="mueble_mitad_decorativo8"]
 [editable path="mueble_mitad_decorativo9"]

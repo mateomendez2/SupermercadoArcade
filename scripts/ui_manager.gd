@@ -1,6 +1,6 @@
 extends TextureRect
 
-@onready var lista_visual: VBoxContainer = $ListaVisual
+@onready var lista_visual: GridContainer = $ListaVisual
 @onready var pantalla_resultados: ColorRect = %PantallaResultados
 @onready var titulo_resultado: Label = %TituloResultado
 @onready var boton_siguiente: Button = %BotonSiguiente
@@ -35,41 +35,52 @@ func _ready() -> void:
 	# NUEVA LÍNEA: Le decimos a la UI que lea la lista del GameManager directamente por si no escuchó el grito
 	_on_lista_generada(GameManager.target_list)
 
-# 1. Cuando arranca el nivel y el GameManager elige los 3 objetos al azar:
+# --- DIBUJAR LA LISTA DE ÍCONOS ---
 func _on_lista_generada(target_list: Array[ItemData]) -> void:
-	
-	# Primero, borramos cualquier texto viejo por si reiniciamos el nivel
+	# Borramos lo viejo
 	for hijo in lista_visual.get_children():
 		hijo.queue_free()
 	etiquetas_items.clear()
 	
-	# Creamos un texto nuevo por cada ítem que nos pide el juego
 	for item in target_list:
-		var nuevo_texto = Label.new()
-		nuevo_texto.text = "[ ] " + item.item_name 
+		# ¡CAMBIO! Creamos un nodo de Imagen en lugar de Texto
+		var nuevo_icono = TextureRect.new()
 		
-		# Cambiamos el color y tamaño
-		nuevo_texto.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2))
-		nuevo_texto.add_theme_font_size_override("font_size", 12)
+		# Le ponemos la fotito que cargaste en el archivo .tres
+		nuevo_icono.texture = item.icon 
 		
-		# ¡NUEVA LÍNEA! Activamos el salto de línea inteligente
-		nuevo_texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		# Configuramos el tamaño para que encaje en la libreta (ej: 32x32)
+		nuevo_icono.custom_minimum_size = Vector2(32, 32)
+		nuevo_icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		nuevo_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		
-		# Lo añadimos a la pantalla
-		lista_visual.add_child(nuevo_texto)
-		etiquetas_items[item.item_name] = nuevo_texto
+		# --- LE PONEMOS EL FILTRO GRIS ---
+		var material_gris = ShaderMaterial.new()
+		# IMPORTANTE: Asegúrate de que esta ruta sea donde guardaste tu shader
+		material_gris.shader = load("res://scripts/escala_grises.gdshader") 
+		nuevo_icono.material = material_gris
+		# ---------------------------------
+		
+		# Lo añadimos a la libreta
+		lista_visual.add_child(nuevo_icono)
+		# Lo guardamos en el diccionario para buscarlo luego
+		etiquetas_items[item.item_name] = nuevo_icono
 
-# 2. Cuando el jugador agarra el objeto correcto de la góndola:
+
+# --- CUANDO AGARRAMOS LA FRUTA ---
 func _on_item_recolectado(item: ItemData) -> void:
 	if etiquetas_items.has(item.item_name):
-		var etiqueta: Label = etiquetas_items[item.item_name]
+		# Buscamos el ícono en la libreta
+		var icono: TextureRect = etiquetas_items[item.item_name]
 		
-		etiqueta.text = "[X] " + item.item_name
-		etiqueta.add_theme_color_override("font_color", Color(0.6, 0.1, 0.1)) 
+		# ¡MAGIA PURA! Le arrancamos el material gris. 
+		# Al quedarse sin filtro, el color original de Nati vuelve a brillar instantáneamente.
+		icono.material = null 
 		
-		# NUEVA LÍNEA ACÁ TAMBIÉN:
-		etiqueta.add_theme_font_size_override("font_size", 12)
-		
+		# (Opcional) Podemos hacer que salte un poquito para festejar
+		var salto = create_tween()
+		salto.tween_property(icono, "scale", Vector2(1.2, 1.2), 0.1)
+		salto.tween_property(icono, "scale", Vector2(1.0, 1.0), 0.1)
 
 func mostrar_resultados(mensaje: String) -> void:
 	# 1. Congelamos TODO el juego (físicas, jugador)

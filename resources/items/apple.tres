@@ -1,8 +1,14 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c2hcnm3r421sg"]
 
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="1_2oqkr"]
 [ext_resource type="Script" uid="uid://dxd5nknl72iln" path="res://scripts/item_data.gd" id="1_4nsy8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yw5el"]
+atlas = ExtResource("1_2oqkr")
+region = Rect2(32, 32, 16, 16)
 
 [resource]
 script = ExtResource("1_4nsy8")
 item_name = "Manzana"
+icon = SubResource("AtlasTexture_yw5el")
 metadata/_custom_type_script = "uid://dxd5nknl72iln"
