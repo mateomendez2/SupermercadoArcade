@@ -422,6 +422,8 @@ animations = [{
 
 [node name="MovingNPC" type="Node2D" unique_id=1691588292]
 script = ExtResource("1_o4fq0")
+tiempo_caminando = 3.0
+tiempo_espera = 4.0
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1116084462]
 unique_name_in_owner = true

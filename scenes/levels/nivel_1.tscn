@@ -1079,10 +1079,10 @@ position = Vector2(145, 144)
 position = Vector2(145, 272)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
-position = Vector2(145, 304)
+position = Vector2(113, 303)
 
 [node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
-position = Vector2(192, 0)
+position = Vector2(255, 0)
 
 [node name="HazardSpill5" parent="." unique_id=1379264887 instance=ExtResource("7_uc16u")]
 position = Vector2(337, 272)
@@ -1125,6 +1125,7 @@ offset_left = -57.0
 offset_top = -6.0
 offset_right = 57.0
 offset_bottom = 17.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 14
 text = "SECTOR COBRO"
 horizontal_alignment = 1
@@ -1156,6 +1157,7 @@ offset_left = -57.0
 offset_top = -8.0
 offset_right = 57.0
 offset_bottom = 15.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 15
 text = "YOGURT"
 horizontal_alignment = 1

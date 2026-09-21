@@ -38,22 +38,41 @@ func interact() -> ItemData:
 
 # Esta función SOLO se llama si el GameManager dice que ganaste el QTE
 func succesful_interaction() -> void:
-	minijuego_guardado = "" # Borramos la memoria al ganar
+	minijuego_guardado = "" 
 	is_empty = true 
-	item_visual.hide() 
 	
+	# --- ¡CAMBIO DE ORDEN! ---
+	# Le avisamos al GameManager AL INSTANTE. 
+	# Esto dispara la animación del Jugador, el sonido y tacha la libreta.
 	print("Góndola: Toma tu ", item_content.item_name)
-	# Entregamos el ítem al inventario
 	GameManager.add_item(item_content)
-
-# El GameManager llamará a esta función si pierdes la barrita
-func failed_interaction() -> void:
-	fallos += 1
-	print("Góndola: Fallaste. Llevas ", fallos, " fallos.")
+	# -------------------------
 	
-	if fallos >= 5:
-		minijuego_guardado = "" # Borramos la memoria
-		iniciar_cooldown()
+	# Y MIENTRAS TANTO, la fruta hace su propio show:
+	var pos_original_y = item_visual.position.y
+	var pop_tween = create_tween()
+	
+	pop_tween.set_parallel(true)
+	pop_tween.tween_property(item_visual, "position:y", pos_original_y - 30.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	pop_tween.tween_property(item_visual, "scale", Vector2(1.5, 1.5), 0.3)
+	
+	pop_tween.chain() 
+	pop_tween.tween_interval(0.4) 
+	
+	pop_tween.set_parallel(true) 
+	pop_tween.tween_property(item_visual, "position:y", pos_original_y - 15.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	pop_tween.tween_property(item_visual, "modulate:a", 0.0, 0.3)
+	
+	await pop_tween.finished
+	item_visual.hide()
+
+# El GameManager llamará a esta función si pierdes TODO el minijuego
+func failed_interaction() -> void:
+	# Como el minijuego ya contó los 5 fallos adentro suyo, 
+	# si llegamos acá significa que se agotaron las oportunidades.
+	# ¡Bloqueamos directamente!
+	print("Góndola: Agotaste los intentos. ¡Bloqueando!")
+	iniciar_cooldown()
 
 # La rutina que bloquea y anima el reloj
 func iniciar_cooldown() -> void:
