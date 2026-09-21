@@ -3,15 +3,15 @@
 [ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="1_x4k6x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s6xo0"]
-size = Vector2(16, 38)
+size = Vector2(28, 36)
 
 [node name="mueble_mitad_decorativo" type="StaticBody2D" unique_id=969787911]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1182334053]
 texture = ExtResource("1_x4k6x")
 region_enabled = true
-region_rect = Rect2(32, 528, 16, 48)
+region_rect = Rect2(960, 464, 32, 48)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=868496563]
-position = Vector2(0, 5)
+position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_s6xo0")
