@@ -94,10 +94,34 @@ func mostrar_resultados(mensaje: String) -> void:
 	boton_siguiente.grab_focus()
 
 # --- BOTONES DE LA PANTALLA DE RESULTADOS ---
+# Variable para saber en qué nivel estamos
+var nivel_actual: int = 1
+
 func _on_boton_siguiente_pressed() -> void:
-	get_tree().paused = false 
-	# EN VEZ DE RECARGAR EL ACTUAL, LE DECIMOS QUE CARGUE EL 2 DIRECTAMENTE
-	get_tree().change_scene_to_file("res://scenes/levels/nivel_2.tscn")
+	# 1. Despausamos el juego y escondemos el cartel de victoria
+	get_tree().paused = false
+	pantalla_resultados.hide()
+	
+	# 2. Sumamos 1 al nivel actual
+	nivel_actual += 1
+	
+	# 3. Borramos el nivel viejo de la pantalla (Sacamos el cartucho)
+	var contenedor = %ContenedorNivel
+	for hijo in contenedor.get_children():
+		hijo.queue_free()
+	
+	# 4. Cargamos el archivo del nivel nuevo (Ej: "res://scenes/levels/nivel_2.tscn")
+	var ruta_nivel = "res://scenes/levels/nivel_" + str(nivel_actual) + ".tscn"
+	
+	# Verificamos si ese nivel existe (por si ya ganaste el último nivel)
+	if ResourceLoader.exists(ruta_nivel):
+		# Lo fabricamos y lo metemos en el contenedor
+		var nuevo_nivel = load(ruta_nivel).instantiate()
+		contenedor.add_child(nuevo_nivel)
+	else:
+		print("¡JUEGO COMPLETADO! No hay más niveles.")
+		# Aquí podrías volver al menú principal o mostrar una pantalla de Fin del Juego
+		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 func _on_boton_menu_pressed() -> void:
 	get_tree().paused = false 

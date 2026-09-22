@@ -14,7 +14,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Nivel_1" parent="." unique_id=1358974874 instance=ExtResource("1_0ay0p")]
+[node name="ContenedorNivel" type="Node" parent="." unique_id=2027435124]
+unique_name_in_owner = true
+
+[node name="Nivel_1" parent="ContenedorNivel" unique_id=1358974874 instance=ExtResource("1_0ay0p")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=431529867]
 

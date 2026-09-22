@@ -1,6 +1,34 @@
 [gd_scene format=3 uid="uid://dgvvbtl2w4wsi"]
 
 [ext_resource type="Script" uid="uid://dqr44a5mduoyy" path="res://scripts/qte_colores.gd" id="1_1mypq"]
+[ext_resource type="Texture2D" uid="uid://b0ayn6j02rtn5" path="res://assets/Panel_QTE_Barra.png" id="2_hbvb7"]
+[ext_resource type="Texture2D" uid="uid://ba5tkwlk3ib3h" path="res://assets/BotonAzul.png" id="3_4iqp1"]
+[ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="4_26rvf"]
+[ext_resource type="Texture2D" uid="uid://cp65ce77te2tl" path="res://assets/BotonAmarillo.png" id="5_akok3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4iqp1"]
+atlas = ExtResource("3_4iqp1")
+region = Rect2(72, 8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26rvf"]
+atlas = ExtResource("4_26rvf")
+region = Rect2(72, 8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akok3"]
+atlas = ExtResource("5_akok3")
+region = Rect2(72, 8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cwvf"]
+atlas = ExtResource("3_4iqp1")
+region = Rect2(8, 8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5mxu"]
+atlas = ExtResource("4_26rvf")
+region = Rect2(8, 8, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bak17"]
+atlas = ExtResource("5_akok3")
+region = Rect2(8, 8, 48, 48)
 
 [node name="QTE_Colores" type="Control" unique_id=1789568607]
 custom_minimum_size = Vector2(200, 80)
@@ -11,6 +39,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_1mypq")
+tex_azul_hundido = SubResource("AtlasTexture_4iqp1")
+tex_rojo_hundido = SubResource("AtlasTexture_26rvf")
+tex_amarillo_hundido = SubResource("AtlasTexture_akok3")
 
 [node name="Fondo" type="ColorRect" parent="." unique_id=1758555355]
 layout_mode = 1
@@ -19,19 +50,74 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1254902, 0.1254902, 0.1254902, 0.52156866)
+color = Color(0, 0, 0, 0.39215687)
 
-[node name="SecuenciaVisual" type="HBoxContainer" parent="." unique_id=960880912]
+[node name="FondoCartel" type="TextureRect" parent="." unique_id=630407671]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+offset_left = -106.5
+offset_top = -91.0
+offset_right = 106.5
+offset_bottom = 91.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_hbvb7")
+
+[node name="SecuenciaVisual" type="HBoxContainer" parent="FondoCartel" unique_id=960880912]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = 24.0
+offset_right = 81.0
+offset_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
+
+[node name="BotonAzul" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=85933578]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_7cwvf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonRojo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=247487157]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_l5mxu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=1111556134]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_bak17")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LucesTarget" type="HBoxContainer" parent="FondoCartel" unique_id=603740832]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -26.0
+offset_right = 30.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 6
