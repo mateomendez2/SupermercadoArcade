@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://crceowgoat7ge"]
+
+[ext_resource type="PackedScene" uid="uid://div0hovqwnvet" path="res://scenes/objects/interactable.tscn" id="1_tlbkq"]
+[ext_resource type="Resource" uid="uid://yq88wit7us8x" path="res://resources/items/Clean_product.tres" id="2_tlbkq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w0ekh"]
+size = Vector2(54, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_so48f"]
+size = Vector2(60, 34)
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_tlbkq")]
+item_content = ExtResource("2_tlbkq")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+position = Vector2(1, 15)
+shape = SubResource("RectangleShape2D_w0ekh")
+
+[node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_so48f")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+region_rect = Rect2(704, 400, 64, 48)
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+position = Vector2(20, 7)
+region_rect = Rect2(16, 32, 16, 16)

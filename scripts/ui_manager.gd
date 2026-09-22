@@ -96,7 +96,8 @@ func mostrar_resultados(mensaje: String) -> void:
 # --- BOTONES DE LA PANTALLA DE RESULTADOS ---
 func _on_boton_siguiente_pressed() -> void:
 	get_tree().paused = false 
-	get_tree().reload_current_scene()
+	# EN VEZ DE RECARGAR EL ACTUAL, LE DECIMOS QUE CARGUE EL 2 DIRECTAMENTE
+	get_tree().change_scene_to_file("res://scenes/levels/nivel_2.tscn")
 
 func _on_boton_menu_pressed() -> void:
 	get_tree().paused = false 

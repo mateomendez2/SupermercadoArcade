@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://2hlx1cbdrxa1" path="res://scenes/obstacles/moving_npc.tscn" id="15_oopf4"]
 [ext_resource type="PackedScene" uid="uid://dn52t8wv5x8f5" path="res://scenes/obstacles/heladera_obstaculo.tscn" id="17_0ew28"]
 [ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="20_b7im0"]
-[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/objects/letrero.tscn" id="23_5c5jg"]
+[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="23_5c5jg"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="23_ut33o"]
 [ext_resource type="PackedScene" uid="uid://d4nftpl3yfr2a" path="res://scenes/obstacles/baranda_seguridad.tscn" id="24_5c5jg"]
 [ext_resource type="PackedScene" uid="uid://dyio2toauaf5j" path="res://scenes/obstacles/cartel_amarillo.tscn" id="24_o0o1h"]

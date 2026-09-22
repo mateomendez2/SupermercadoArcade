@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cxtycne88ve7t" path="res://assets/personajecorrerarriba.png" id="14_yritj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1fqmo"]
-size = Vector2(64, 80)
+size = Vector2(84, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_inhyd"]
 atlas = ExtResource("3_bmao2")
@@ -426,7 +426,7 @@ size = Vector2(64, 64)
 script = ExtResource("1_gtf4q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=609892723]
-position = Vector2(0, 8)
+position = Vector2(10, 8)
 shape = SubResource("RectangleShape2D_1fqmo")
 
 [node name="SpriteCajero" type="AnimatedSprite2D" parent="." unique_id=845598636]
