@@ -67,60 +67,41 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_hbvb7")
 
-[node name="SecuenciaVisual" type="HBoxContainer" parent="FondoCartel" unique_id=960880912]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = 24.0
-offset_right = 81.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 10
-
-[node name="BotonAzul" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=85933578]
+[node name="BotonAzul" type="TextureRect" parent="FondoCartel" unique_id=85933578]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
+offset_left = 59.5
+offset_top = 62.0
+offset_right = 91.5
+offset_bottom = 102.0
 texture = SubResource("AtlasTexture_7cwvf")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BotonRojo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=247487157]
+[node name="BotonRojo" type="TextureRect" parent="FondoCartel" unique_id=247487157]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
+offset_left = 101.5
+offset_top = 82.0
+offset_right = 133.5
+offset_bottom = 122.0
 texture = SubResource("AtlasTexture_l5mxu")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=1111556134]
+[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel" unique_id=1111556134]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
-layout_mode = 2
+layout_mode = 0
+offset_left = 143.5
+offset_top = 62.0
+offset_right = 175.5
+offset_bottom = 102.0
 texture = SubResource("AtlasTexture_bak17")
 expand_mode = 1
 stretch_mode = 5
-
-[node name="LucesTarget" type="HBoxContainer" parent="FondoCartel" unique_id=603740832]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -26.0
-offset_right = 30.0
-offset_bottom = 14.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 6
 
 [node name="Label" type="Label" parent="." unique_id=360273202]
 layout_mode = 0

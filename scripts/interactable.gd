@@ -23,6 +23,10 @@ var reloj_tween: Tween
 
 var minijuego_guardado: String = "" # Puede ser "barrita", "colores" o ""
 
+func _ready() -> void:
+	# Nos suscribimos a la señal del GameManager para saber cuándo se le cae algo al jugador
+	GameManager.item_dropped.connect(_on_item_devuelto)
+
 func interact() -> ItemData:
 	# NUEVO: Si está bloqueada, no hacemos nada y rechazamos la interacción
 	if is_locked:
@@ -65,6 +69,9 @@ func succesful_interaction() -> void:
 	
 	await pop_tween.finished
 	item_visual.hide()
+	item_visual.position.y = pos_original_y 
+	print("Góndola: Toma tu ", item_content.item_name)
+	GameManager.add_item(item_content)
 
 # El GameManager llamará a esta función si pierdes TODO el minijuego
 func failed_interaction() -> void:
@@ -118,3 +125,17 @@ func _on_area_exited(area: Area2D) -> void:
 		if GameManager.gondola_actual == self:
 			print("🏃 Góndola: Cerrando por ALEJAMIENTO DEL JUGADOR.")
 			GameManager.cancelar_qte()
+
+# Cuando el jugador pierde un ítem por un choque
+func _on_item_devuelto(item_perdido: ItemData) -> void:
+	# Si esta góndola está vacía, Y su contenido es igual al que el jugador perdió...
+	if is_empty and item_content == item_perdido:
+		# ¡Magia! Se vuelve a llenar
+		is_empty = false
+		item_visual.show()
+		
+		# IMPORTANTE: Restauramos el color original por si quedó transparente de la vez que lo agarramos
+		item_visual.modulate.a = 1.0
+		item_visual.scale = Vector2(1.0, 1.0)
+		
+		print("Góndola: He recuperado mi ", item_content.item_name)

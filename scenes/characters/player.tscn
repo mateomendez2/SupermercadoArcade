@@ -421,9 +421,9 @@ height = 10.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yewv4"]
 size = Vector2(32, 25.5)
 
-[node name="Player" type="CharacterBody2D" unique_id=177984774]
+[node name="Player" type="CharacterBody2D" unique_id=177984774 groups=["Player"]]
 script = ExtResource("1_rp718")
-speed = 125.0
+speed = 95.0
 friction = 1400.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=892306982]
@@ -449,9 +449,5 @@ limit_right = 384
 limit_bottom = 400
 
 [node name="SonidoRecoger" type="AudioStreamPlayer2D" parent="." unique_id=1038823411]
-stream = ExtResource("14_k4v7y")
-volume_db = 10.0
-
-[node name="SonidoRecoger2" type="AudioStreamPlayer2D" parent="." unique_id=2109883941]
 stream = ExtResource("14_k4v7y")
 volume_db = 10.0

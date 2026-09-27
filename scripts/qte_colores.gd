@@ -10,9 +10,6 @@ var tex_azul_normal: Texture2D
 var tex_rojo_normal: Texture2D
 var tex_amarillo_normal: Texture2D
 
-# Referencia a la cajita de arriba donde aparecerán las luces
-@onready var luces_contrasena: HBoxContainer = %LucesTarget
-
 @onready var botones = {
 	"azul": %BotonAzul,
 	"rojo": %BotonRojo,
@@ -22,7 +19,7 @@ var tex_amarillo_normal: Texture2D
 var secuencia_correcta: Array[String] = [] 
 var indice_actual: int = 0 
 var is_active: bool = false
-var cantidad_de_botones: int = 4 
+var cantidad_de_secuencias: int = 4 
 var estado_juego: String = "MOSTRANDO" 
 var intentos_restantes: int = 5
 
@@ -36,7 +33,7 @@ func start_qte() -> void:
 	show()
 	intentos_restantes = 5
 	generar_secuencia()
-	dibujar_luces() # Fabricamos las luces arriba
+	apagar_botones()
 	
 	indice_actual = 0
 	is_active = true
@@ -45,59 +42,48 @@ func start_qte() -> void:
 func generar_secuencia() -> void:
 	secuencia_correcta.clear()
 	var colores_posibles = ["azul", "rojo", "amarillo"]
-	for i in range(cantidad_de_botones):
+	for i in range(cantidad_de_secuencias):
 		secuencia_correcta.append(colores_posibles.pick_random())
 
-# --- DIBUJAR LUCES (ARRIBA) ---
-func dibujar_luces() -> void:
-	for hijo in luces_contrasena.get_children():
-		hijo.queue_free()
+func apagar_botones() -> void:
+	# Los ponemos bien oscuros (como luz apagada)
+	for color in botones:
+		botones[color].modulate = Color(0.2, 0.2, 0.2, 1.0)
 		
-	for color_pedido in secuencia_correcta:
-		var circulo = Panel.new()
-		circulo.custom_minimum_size = Vector2(32, 32)
-		
-		var estilo = StyleBoxFlat.new()
-		estilo.corner_radius_top_left = 16
-		estilo.corner_radius_top_right = 16
-		estilo.corner_radius_bottom_left = 16
-		estilo.corner_radius_bottom_right = 16
-		estilo.anti_aliasing = false 
-		
-		match color_pedido:
-			"azul": estilo.bg_color = Color.BLUE
-			"rojo": estilo.bg_color = Color.RED
-			"amarillo": estilo.bg_color = Color.YELLOW
-			
-		circulo.add_theme_stylebox_override("panel", estilo)
-		
-		# Nacen Negros (Ocultando el color)
-		circulo.modulate = Color.BLACK 
-		luces_contrasena.add_child(circulo)
+func restablecer_botones() -> void:
+	# Los ponemos en color normal (apagado pero visible)
+	for color in botones:
+		botones[color].modulate = Color.WHITE
 
-# --- ANIMACIÓN "SIMÓN DICE" (En las luces de arriba) ---
+# --- LA ANIMACIÓN "SIMÓN DICE" EN LOS BOTONES DE NATI ---
 func animar_secuencia() -> void:
 	estado_juego = "MOSTRANDO" 
 	await get_tree().create_timer(0.5).timeout 
 	
-	for i in range(secuencia_correcta.size()):
+	for color_pedido in secuencia_correcta:
 		if not is_active: return
-		if i >= luces_contrasena.get_child_count(): return
 		
-		var luz = luces_contrasena.get_child(i)
+		# ¡MAGIA! En lugar de prender una luz, "hundimos" el botón de Nati como si un fantasma lo estuviera tocando
+		var btn = botones[color_pedido]
 		
-		if is_instance_valid(luz):
-			luz.modulate = Color.WHITE # Muestra el color
+		# ENCIENDE
+		btn.modulate = Color(1.5, 1.5, 1.5, 1.0) # Brilla mucho
+		animar_hundimiento(color_pedido, true) # Lo hundimos (true = por la máquina)
+		
 		await get_tree().create_timer(0.4).timeout 
 		
-		if is_instance_valid(luz):
-			luz.modulate = Color.BLACK # Vuelve a ocultarlo en negro
+		# APAGA
+		if not is_active: return
+		btn.modulate = Color(0.2, 0.2, 0.2, 1.0) # Se vuelve a oscurecer
+		animar_hundimiento(color_pedido, false) # Lo levantamos (false)
+		
 		await get_tree().create_timer(0.2).timeout
 		
 	if is_active:
 		estado_juego = "JUGANDO"
+		restablecer_botones() # Cuando te toca a ti, se iluminan a su color normal
 
-# --- LÓGICA DE JUGABILIDAD (En los botones de abajo) ---
+# --- LÓGICA DE JUGABILIDAD ---
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
@@ -116,11 +102,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			comprobar_boton(color_apretado)
 
 func comprobar_boton(color_apretado: String) -> void:
-	animar_hundimiento(color_apretado) # Hunde el botón de Nati abajo
+	# El jugador lo hunde con su dedo (Cortito para que no se trabe)
+	efecto_dedo_jugador(color_apretado)
 	
 	if color_apretado == secuencia_correcta[indice_actual]:
-		# ¡ACERTÓ! Revela el color en la luz de arriba
-		luces_contrasena.get_child(indice_actual).modulate = Color.WHITE
 		indice_actual += 1 
 		
 		if indice_actual >= secuencia_correcta.size():
@@ -135,31 +120,36 @@ func comprobar_boton(color_apretado: String) -> void:
 		if intentos_restantes <= 0:
 			terminar_juego(false)
 		else:
-			# --- REINICIO DEL MINIJUEGO (NUEVO INTENTO) ---
 			is_active = true
+			apagar_botones()
 			indice_actual = 0
-			
-			generar_secuencia() # ¡NUEVA LÍNEA! Crea una nueva contraseña
-			dibujar_luces()     # ¡NUEVA LÍNEA! Dibuja los círculos otra vez
-			
-			animar_secuencia()  # Empieza a mostrar la nueva contraseña
+			animar_secuencia()
 
-# --- EFECTO VISUAL DE HUNDIR BOTONES DE NATI ---
-func animar_hundimiento(color: String) -> void:
+# --- CONTROLADOR DE ARTE DE LOS BOTONES ---
+func animar_hundimiento(color: String, hundir: bool) -> void:
 	var btn = botones[color]
-	
-	match color:
-		"azul": if tex_azul_hundido: btn.texture = tex_azul_hundido
-		"rojo": if tex_rojo_hundido: btn.texture = tex_rojo_hundido
-		"amarillo": if tex_amarillo_hundido: btn.texture = tex_amarillo_hundido
+	if hundir:
+		match color:
+			"azul": if tex_azul_hundido: btn.texture = tex_azul_hundido
+			"rojo": if tex_rojo_hundido: btn.texture = tex_rojo_hundido
+			"amarillo": if tex_amarillo_hundido: btn.texture = tex_amarillo_hundido
+	else:
+		match color:
+			"azul": btn.texture = tex_azul_normal
+			"rojo": btn.texture = tex_rojo_normal
+			"amarillo": btn.texture = tex_amarillo_normal
+
+# Efecto ultra-rápido solo para cuando el jugador aprieta
+func efecto_dedo_jugador(color: String) -> void:
+	var btn = botones[color]
+	animar_hundimiento(color, true)
+	btn.modulate = Color(1.2, 1.2, 1.2, 1.0) # Ilumina un poquito
 	
 	await get_tree().create_timer(0.15).timeout
 	if not is_active: return
 	
-	match color:
-		"azul": btn.texture = tex_azul_normal
-		"rojo": btn.texture = tex_rojo_normal
-		"amarillo": btn.texture = tex_amarillo_normal
+	animar_hundimiento(color, false)
+	btn.modulate = Color.WHITE
 
 func terminar_juego(victoria: bool) -> void:
 	is_active = false

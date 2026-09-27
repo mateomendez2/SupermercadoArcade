@@ -22,13 +22,12 @@ func _ready() -> void:
 	if arte_elegido != null:
 		sprite.texture = arte_elegido
 
-# Cuando alguien pisa el charco...
 func _on_body_entered(body: Node2D) -> void:
-	# Preguntamos si el que pisó es de la clase Player
 	if body is Player:
 		body.set_slippery(true)
+		# ¡NUEVA LÍNEA! Te hace perder una fruta al pisarlo
+		GameManager.perder_ultimo_item()
 
-# Cuando alguien sale del charco...
 func _on_body_exited(body: Node2D) -> void:
 	if body is Player:
 		body.set_slippery(false)

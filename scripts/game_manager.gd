@@ -6,6 +6,8 @@ signal item_collected(item: ItemData) # Se emite cuando tachamos uno de la lista
 signal game_won
 signal start_qte_colores 
 signal start_qte_mashing
+signal lista_lista_para_pagar # Avisa que ya tenemos todo
+signal lista_incompleta       # Avisa que nos robaron algo y ya no tenemos todo
 
 # 1. LA BASE DE DATOS (Nuestra lista maestra)
 # preload() carga los archivos a la memoria en cuanto el juego arranca.
@@ -26,6 +28,8 @@ var juego_activo: bool = false
 signal time_updated(tiempo: int)
 signal game_over_reached
 signal qte_cancelled # NUEVA SEÑAL
+
+signal item_dropped(item: ItemData) # ¡NUEVA! Avisa qué ítem se nos cayó
 
 func _ready() -> void:
 	pass # Ya no generamos la lista aquí automáticamente
@@ -71,6 +75,7 @@ func add_item(new_item: ItemData) -> void:
 func check_win_condition() -> void:
 	if collected_items.size() == target_list.size():
 		print("Lista completa. ¡Ve a la caja registradora a pagar!")
+		lista_lista_para_pagar.emit() # ¡NUEVA LÍNEA!
 
 # ¡NUEVA FUNCIÓN! La caja registradora llamará a esta.
 func intentar_pagar() -> void:
@@ -155,3 +160,15 @@ func cancelar_qte() -> void:
 		
 	# Limpiamos todo
 	gondola_actual = null
+
+# --- SISTEMA DE CASTIGO ---
+func perder_ultimo_item() -> ItemData:
+	if collected_items.size() == 0: return null
+	
+	var item_perdido = collected_items.pop_back()
+	item_dropped.emit(item_perdido)
+	
+	# ¡NUEVA LÍNEA! Como perdimos algo, la lista ya no está completa
+	lista_incompleta.emit() 
+	
+	return item_perdido

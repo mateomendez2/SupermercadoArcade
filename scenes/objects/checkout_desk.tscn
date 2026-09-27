@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://bpjhd1f6e5so4" path="res://assets/personajecorrerizquierda.png" id="12_xrrwd"]
 [ext_resource type="Texture2D" uid="uid://dh8hynecb5v75" path="res://assets/personajecorrerderecha.png" id="13_ol8tp"]
 [ext_resource type="Texture2D" uid="uid://cxtycne88ve7t" path="res://assets/personajecorrerarriba.png" id="14_yritj"]
+[ext_resource type="Script" uid="uid://7cpnxb64s2yy" path="res://scripts/flecha_guia.gd" id="15_vbns1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1fqmo"]
 size = Vector2(84, 80)
@@ -422,7 +423,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cnq0w"]
 size = Vector2(64, 64)
 
-[node name="CheckoutDesk" type="Area2D" unique_id=1181652669]
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ssg4l"]
+load_path = "res://.godot/imported/Flecha_amarilla.png-63cee8ecdd624bd6d9286cca3b2a7972.ctex"
+
+[node name="CheckoutDesk" type="Area2D" unique_id=1181652669 groups=["CheckoutDesk"]]
 script = ExtResource("1_gtf4q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=609892723]
@@ -447,3 +451,10 @@ shape = SubResource("RectangleShape2D_cnq0w")
 texture = ExtResource("2_1fqmo")
 region_enabled = true
 region_rect = Rect2(0, 128, 64, 64)
+
+[node name="FlechaGuia" type="Node2D" parent="." unique_id=1557287736]
+unique_name_in_owner = true
+script = ExtResource("15_vbns1")
+
+[node name="Sprite2D" type="Sprite2D" parent="FlechaGuia" unique_id=1504040061]
+texture = SubResource("CompressedTexture2D_ssg4l")

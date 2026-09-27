@@ -55,4 +55,8 @@ func update_animation(is_moving: bool) -> void:
 # --- CASTIGO AL JUGADOR ---
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body is Player:
-		body.apply_penalty(5.0)
+		
+		# ¡EL CAMBIO MÁGICO! Le mandamos hitbox.global_position
+		body.apply_penalty(5.0, hitbox.global_position)
+		
+		GameManager.perder_ultimo_item()
