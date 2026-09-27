@@ -1,0 +1,133 @@
+[gd_scene format=3 uid="uid://buvd11p1cwpn2"]
+
+[ext_resource type="Script" uid="uid://cwfcml3tqvwj6" path="res://scripts/qte_mashing.gd" id="1_xdo60"]
+[ext_resource type="Texture2D" uid="uid://ba5tkwlk3ib3h" path="res://assets/BotonAzul.png" id="2_7l4m2"]
+[ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="3_hy0a7"]
+[ext_resource type="Texture2D" uid="uid://cp65ce77te2tl" path="res://assets/BotonAmarillo.png" id="4_iesky"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7l4m2"]
+atlas = ExtResource("2_7l4m2")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hy0a7"]
+atlas = ExtResource("3_hy0a7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iesky"]
+atlas = ExtResource("4_iesky")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6cq8l"]
+load_path = "res://.godot/imported/Panel_QTE_Barra.png-ebb16efa45728b3ce7bdfbce2cb3b8ed.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fxvgd"]
+atlas = ExtResource("2_7l4m2")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ygv8o"]
+atlas = ExtResource("3_hy0a7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41306"]
+atlas = ExtResource("4_iesky")
+region = Rect2(0, 0, 32, 32)
+
+[node name="QTE_Mashing" type="Control" unique_id=1096045055]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xdo60")
+tex_azul_hundido = SubResource("AtlasTexture_7l4m2")
+tex_rojo_hundido = SubResource("AtlasTexture_hy0a7")
+tex_amarillo_hundido = SubResource("AtlasTexture_iesky")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=162993247]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="FondoCartel" type="TextureRect" parent="." unique_id=6995230]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_6cq8l")
+
+[node name="ProgressBar" type="ProgressBar" parent="FondoCartel" unique_id=2107685798]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -13.5
+offset_right = 73.0
+offset_bottom = 13.5
+grow_horizontal = 2
+grow_vertical = 2
+show_percentage = false
+
+[node name="SecuenciaVisual" type="HBoxContainer" parent="FondoCartel" unique_id=1243908339]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -35.0
+offset_top = 24.0
+offset_right = 81.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="BotonAzul" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=463699732]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_fxvgd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonRojo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=1107973923]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_ygv8o")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel/SecuenciaVisual" unique_id=670822488]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = SubResource("AtlasTexture_41306")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="." unique_id=2066954111]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 148.0
+offset_right = 363.0
+offset_bottom = 173.0
+text = "PRESIONÁ"
+horizontal_alignment = 1
+vertical_alignment = 1

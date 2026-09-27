@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c10ck7dy1bqcy" path="res://assets/anotadorobjetos.png" id="2_vspwy"]
 [ext_resource type="PackedScene" uid="uid://cfr8u4ga4ww1u" path="res://scenes/ui/qte_minigame.tscn" id="3_02nsg"]
 [ext_resource type="PackedScene" uid="uid://dgvvbtl2w4wsi" path="res://scenes/ui/qte_colores.tscn" id="5_7n028"]
+[ext_resource type="PackedScene" uid="uid://buvd11p1cwpn2" path="res://scenes/ui/qte_mashing.tscn" id="6_jvuow"]
 
 [node name="Main" type="Control" unique_id=1195027389]
 layout_mode = 3
@@ -38,10 +39,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -86.0
-offset_top = -117.0
-offset_right = -5.0
-offset_bottom = -16.0
+offset_left = -93.0
+offset_top = -116.01233
+offset_right = -4.0
+offset_bottom = -5.0370483
 grow_horizontal = 0
 grow_vertical = 0
 texture = ExtResource("2_vspwy")
@@ -52,11 +53,11 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 18.0
 offset_top = 2.0
-offset_right = 75.0
+offset_right = 86.0
 offset_bottom = 96.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 3
+columns = 2
 
 [node name="RelojVisual" type="Label" parent="CanvasLayer/InterfazFlotante" unique_id=2107490665]
 unique_name_in_owner = true
@@ -121,6 +122,13 @@ layout_mode = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+
+[node name="QTE_Mashing" parent="CanvasLayer/InterfazFlotante" unique_id=1096045055 instance=ExtResource("6_jvuow")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
 
 [connection signal="pressed" from="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer/BotonSiguiente" to="CanvasLayer/InterfazFlotante/Libreta" method="_on_boton_siguiente_pressed"]
 [connection signal="pressed" from="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer/BotonMenu" to="CanvasLayer/InterfazFlotante/Libreta" method="_on_boton_menu_pressed"]

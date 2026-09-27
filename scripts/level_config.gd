@@ -17,7 +17,23 @@ var charcos_viejos: Array = []
 
 var duracion_turno_actual: float = 15.0
 
+# --- LÍMITES DE LA CÁMARA ---
+@export var cam_limite_arriba: int = -64
+@export var cam_limite_abajo: int = 384
+@export var cam_limite_izquierdo: int = 0
+@export var cam_limite_derecho: int = 640
+
 func _ready() -> void:
+	# -------------------------------------------------------------
+	# 0. AJUSTAMOS LA CÁMARA PRIMERO (Para evitar el salto brusco)
+	# -------------------------------------------------------------
+	var camara = jugador.get_node("Camera2D")
+	if camara:
+		camara.limit_top = cam_limite_arriba
+		camara.limit_bottom = cam_limite_abajo
+		camara.limit_left = cam_limite_izquierdo
+		camara.limit_right = cam_limite_derecho
+		
 	# -------------------------------------------------------------
 	# 1. SETUP DE OBSTÁCULOS SILENCIOSO (¡Antes de la peli!)
 	# -------------------------------------------------------------
@@ -51,10 +67,11 @@ func _ready() -> void:
 	jugador.update_animation(false)
 	jugador.is_frozen = false
 	
+	# --- APAGAR Y CERRAR LA PUERTA ---
 	var puerta = get_tree().get_first_node_in_group("PuertaEntrada")
 	if puerta and puerta.has_method("sellar_puerta"):
 		puerta.sellar_puerta()
-	
+		
 	# -------------------------------------------------------------
 	# 3. AHORA SÍ, ¡ARRANCA EL JUEGO OFICIAL! 
 	# -------------------------------------------------------------

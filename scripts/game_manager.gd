@@ -5,6 +5,7 @@ signal list_generated(target_items: Array[ItemData]) # Se emite al inicio
 signal item_collected(item: ItemData) # Se emite cuando tachamos uno de la lista
 signal game_won
 signal start_qte_colores 
+signal start_qte_mashing
 
 # 1. LA BASE DE DATOS (Nuestra lista maestra)
 # preload() carga los archivos a la memoria en cuanto el juego arranca.
@@ -97,20 +98,27 @@ func request_qte(gondola: Interactable) -> void:
 	
 	# ¿La góndola ya tiene un minijuego guardado en su memoria?
 	if gondola_actual.minijuego_guardado == "":
-		# Tiramos la moneda por PRIMERA VEZ
-		var moneda = randf()
-		if moneda > 0.5:
+		
+		# Tiramos un dado de 3 caras (del 0 al 2)
+		var dado = randi() % 3
+		
+		if dado == 0:
 			gondola_actual.minijuego_guardado = "barrita"
-		else:
+		elif dado == 1:
 			gondola_actual.minijuego_guardado = "colores"
-	
-	# Ahora simplemente leemos la memoria de la góndola y abrimos el correcto
+		else:
+			gondola_actual.minijuego_guardado = "mashing"
+			
+	# Ahora leemos la memoria y abrimos el correcto
 	if gondola_actual.minijuego_guardado == "barrita":
 		print("Abriendo la Barrita...")
 		start_qte_ui.emit() 
 	elif gondola_actual.minijuego_guardado == "colores":
 		print("Abriendo los Colores...")
 		start_qte_colores.emit()
+	elif gondola_actual.minijuego_guardado == "mashing":
+		print("Abriendo el Machaque...")
+		start_qte_mashing.emit()
 
 func resolve_qte(success: bool) -> void:
 	# GUARDIA DE SEGURIDAD (Evita el crash rojo por si acaso)

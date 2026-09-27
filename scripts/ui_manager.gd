@@ -25,6 +25,13 @@ func _ready() -> void:
 	GameManager.start_qte_colores.connect(%QTE_Colores.start_qte)
 	%QTE_Colores.qte_finished.connect(GameManager.resolve_qte)
 	
+	GameManager.start_qte_mashing.connect(%QTE_Mashing.start_qte)
+	%QTE_Mashing.qte_finished.connect(GameManager.resolve_qte)
+	
+	# Le decimos que también se esconda si el jugador huye del cajón
+	GameManager.qte_cancelled.connect(%QTE_Mashing.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Mashing.is_active = false)
+	
 	# NUEVO: Si huyen, escondemos las dos pantallas a la fuerza y las desactivamos
 	GameManager.qte_cancelled.connect(%QTE_Minigame.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Minigame.is_active = false)

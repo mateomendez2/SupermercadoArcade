@@ -6,11 +6,11 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ouiy"]
 atlas = ExtResource("3_0gn5w")
-region = Rect2(8, 8, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nwd3d"]
 atlas = ExtResource("3_0gn5w")
-region = Rect2(72, 8, 48, 48)
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ssu0i"]
 load_path = "res://.godot/imported/QuickTimeEvent.png-a57a02cd048503355188178862c86c47.ctex"
@@ -28,7 +28,7 @@ region = Rect2(6, 12, 19, 11)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_151eb"]
 atlas = ExtResource("3_0gn5w")
-region = Rect2(8, 8, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
 [node name="QTE_Minigame" type="Control" unique_id=620292326]
 layout_mode = 3
@@ -119,3 +119,13 @@ offset_top = 105.0
 offset_right = 181.5
 offset_bottom = 153.0
 texture = SubResource("AtlasTexture_151eb")
+
+[node name="Label" type="Label" parent="." unique_id=436349190]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 146.0
+offset_right = 363.0
+offset_bottom = 174.0
+text = "ATINÁ"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -8,27 +8,27 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4iqp1"]
 atlas = ExtResource("3_4iqp1")
-region = Rect2(72, 8, 48, 48)
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_26rvf"]
 atlas = ExtResource("4_26rvf")
-region = Rect2(72, 8, 48, 48)
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_akok3"]
 atlas = ExtResource("5_akok3")
-region = Rect2(72, 8, 48, 48)
+region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7cwvf"]
 atlas = ExtResource("3_4iqp1")
-region = Rect2(8, 8, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l5mxu"]
 atlas = ExtResource("4_26rvf")
-region = Rect2(8, 8, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bak17"]
 atlas = ExtResource("5_akok3")
-region = Rect2(8, 8, 48, 48)
+region = Rect2(0, 0, 32, 32)
 
 [node name="QTE_Colores" type="Control" unique_id=1789568607]
 custom_minimum_size = Vector2(200, 80)
@@ -121,3 +121,13 @@ offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="." unique_id=360273202]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 146.0
+offset_right = 363.0
+offset_bottom = 174.0
+text = "MEMORIZÁ"
+horizontal_alignment = 1
+vertical_alignment = 1

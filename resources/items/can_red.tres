@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://diedgqpaa8ohg"]
+
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="1_2soof"]
+[ext_resource type="Script" uid="uid://dxd5nknl72iln" path="res://scripts/item_data.gd" id="2_50k1t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xtnq8"]
+atlas = ExtResource("1_2soof")
+region = Rect2(16, 16, 16, 16)
+
+[resource]
+script = ExtResource("2_50k1t")
+item_name = "Lata Comida Roja"
+icon = SubResource("AtlasTexture_xtnq8")
+metadata/_custom_type_script = "uid://dxd5nknl72iln"

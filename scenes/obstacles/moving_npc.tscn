@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cxtycne88ve7t" path="res://assets/personajecorrerarriba.png" id="13_r4i3a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d47hv"]
-size = Vector2(32, 32)
+size = Vector2(28, 28)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jih75"]
 shader = ExtResource("2_s3p6f")
