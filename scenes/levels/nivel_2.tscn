@@ -1127,10 +1127,22 @@ position = Vector2(273, 272)
 position = Vector2(177, 336)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("12_lwl8p")]
-position = Vector2(17, 239)
+position = Vector2(48, 176)
 
-[node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
-position = Vector2(223, 0)
+[node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
+position = Vector2(0, 64)
+
+[node name="Punto2" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="1" unique_id=158643228]
+position = Vector2(128, 64)
+
+[node name="Punto3" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="2" unique_id=1495986653]
+position = Vector2(128, 160)
+
+[node name="Punto4" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="3" unique_id=1311580197]
+position = Vector2(64, 160)
+
+[node name="Punto5" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="4" unique_id=1097235196]
+position = Vector2(64, 160)
 
 [node name="HazardSpill5" parent="." unique_id=1379264887 instance=ExtResource("11_iswpf")]
 position = Vector2(433, 208)
@@ -1611,10 +1623,22 @@ region_rect = Rect2(256, 448, 64, 64)
 position = Vector2(224, 328)
 
 [node name="MovingNPC2" parent="." unique_id=2002729622 instance=ExtResource("12_lwl8p")]
-position = Vector2(400, 368)
+position = Vector2(336, 368)
 
-[node name="PuntoFinal" parent="MovingNPC2" index="1" unique_id=1636385908]
-position = Vector2(0, -96)
+[node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="0" unique_id=1225420983]
+position = Vector2(64, 0)
+
+[node name="Punto2" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="1" unique_id=158643228]
+position = Vector2(64, -96)
+
+[node name="Punto3" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="2" unique_id=1495986653]
+position = Vector2(-96, -96)
+
+[node name="Punto4" type="Marker2D" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="3" unique_id=839133803]
+position = Vector2(-96, -192)
+
+[node name="Punto5" type="Marker2D" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="4" unique_id=974351717]
+position = Vector2(0, -192)
 
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]

@@ -1,10 +1,10 @@
 extends Node2D
 
-@export var tiempo_caminando: float = 2.0 
-@export var tiempo_espera: float = 1.0 
+@export var velocidad: float = 100.0 # Píxeles por segundo (más alto = más rápido)
+@export var tiempo_espera: float = 0.2
 
 @onready var hitbox: Area2D = %Hitbox
-@onready var punto_final: Marker2D = %PuntoFinal
+@onready var ruta: Node2D = %Ruta # Nuestra carpeta de puntos
 
 # NUEVO: Referencia al dibujo animado (que ahora es hijo de la Hitbox)
 @onready var anim_sprite: AnimatedSprite2D = %Hitbox.get_node("AnimatedSprite2D")
@@ -20,9 +20,38 @@ func _ready() -> void:
 
 func iniciar_patrullaje() -> void:
 	var patrulla_tween = create_tween().set_loops()
-	patrulla_tween.tween_property(hitbox, "position", punto_final.position, tiempo_caminando)
-	patrulla_tween.tween_interval(tiempo_espera)
-	patrulla_tween.tween_property(hitbox, "position", posicion_inicial, tiempo_caminando)
+	var marcadores = ruta.get_children() 
+	
+	if marcadores.size() == 0:
+		return
+		
+	# Usamos un puntero para saber dónde está parado y medir la distancia al siguiente punto
+	var pos_actual = posicion_inicial
+		
+	# 1. VIAJE DE IDA 
+	for marcador in marcadores:
+		# Fórmula: Tiempo = Distancia / Velocidad
+		var tiempo_viaje = pos_actual.distance_to(marcador.position) / velocidad
+		
+		patrulla_tween.tween_property(hitbox, "position", marcador.position, tiempo_viaje)
+		patrulla_tween.tween_interval(tiempo_espera)
+		pos_actual = marcador.position # Anotamos que ya llegó a este punto
+		
+	# 2. VIAJE DE VUELTA
+	var marcadores_reversa = marcadores.duplicate()
+	marcadores_reversa.reverse() 
+	marcadores_reversa.pop_front() 
+	
+	for marcador in marcadores_reversa:
+		var tiempo_viaje = pos_actual.distance_to(marcador.position) / velocidad
+		
+		patrulla_tween.tween_property(hitbox, "position", marcador.position, tiempo_viaje)
+		patrulla_tween.tween_interval(tiempo_espera)
+		pos_actual = marcador.position
+		
+	# 3. VOLVER AL INICIO ORIGINAL
+	var tiempo_final = pos_actual.distance_to(posicion_inicial) / velocidad
+	patrulla_tween.tween_property(hitbox, "position", posicion_inicial, tiempo_final)
 	patrulla_tween.tween_interval(tiempo_espera)
 
 # --- NUEVO: CEREBRO DE ANIMACIÓN ---

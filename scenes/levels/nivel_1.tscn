@@ -1103,10 +1103,19 @@ position = Vector2(145, 144)
 position = Vector2(145, 272)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
-position = Vector2(113, 303)
+position = Vector2(368, 304)
 
-[node name="PuntoFinal" parent="MovingNPC" index="1" unique_id=1636385908]
-position = Vector2(255, 0)
+[node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
+position = Vector2(-224, 0)
+
+[node name="Punto2" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="1" unique_id=158643228]
+position = Vector2(-224, -96)
+
+[node name="Punto3" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="2" unique_id=1495986653]
+position = Vector2(-128, -96)
+
+[node name="Punto4" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="3" unique_id=933207079]
+position = Vector2(-128, -160)
 
 [node name="HazardSpill5" parent="." unique_id=1379264887 instance=ExtResource("7_uc16u")]
 position = Vector2(337, 272)

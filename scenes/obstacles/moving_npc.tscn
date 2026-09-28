@@ -421,9 +421,10 @@ animations = [{
 }]
 
 [node name="MovingNPC" type="Node2D" unique_id=1691588292]
+y_sort_enabled = true
 script = ExtResource("1_o4fq0")
-tiempo_caminando = 3.0
-tiempo_espera = 4.0
+velocidad = 75.0
+tiempo_espera = 0.5
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1116084462]
 unique_name_in_owner = true
@@ -433,9 +434,17 @@ shape = SubResource("RectangleShape2D_d47hv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Hitbox" unique_id=1225584199]
 material = SubResource("ShaderMaterial_jih75")
+position = Vector2(0, -2)
 sprite_frames = SubResource("SpriteFrames_3am1c")
 animation = &"pickup_left"
+frame = 3
+frame_progress = 1.0
 
-[node name="PuntoFinal" type="Marker2D" parent="." unique_id=1636385908]
+[node name="Ruta" type="Node2D" parent="." unique_id=608753318]
 unique_name_in_owner = true
-position = Vector2(64, 0)
+
+[node name="Punto1" type="Marker2D" parent="Ruta" unique_id=1225420983]
+
+[node name="Punto2" type="Marker2D" parent="Ruta" unique_id=158643228]
+
+[node name="Punto3" type="Marker2D" parent="Ruta" unique_id=1495986653]
