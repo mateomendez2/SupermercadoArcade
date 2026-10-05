@@ -11,7 +11,20 @@ var etiquetas_items: Dictionary = {}
 
 @onready var reloj_visual: Label = %RelojVisual
 
+@onready var libreta: TextureRect = %Libreta
+
+# Variables para que la libreta recuerde a dónde volver
+var pos_original_libreta: Vector2
+var escala_original_libreta: Vector2
+
 func _ready() -> void:
+	# Guardamos dónde estaba la libreta originalmente
+	pos_original_libreta = libreta.position
+	escala_original_libreta = libreta.scale
+	# Ponemos el "Pivote" en el centro para que cuando crezca, crezca desde el medio
+	libreta.pivot_offset = libreta.size / 2.0 
+	
+	# ... (siguen tus conexiones de señales de siempre) ...
 	# 1. Nos suscribimos a todas las señales
 	GameManager.list_generated.connect(_on_lista_generada)
 	GameManager.item_collected.connect(_on_item_recolectado)
@@ -64,8 +77,12 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 		material_gris.shader = load("res://scripts/escala_grises.gdshader") 
 		nuevo_icono.material = material_gris
 		
+		# Lo añadimos a la libreta
 		lista_visual.add_child(nuevo_icono)
 		etiquetas_items[item.item_name] = nuevo_icono
+	
+	# ¡NUEVA LÍNEA AL FINAL DE LA FUNCIÓN!
+	animar_presentacion_libreta()
 
 # --- CUANDO AGARRAMOS LA FRUTA ---
 func _on_item_recolectado(item: ItemData) -> void:
@@ -138,3 +155,26 @@ func _on_victoria() -> void:
 func _on_game_over() -> void:
 	reloj_visual.modulate = Color.RED 
 	mostrar_resultados("¡SE ACABÓ EL TIEMPO!")
+
+# --- ANIMACIÓN DE INTRODUCCIÓN DE LA LIBRETA ---
+func animar_presentacion_libreta() -> void:
+	# 1. Calculamos el centro exacto de tu monitor
+	var centro_pantalla = (get_viewport_rect().size / 2.0) - (libreta.size / 2.0)
+	
+	# 2. Teletransportamos la libreta al centro y la hacemos gigante AL INSTANTE
+	libreta.position = centro_pantalla
+	libreta.scale = Vector2(2.0, 2.0)
+	
+	# 3. Armamos la coreografía ESTRICTA
+	var anim_intro = create_tween()
+	
+	# PASO A: Congelada en el medio (Por ejemplo, 2.5 segundos)
+	anim_intro.tween_interval(2.5)
+	
+	# PASO B: Encadenamos el movimiento para que no arranque hasta que termine el intervalo
+	anim_intro.chain()
+	
+	# PASO C: El viaje a la esquina de forma paralela (Lento y suave en 1.0 seg)
+	anim_intro.set_parallel(true)
+	anim_intro.tween_property(libreta, "position", pos_original_libreta, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	anim_intro.tween_property(libreta, "scale", escala_original_libreta, 1.0).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)

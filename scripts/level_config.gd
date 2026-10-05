@@ -24,9 +24,7 @@ var duracion_turno_actual: float = 15.0
 @export var cam_limite_derecho: int = 640
 
 func _ready() -> void:
-	# -------------------------------------------------------------
-	# 0. AJUSTAMOS LA CÁMARA PRIMERO (Para evitar el salto brusco)
-	# -------------------------------------------------------------
+	# 0. AJUSTAMOS LA CÁMARA PRIMERO
 	var camara = jugador.get_node("Camera2D")
 	if camara:
 		camara.limit_top = cam_limite_arriba
@@ -35,7 +33,13 @@ func _ready() -> void:
 		camara.limit_right = cam_limite_derecho
 		
 	# -------------------------------------------------------------
-	# 1. SETUP DE OBSTÁCULOS SILENCIOSO (¡Antes de la peli!)
+	# 1. ¡ARRANCA EL JUEGO OFICIAL Y LA LIBRETA GIGANTE!
+	# -------------------------------------------------------------
+	GameManager.item_collected.connect(_on_item_recolectado)
+	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
+	
+	# -------------------------------------------------------------
+	# 2. SETUP DE OBSTÁCULOS 
 	# -------------------------------------------------------------
 	var todas_las_cajas = get_tree().get_nodes_in_group("CajasObstaculo")
 	for caja in todas_las_cajas:
@@ -47,12 +51,11 @@ func _ready() -> void:
 		if self.is_ancestor_of(charco):
 			mis_charcos.append(charco)
 			
-	# Mezclamos y apagamos lo que sobra instantáneamente
 	mezclar_cajas()
 	mezclar_charcos()
 	
 	# -------------------------------------------------------------
-	# 2. CINEMÁTICA DE ENTRADA
+	# 3. CINEMÁTICA DE ENTRADA DEL JUGADOR
 	# -------------------------------------------------------------
 	jugador.is_frozen = true
 	jugador.anim_sprite.play("walk_down")
@@ -67,18 +70,11 @@ func _ready() -> void:
 	jugador.update_animation(false)
 	jugador.is_frozen = false
 	
-	# --- APAGAR Y CERRAR LA PUERTA ---
 	var puerta = get_tree().get_first_node_in_group("PuertaEntrada")
 	if puerta and puerta.has_method("sellar_puerta"):
 		puerta.sellar_puerta()
-		
-	# -------------------------------------------------------------
-	# 3. AHORA SÍ, ¡ARRANCA EL JUEGO OFICIAL! 
-	# -------------------------------------------------------------
-	GameManager.iniciar_nivel(frutas_del_nivel, tiempo_del_nivel)
-	GameManager.item_collected.connect(_on_item_recolectado)
 	
-	# Prendemos el reloj para que empiecen a cambiar de lugar
+	# Prendemos el reloj de los obstáculos AL FINAL
 	bucle_de_tiempo_aleatorio()
 	
 # --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
