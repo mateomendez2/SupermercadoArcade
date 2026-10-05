@@ -1185,11 +1185,11 @@ region_rect = Rect2(320, 96, 128, 32)
 
 [node name="Label" type="Label" parent="Letrero" unique_id=357049464]
 offset_left = -57.0
-offset_top = -6.0
-offset_right = 57.0
-offset_bottom = 17.0
+offset_top = -5.0
+offset_right = 59.0
+offset_bottom = 18.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "SECTOR COBRO"
 horizontal_alignment = 1
 
@@ -1220,11 +1220,11 @@ position = Vector2(321, 301)
 
 [node name="Label" type="Label" parent="Letrero2" unique_id=1229198475]
 offset_left = -57.0
-offset_top = -8.0
+offset_top = -4.0
 offset_right = 57.0
-offset_bottom = 15.0
+offset_bottom = 19.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "LECHE"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
@@ -1576,7 +1576,7 @@ offset_right = 13.0
 offset_bottom = 3.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -4
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 12
 text = "10%
 OFF"
 horizontal_alignment = 1
@@ -1586,13 +1586,14 @@ position = Vector2(208, 271)
 
 [node name="Label" type="Label" parent="Cartel_Amarillo3" unique_id=1514778383]
 offset_left = -13.0
-offset_top = -17.0
+offset_top = -23.0
 offset_right = 13.0
-offset_bottom = -5.0
+offset_bottom = -3.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -4
-theme_override_font_sizes/font_size = 8
-text = "SODA"
+theme_override_font_sizes/font_size = 12
+text = "20%
+off"
 horizontal_alignment = 1
 
 [node name="Interactable" parent="." unique_id=1647453037 instance=ExtResource("27_qxm3b")]

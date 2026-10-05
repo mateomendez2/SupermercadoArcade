@@ -1,6 +1,15 @@
 [gd_scene format=3 uid="uid://7le6r5yuesr1"]
 
 [ext_resource type="Script" uid="uid://cv7883mckeuuj" path="res://scripts/main_menu.gd" id="1_sl1te"]
+[ext_resource type="Texture2D" uid="uid://cnuaff5gv8gu8" path="res://assets/FondoMenuInicio.png" id="2_x2yvf"]
+[ext_resource type="Shader" uid="uid://bcowfanu770k2" path="res://scripts/main_menu.gdshader" id="3_uhagc"]
+[ext_resource type="Texture2D" uid="uid://0go5mlwem36t" path="res://assets/NubesMenuInicio.png" id="4_btxxm"]
+[ext_resource type="Texture2D" uid="uid://bqcb624psl3a0" path="res://assets/MenuInicio.png" id="5_uhagc"]
+[ext_resource type="Texture2D" uid="uid://bjjwggtkq28g8" path="res://assets/TituloMenuInicio.png" id="5_wb0q5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q85j6"]
+shader = ExtResource("3_uhagc")
+shader_parameter/velocidad = 0.05
 
 [node name="MainMenu" type="Control" unique_id=2048693485]
 layout_mode = 3
@@ -11,42 +20,62 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_sl1te")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=945979761]
+[node name="FondoCielo" type="TextureRect" parent="." unique_id=1049971389]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.026944732, 4.2054244e-06, 0.18284875, 1)
+texture = ExtResource("2_x2yvf")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=731313772]
+[node name="Nubes" type="TextureRect" parent="." unique_id=1718833182]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_q85j6")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+texture = ExtResource("4_btxxm")
 
-[node name="Titulo" type="Label" parent="VBoxContainer" unique_id=1649508902]
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-text = "SUPERMERCADO ARCADE"
+[node name="FondoSupermercado" type="TextureRect" parent="." unique_id=429354666]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_uhagc")
 
-[node name="BotonJugar" type="Button" parent="VBoxContainer" unique_id=156510508]
-layout_mode = 2
-text = "JUGAR"
+[node name="TituloJuego" type="TextureRect" parent="." unique_id=53118547]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_wb0q5")
 
-[node name="BotonSalir" type="Button" parent="VBoxContainer" unique_id=921560628]
-layout_mode = 2
-text = "SALIR"
-
-[connection signal="pressed" from="VBoxContainer/BotonJugar" to="." method="_on_jugar_pressed"]
-[connection signal="pressed" from="VBoxContainer/BotonSalir" to="." method="_on_salir_pressed"]
+[node name="TextoComenzar" type="Label" parent="." unique_id=1227215073]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -104.0
+offset_right = 220.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.98039216, 1, 0.5882353, 1)
+theme_override_colors/font_outline_color = Color(0.7490196, 0.21176471, 0.047058824, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "Presiona cualquier botón
+para comenzar"
+horizontal_alignment = 1
+vertical_alignment = 1

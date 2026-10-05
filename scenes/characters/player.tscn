@@ -348,7 +348,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_down",
-"speed": 10.0
+"speed": 7.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -371,7 +371,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_left",
-"speed": 15.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -394,7 +394,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_right",
-"speed": 15.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -411,7 +411,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk_up",
-"speed": 10.0
+"speed": 7.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yewv4"]
@@ -423,13 +423,13 @@ size = Vector2(32, 25.5)
 
 [node name="Player" type="CharacterBody2D" unique_id=177984774 groups=["Player"]]
 script = ExtResource("1_rp718")
-speed = 95.0
 friction = 1400.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=892306982]
 position = Vector2(0, -9)
 sprite_frames = SubResource("SpriteFrames_xhtjm")
-animation = &"pickup_left"
+animation = &"walk_right"
+frame_progress = 0.32929057
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1597456713]
 shape = SubResource("CapsuleShape2D_yewv4")
@@ -443,6 +443,7 @@ shape = SubResource("RectangleShape2D_yewv4")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=105120721]
 position = Vector2(0, 12)
+zoom = Vector2(2, 2)
 limit_left = 0
 limit_top = -80
 limit_right = 384

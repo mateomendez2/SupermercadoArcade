@@ -1155,11 +1155,11 @@ region_rect = Rect2(320, 96, 128, 32)
 
 [node name="Label" type="Label" parent="Letrero" unique_id=357049464]
 offset_left = -57.0
-offset_top = -6.0
-offset_right = 57.0
-offset_bottom = 17.0
+offset_top = -5.0
+offset_right = 59.0
+offset_bottom = 18.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "SECTOR COBRO"
 horizontal_alignment = 1
 
@@ -1187,11 +1187,11 @@ position = Vector2(64, 140)
 
 [node name="Label" type="Label" parent="Letrero2" unique_id=1229198475]
 offset_left = -57.0
-offset_top = -8.0
+offset_top = -4.0
 offset_right = 57.0
-offset_bottom = 15.0
+offset_bottom = 19.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "YOGURT"
 horizontal_alignment = 1
 
@@ -1269,8 +1269,9 @@ offset_right = 14.0
 offset_bottom = 5.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = 0
-theme_override_font_sizes/font_size = 13
-text = "2x1"
+theme_override_font_sizes/font_size = 12
+text = "20%
+off"
 horizontal_alignment = 1
 
 [node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("25_6d0ty")]

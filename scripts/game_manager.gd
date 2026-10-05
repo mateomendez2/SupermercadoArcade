@@ -142,12 +142,18 @@ func resolve_qte(success: bool) -> void:
 func _process(delta: float) -> void:
 	if juego_activo:
 		tiempo_restante -= delta # Restamos milisegundos
-		time_updated.emit(int(tiempo_restante)) # Avisamos a la UI (sin decimales)
+		time_updated.emit(int(tiempo_restante)) # Avisamos a la UI
 		
 		# Si llega a cero, perdemos
 		if tiempo_restante <= 0:
 			juego_activo = false
 			print("¡SE ACABÓ EL TIEMPO!")
+			
+			# --- ¡LA SOLUCIÓN! ---
+			# Abortamos de emergencia cualquier QTE que esté abierto
+			cancelar_qte() 
+			# ---------------------
+			
 			game_over_reached.emit()
 
 func cancelar_qte() -> void:

@@ -108,7 +108,10 @@ layout_mode = 0
 offset_left = 235.0
 offset_top = 146.0
 offset_right = 363.0
-offset_bottom = 174.0
-text = "MEMORIZÁ"
+offset_bottom = 175.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -3
+theme_override_font_sizes/font_size = 16
+text = "Memoriza y
+repite"
 horizontal_alignment = 1
-vertical_alignment = 1

@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var velocidad: float = 100.0 # Píxeles por segundo (más alto = más rápido)
+@export var velocidad: float = 50.0 # Píxeles por segundo (más alto = más rápido)
 @export var tiempo_espera: float = 0.2
 
 @onready var hitbox: Area2D = %Hitbox

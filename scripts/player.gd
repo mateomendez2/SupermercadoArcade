@@ -3,7 +3,7 @@ class_name Player
 
 @onready var sonido_recoger: AudioStreamPlayer2D = $SonidoRecoger
 
-@export var speed: float = 200.0
+@export var speed: float = 75.0
 @export var acceleration: float = 1500.0
 @export var friction: float = 1200.0
 @onready var default_speed: float = speed
