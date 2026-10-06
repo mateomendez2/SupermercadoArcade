@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://pvppfdsw8t6b"]
 
-[ext_resource type="PackedScene" uid="uid://cr1l4dencybhe" path="res://scenes/levels/nivel_1.tscn" id="1_0ay0p"]
+[ext_resource type="PackedScene" uid="uid://b8vx187nar8m" path="res://scenes/levels/nivel_tutorial.tscn" id="1_jvuow"]
 [ext_resource type="Script" uid="uid://bpl405whge16y" path="res://scripts/ui_manager.gd" id="2_2p1s2"]
 [ext_resource type="Texture2D" uid="uid://c10ck7dy1bqcy" path="res://assets/anotadorobjetos.png" id="2_vspwy"]
 [ext_resource type="PackedScene" uid="uid://cfr8u4ga4ww1u" path="res://scenes/ui/qte_minigame.tscn" id="3_02nsg"]
@@ -18,7 +18,8 @@ grow_vertical = 2
 [node name="ContenedorNivel" type="Node" parent="." unique_id=2027435124]
 unique_name_in_owner = true
 
-[node name="Nivel_1" parent="ContenedorNivel" unique_id=1358974874 instance=ExtResource("1_0ay0p")]
+[node name="Nivel_Tutorial" parent="ContenedorNivel" unique_id=1358974874 instance=ExtResource("1_jvuow")]
+position = Vector2(279.93793, 146.23137)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=431529867]
 

@@ -17,7 +17,7 @@
 [ext_resource type="Script" uid="uid://7cpnxb64s2yy" path="res://scripts/flecha_guia.gd" id="15_vbns1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1fqmo"]
-size = Vector2(84, 80)
+size = Vector2(96, 80)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_inhyd"]
 atlas = ExtResource("3_bmao2")
@@ -430,7 +430,7 @@ load_path = "res://.godot/imported/Flecha_amarilla.png-63cee8ecdd624bd6d9286cca3
 script = ExtResource("1_gtf4q")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=609892723]
-position = Vector2(10, 8)
+position = Vector2(16, 8)
 shape = SubResource("RectangleShape2D_1fqmo")
 
 [node name="SpriteCajero" type="AnimatedSprite2D" parent="." unique_id=845598636]
@@ -458,3 +458,13 @@ script = ExtResource("15_vbns1")
 
 [node name="Sprite2D" type="Sprite2D" parent="FlechaGuia" unique_id=1504040061]
 texture = SubResource("CompressedTexture2D_ssg4l")
+
+[node name="ZonaVisual" type="ColorRect" parent="." unique_id=1945427290]
+unique_name_in_owner = true
+visible = false
+z_index = -1
+offset_left = 32.0
+offset_top = -32.0
+offset_right = 64.0
+offset_bottom = 48.0
+color = Color(1, 0.9529412, 0, 0.49019608)

@@ -72,11 +72,6 @@ func _on_lista_generada(target_list: Array[ItemData]) -> void:
 		nuevo_icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		nuevo_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		
-		# --- LE PONEMOS EL FILTRO GRIS ---
-		var material_gris = ShaderMaterial.new()
-		material_gris.shader = load("res://scripts/escala_grises.gdshader") 
-		nuevo_icono.material = material_gris
-		
 		# Lo añadimos a la libreta
 		lista_visual.add_child(nuevo_icono)
 		etiquetas_items[item.item_name] = nuevo_icono
@@ -89,10 +84,12 @@ func _on_item_recolectado(item: ItemData) -> void:
 	if etiquetas_items.has(item.item_name):
 		var icono: TextureRect = etiquetas_items[item.item_name]
 		
-		# ¡MAGIA PURA! Le arrancamos el material gris. 
-		icono.material = null 
+		# ¡NUEVO! Le ponemos el filtro gris porque ya lo tachamos
+		var material_gris = ShaderMaterial.new()
+		material_gris.shader = load("res://scripts/escala_grises.gdshader") 
+		icono.material = material_gris
 		
-		# Saltito de festejo
+		# Saltito de festejo (opcional, si lo tenías)
 		var salto = create_tween()
 		salto.tween_property(icono, "scale", Vector2(1.2, 1.2), 0.1)
 		salto.tween_property(icono, "scale", Vector2(1.0, 1.0), 0.1)
@@ -102,12 +99,10 @@ func _on_item_perdido(item: ItemData) -> void:
 	if etiquetas_items.has(item.item_name):
 		var icono: TextureRect = etiquetas_items[item.item_name]
 		
-		# Le volvemos a poner la capa gris
-		var material_gris = ShaderMaterial.new()
-		material_gris.shader = load("res://scripts/escala_grises.gdshader") 
-		icono.material = material_gris
+		# ¡NUEVO! Le quitamos el filtro gris para que vuelva a estar a color (pendiente)
+		icono.material = null
 		
-		# Efecto visual de error: Parpadea en rojo súper rápido
+		# Efecto de error en rojo
 		var parpadeo = create_tween()
 		parpadeo.tween_property(icono, "modulate", Color.RED, 0.1)
 		parpadeo.tween_property(icono, "modulate", Color.WHITE, 0.1)
@@ -119,26 +114,32 @@ func mostrar_resultados(mensaje: String) -> void:
 	pantalla_resultados.show()
 	boton_siguiente.grab_focus()
 
-# --- BOTONES DE LA PANTALLA DE RESULTADOS ---
-var nivel_actual: int = 1
+# Cambiamos esto a 0, porque arrancamos en el Tutorial
+var nivel_actual: int = 0 
 
 func _on_boton_siguiente_pressed() -> void:
 	get_tree().paused = false
 	pantalla_resultados.hide()
 	
-	nivel_actual += 1
+	nivel_actual += 1 # Suma 1. Así que del 0 pasará al 1.
 	
 	var contenedor = %ContenedorNivel
 	for hijo in contenedor.get_children():
 		hijo.queue_free()
 	
-	var ruta_nivel = "res://scenes/levels/nivel_" + str(nivel_actual) + ".tscn"
+	# La matemática del archivo
+	var ruta_nivel = ""
+	if nivel_actual == 1:
+		ruta_nivel = "res://scenes/levels/nivel_1.tscn"
+	elif nivel_actual == 2:
+		ruta_nivel = "res://scenes/levels/nivel_2.tscn"
+	# Si llegas a hacer más niveles (3, 4), puedes copiarlos aquí siguiendo la lógica
 	
-	if ResourceLoader.exists(ruta_nivel):
+	if ruta_nivel != "" and ResourceLoader.exists(ruta_nivel):
 		var nuevo_nivel = load(ruta_nivel).instantiate()
 		contenedor.add_child(nuevo_nivel)
 	else:
-		print("¡JUEGO COMPLETADO! No hay más niveles.")
+		print("¡JUEGO COMPLETADO!")
 		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 
 func _on_boton_menu_pressed() -> void:
