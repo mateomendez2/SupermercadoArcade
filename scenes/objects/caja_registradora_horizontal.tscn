@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/caja_registradora.tscn" id="1_base"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zona"]
+size = Vector2(64, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mesa"]
+size = Vector2(64, 56)
+
+[node name="CheckoutDesk" unique_id=1181652669 instance=ExtResource("1_base")]
+posicion_aviso = Vector2(-2, -43)
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=609892723]
+position = Vector2(0, 44)
+shape = SubResource("RectangleShape2D_zona")
+
+[node name="SpriteCajero" parent="." index="1" unique_id=845598636]
+z_index = 0
+position = Vector2(-2, -8)
+
+[node name="CollisionShape2D" parent="StaticBody2D" parent_id_path=PackedInt32Array(812905775) index="0" unique_id=2070029009]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_mesa")
+
+[node name="SpriteMesa" parent="." index="3" unique_id=186989239]
+region_rect = Rect2(0, 64, 64, 64)
+
+[node name="ZonaVisual" parent="." index="5" unique_id=1945427290]
+offset_left = -32.0
+offset_top = 32.0
+offset_right = 32.0
+offset_bottom = 64.0
+
+[node name="DetectorPantalla" parent="." index="6" unique_id=1551316676]
+rect = Rect2(-32, 32, 64, 32)

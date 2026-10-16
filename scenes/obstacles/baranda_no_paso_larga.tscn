@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b5hlp4t5bhdxt"]
 
-[ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="1_yu335"]
+[ext_resource type="Texture2D" path="res://assets/Mobiliario_Extra.png" id="1_yu335"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pq64n"]
 size = Vector2(56, 16)
@@ -10,7 +10,7 @@ size = Vector2(56, 16)
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2006390179]
 texture = ExtResource("1_yu335")
 region_enabled = true
-region_rect = Rect2(96, 160, 64, 32)
+region_rect = Rect2(0, 0, 64, 32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=182311282]
 position = Vector2(0, 8)

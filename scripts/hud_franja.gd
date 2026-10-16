@@ -1,0 +1,368 @@
+extends CanvasLayer
+## LA FRANJA ARCADE DE ARRIBA
+## De izquierda a derecha: NIVEL x | TIEMPO xx + bloques que se van vaciando | LISTA n/m
+## Debajo de "LISTA" cuelga el ticket con los productos (sale "impreso" al empezar el nivel).
+##
+## Todo se arma por código con las imágenes de res://assets/ui/hud/ (estilo del título de Nati).
+## La crea gestor_interfaz.gd, y ella sola escucha al GameManager para actualizarse.
+
+signal ticket_impreso # Avisa cuando el ticket terminó de salir de la "impresora"
+
+const CARPETA: String = "res://assets/ui/hud/"
+
+# --- MEDIDAS (en pixeles de pantalla) ---
+const ALTO_FRANJA: int = 26     # Alto de la parte negra
+const Y_TEXTO: int = 4          # Altura de las letras dentro de la franja
+const Y_BLOQUES: int = 5        # Altura de los bloques de tiempo
+const MARGEN: int = 8           # Separación con los bordes de la pantalla
+const ESPACIO_ROTULO: int = 4   # Entre "NIVEL" y su número
+const ESPACIO_GRUPO: int = 16   # Entre un grupo y el siguiente
+const PASO_DIGITO: int = 12     # Cada cuánto va un dígito
+const PASO_BLOQUE: int = 13     # Cada cuánto va un bloque de tiempo
+const PASO_ICONO: int = 36      # Cada cuánto va un producto en el ticket
+const ALTO_TICKET: int = 48
+const SEGUNDOS_ALERTA: int = 10 # Debajo de esto, los bloques titilan en rojo
+
+# Colores del título "MANDADOS A FULL"
+const COLOR_BORDE: Color = Color8(191, 54, 12)
+const COLOR_RELIEVE: Color = Color8(110, 28, 6)
+
+var tex: Dictionary = {} # nombre de imagen -> textura
+var ancho_pantalla: float = 576.0
+var raiz: Control
+
+var caja_nivel: Control
+var caja_tiempo: Control
+var caja_bloques: Control
+var x_bloques: float = 0.0
+var grupo_lista: Control
+var caja_contador: Control
+
+var ventana_ticket: Control # Recorta el ticket: así parece que sale de adentro de la franja
+var ticket: NinePatchRect
+var ranura: ColorRect
+var ancho_ticket: float = 0.0
+var iconos: Dictionary = {}  # nombre del producto -> TextureRect
+var tildes: Dictionary = {}  # nombre del producto -> TextureRect del tilde
+var sello: Label
+var tween_sello: Tween
+
+var material_gris: ShaderMaterial
+var tiempo_mostrado: int = -1
+var bloques_llenos: int = -1
+var tween_alerta: Tween
+
+func _ready() -> void:
+	layer = 5 # Por encima del juego y la interfaz, por debajo del cartel "NIVEL X" (capa 10)
+	ancho_pantalla = get_viewport().get_visible_rect().size.x
+
+	_cargar_texturas()
+	material_gris = ShaderMaterial.new()
+	material_gris.shader = load("res://scripts/escala_grises.gdshader")
+
+	_armar_franja()
+
+	# Escuchamos al GameManager
+	GameManager.list_generated.connect(_on_lista_generada)
+	GameManager.item_collected.connect(_on_item_juntado)
+	GameManager.item_dropped.connect(_on_item_perdido)
+	GameManager.time_updated.connect(_on_tiempo)
+	#GameManager.lista_lista_para_pagar.connect(_mostrar_sello) # Sello "¡A LA CAJA!" desactivado
+	GameManager.lista_incompleta.connect(_ocultar_sello)
+
+	# El Tutorial arma su lista ANTES de que exista la interfaz, así que la leemos ahora
+	if GameManager.target_list.size() > 0:
+		_on_lista_generada(GameManager.target_list)
+	_on_tiempo(int(GameManager.tiempo_restante))
+
+# =====================================================================
+# ARMADO
+# =====================================================================
+func _cargar_texturas() -> void:
+	var nombres = ["txt_nivel", "txt_tiempo", "txt_lista", "num_barra",
+		"bloque_lleno", "bloque_vacio", "ticket", "tilde"]
+	for i in range(10):
+		nombres.append("num_" + str(i))
+	for nombre in nombres:
+		tex[nombre] = load(CARPETA + nombre + ".png")
+
+func _armar_franja() -> void:
+	raiz = Control.new()
+	raiz.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(raiz)
+	raiz.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+	# Fondo negro + filo rojizo con relieve (como el borde del título)
+	_rectangulo(Rect2(0, 0, ancho_pantalla, ALTO_FRANJA), Color.BLACK)
+	_rectangulo(Rect2(0, ALTO_FRANJA, ancho_pantalla, 1), COLOR_BORDE)
+	_rectangulo(Rect2(0, ALTO_FRANJA + 1, ancho_pantalla, 1), COLOR_RELIEVE)
+
+	# NIVEL x
+	var x: float = MARGEN
+	_imagen("txt_nivel", Vector2(x, Y_TEXTO), raiz)
+	x += tex["txt_nivel"].get_width() + ESPACIO_ROTULO
+	caja_nivel = _caja(Vector2(x, Y_TEXTO))
+	x += _ancho_numero(2) + ESPACIO_GRUPO
+
+	# TIEMPO xx (lugar reservado para 3 dígitos, así los bloques no se mueven)
+	_imagen("txt_tiempo", Vector2(x, Y_TEXTO), raiz)
+	x += tex["txt_tiempo"].get_width() + ESPACIO_ROTULO
+	caja_tiempo = _caja(Vector2(x, Y_TEXTO))
+	x += _ancho_numero(3) + ESPACIO_GRUPO
+
+	# Bloques de tiempo (cuántos entran se calcula cuando sabemos el ancho del ticket)
+	x_bloques = x
+	caja_bloques = _caja(Vector2(x_bloques, Y_BLOQUES))
+
+	# LISTA n/m (se centra arriba del ticket)
+	grupo_lista = _caja(Vector2(0, Y_TEXTO))
+	_imagen("txt_lista", Vector2.ZERO, grupo_lista)
+	caja_contador = Control.new()
+	caja_contador.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	caja_contador.position = Vector2(tex["txt_lista"].get_width() + ESPACIO_ROTULO, 0)
+	grupo_lista.add_child(caja_contador)
+
+	# El ticket: vive adentro de una "ventana" que lo recorta
+	ventana_ticket = _caja(Vector2.ZERO)
+	ventana_ticket.clip_contents = true
+	ticket = NinePatchRect.new()
+	ticket.texture = tex["ticket"]
+	ticket.patch_margin_left = 4  # Los bordes de los costados no se estiran
+	ticket.patch_margin_right = 4
+	ticket.axis_stretch_horizontal = NinePatchRect.AXIS_STRETCH_MODE_TILE # El centro se repite
+	ticket.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ventana_ticket.add_child(ticket)
+
+	# La "ranura" de la impresora: una rayita negra que corta el filo de la franja
+	ranura = ColorRect.new()
+	ranura.color = Color.BLACK
+	ranura.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	raiz.add_child(ranura)
+
+func _armar_ticket(lista: Array[ItemData]) -> void:
+	# Borramos lo del nivel anterior
+	if tween_sello: tween_sello.kill()
+	_vaciar(ticket)
+	iconos.clear()
+	tildes.clear()
+
+	# Tamaño y lugar: pegado a la derecha, debajo de la franja.
+	# Como mínimo mide lo mismo que "LISTA n/m", así queda justo debajo del rótulo
+	var ancho_productos: int = lista.size() * PASO_ICONO + 12
+	var ancho_rotulo: int = tex["txt_lista"].get_width() + ESPACIO_ROTULO + int(_ancho_numero(3)) + 4
+	ancho_ticket = maxi(ancho_productos, ancho_rotulo)
+	var primer_icono_x: int = (int(ancho_ticket) - ancho_productos) / 2 + 8 # Productos centrados
+	var x = ancho_pantalla - MARGEN - ancho_ticket
+	ventana_ticket.position = Vector2(x, ALTO_FRANJA + 2)
+	ventana_ticket.size = Vector2(ancho_ticket, ALTO_TICKET + 2)
+	ticket.size = Vector2(ancho_ticket, ALTO_TICKET)
+	ticket.position = Vector2(0, -ALTO_TICKET) # Escondido "adentro de la impresora"
+	ranura.position = Vector2(x - 3, ALTO_FRANJA)
+	ranura.size = Vector2(ancho_ticket + 6, 2)
+
+	# Un ícono por producto (al doble de tamaño, como en la libreta)
+	for i in range(lista.size()):
+		var item: ItemData = lista[i]
+		var icono = TextureRect.new()
+		icono.texture = item.icon
+		icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icono.stretch_mode = TextureRect.STRETCH_SCALE
+		icono.size = Vector2(32, 32)
+		icono.pivot_offset = Vector2(16, 16)
+		icono.position = Vector2(primer_icono_x + i * PASO_ICONO, 6)
+		icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ticket.add_child(icono)
+		iconos[item.item_name] = icono
+
+		var tilde = _imagen("tilde", Vector2(21, 22), icono)
+		tilde.hide()
+		tildes[item.item_name] = tilde
+
+	# El sello "¡A LA CAJA!" (aparece cuando completás la lista)
+	sello = Label.new()
+	sello.text = "¡A LA\nCAJA!"
+	sello.add_theme_font_size_override("font_size", 32)
+	sello.add_theme_color_override("font_color", Color(0.85, 0.1, 0.1))
+	sello.add_theme_color_override("font_outline_color", Color.WHITE)
+	sello.add_theme_constant_override("outline_size", 6)
+	sello.add_theme_constant_override("line_spacing", -8)
+	sello.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sello.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	sello.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sello.size = Vector2(ancho_ticket, ALTO_TICKET - 4)
+	sello.pivot_offset = sello.size / 2.0
+	sello.rotation_degrees = -8.0
+	sello.hide()
+	ticket.add_child(sello)
+
+func _armar_bloques() -> void:
+	_vaciar(caja_bloques)
+	# Entran todos los bloques que haya lugar entre el tiempo y la lista (entre 5 y 20)
+	var lugar: float = grupo_lista.position.x - 10 - x_bloques
+	var cantidad = clampi(int(lugar / PASO_BLOQUE), 5, 20)
+	for i in range(cantidad):
+		_imagen("bloque_vacio", Vector2(i * PASO_BLOQUE, 0), caja_bloques)
+	bloques_llenos = -1
+
+# =====================================================================
+# ACTUALIZACIONES
+# =====================================================================
+func poner_nivel(numero: int) -> void:
+	_escribir_numero(caja_nivel, str(numero))
+
+func _on_lista_generada(lista: Array[ItemData]) -> void:
+	_armar_ticket(lista)
+	_actualizar_contador()
+	_armar_bloques()
+	_frenar_alerta()
+	tiempo_mostrado = -1
+
+func _on_tiempo(tiempo: int) -> void:
+	tiempo = maxi(tiempo, 0)
+	if tiempo == tiempo_mostrado:
+		return # El GameManager avisa en cada frame; solo redibujamos cuando cambia el segundo
+	tiempo_mostrado = tiempo
+	_escribir_numero(caja_tiempo, str(tiempo))
+	_actualizar_bloques()
+
+	# Últimos segundos: ¡todo titila en rojo!
+	if tiempo > 0 and tiempo <= SEGUNDOS_ALERTA and GameManager.juego_activo:
+		_empezar_alerta()
+	else:
+		_frenar_alerta()
+
+func _actualizar_bloques() -> void:
+	var cantidad = caja_bloques.get_child_count()
+	if cantidad == 0: return
+	var total: float = maxf(GameManager.tiempo_total, 1.0)
+	var llenos = clampi(ceili(float(tiempo_mostrado) * cantidad / total), 0, cantidad)
+	if llenos == bloques_llenos: return
+	bloques_llenos = llenos
+	var i = 0
+	for bloque in caja_bloques.get_children():
+		bloque.texture = tex["bloque_lleno"] if i < llenos else tex["bloque_vacio"]
+		i += 1
+
+func _actualizar_contador() -> void:
+	var texto = str(GameManager.collected_items.size()) + "/" + str(GameManager.target_list.size())
+	_escribir_numero(caja_contador, texto)
+	# Centramos "LISTA n/m" arriba del ticket (sin que se salga de la pantalla)
+	var ancho = tex["txt_lista"].get_width() + ESPACIO_ROTULO + _ancho_numero(texto.length())
+	var centro = ventana_ticket.position.x + ancho_ticket / 2.0
+	grupo_lista.position.x = roundf(minf(centro - ancho / 2.0, ancho_pantalla - 4 - ancho))
+
+func _on_item_juntado(item: ItemData) -> void:
+	_actualizar_contador()
+	if not iconos.has(item.item_name): return
+	var icono: TextureRect = iconos[item.item_name]
+	icono.material = material_gris # Gris = ya lo tenemos
+	tildes[item.item_name].show()
+	var salto = create_tween()
+	salto.tween_property(icono, "scale", Vector2(1.25, 1.25), 0.1)
+	salto.tween_property(icono, "scale", Vector2.ONE, 0.1)
+
+func _on_item_perdido(item: ItemData) -> void:
+	_actualizar_contador()
+	if not iconos.has(item.item_name): return
+	var icono: TextureRect = iconos[item.item_name]
+	icono.material = null # Vuelve a color = hay que ir a buscarlo de nuevo
+	tildes[item.item_name].hide()
+	var parpadeo = create_tween()
+	parpadeo.tween_property(icono, "modulate", Color.RED, 0.1)
+	parpadeo.tween_property(icono, "modulate", Color.WHITE, 0.1)
+	parpadeo.tween_property(icono, "modulate", Color.RED, 0.1)
+	parpadeo.tween_property(icono, "modulate", Color.WHITE, 0.1)
+
+# =====================================================================
+# ANIMACIONES
+# =====================================================================
+# El ticket sale de la franja a "tirones", como una impresora de supermercado
+func imprimir_ticket() -> void:
+	ticket.position.y = -ALTO_TICKET
+	var impresion = create_tween()
+	var pasos = 6
+	for i in range(1, pasos + 1):
+		impresion.tween_property(ticket, "position:y", -ALTO_TICKET + ALTO_TICKET * i / float(pasos), 0.1)
+		impresion.tween_interval(0.06)
+	await impresion.finished
+	ticket_impreso.emit()
+
+func _mostrar_sello() -> void:
+	if sello == null: return
+	if tween_sello: tween_sello.kill()
+	sello.scale = Vector2(3.0, 3.0)
+	sello.modulate.a = 0.0
+	sello.show()
+	tween_sello = create_tween()
+	tween_sello.set_parallel(true)
+	tween_sello.tween_property(sello, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween_sello.tween_property(sello, "modulate:a", 1.0, 0.2)
+	# ¡PUM! El ticket se sacude cuando cae el sello
+	tween_sello.chain()
+	tween_sello.set_parallel(false)
+	for i in range(4):
+		tween_sello.tween_property(ticket, "position:x", randf_range(-2.0, 2.0), 0.04)
+	tween_sello.tween_property(ticket, "position:x", 0.0, 0.04)
+
+func _ocultar_sello() -> void:
+	if tween_sello: tween_sello.kill()
+	if sello: sello.hide()
+	ticket.position.x = 0.0
+
+func _empezar_alerta() -> void:
+	if tween_alerta and tween_alerta.is_valid(): return # Ya está titilando
+	tween_alerta = create_tween().set_loops()
+	tween_alerta.set_parallel(true)
+	tween_alerta.tween_property(caja_bloques, "modulate", Color(1.0, 0.3, 0.25), 0.25)
+	tween_alerta.tween_property(caja_tiempo, "modulate", Color(1.0, 0.3, 0.25), 0.25)
+	tween_alerta.chain()
+	tween_alerta.tween_property(caja_bloques, "modulate", Color.WHITE, 0.25)
+	tween_alerta.tween_property(caja_tiempo, "modulate", Color.WHITE, 0.25)
+
+func _frenar_alerta() -> void:
+	if tween_alerta: tween_alerta.kill()
+	if caja_bloques: caja_bloques.modulate = Color.WHITE
+	if caja_tiempo: caja_tiempo.modulate = Color.WHITE
+
+# =====================================================================
+# AYUDANTES
+# =====================================================================
+func _escribir_numero(caja: Control, texto: String) -> void:
+	_vaciar(caja)
+	for i in range(texto.length()):
+		var letra = texto[i]
+		var nombre = "num_barra" if letra == "/" else "num_" + letra
+		if tex.has(nombre):
+			_imagen(nombre, Vector2(i * PASO_DIGITO, 0), caja)
+
+# Saca los hijos de un nodo EN EL MOMENTO (queue_free solo los borra al final del frame)
+func _vaciar(nodo: Node) -> void:
+	for hijo in nodo.get_children():
+		nodo.remove_child(hijo)
+		hijo.queue_free()
+
+func _ancho_numero(digitos: int) -> float:
+	return (digitos - 1) * PASO_DIGITO + tex["num_0"].get_width()
+
+func _imagen(nombre: String, pos: Vector2, padre: Node) -> TextureRect:
+	var img = TextureRect.new()
+	img.texture = tex[nombre]
+	img.position = pos
+	img.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	padre.add_child(img)
+	return img
+
+func _caja(pos: Vector2) -> Control:
+	var caja = Control.new()
+	caja.position = pos
+	caja.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	raiz.add_child(caja)
+	return caja
+
+func _rectangulo(r: Rect2, color: Color) -> void:
+	var rect = ColorRect.new()
+	rect.color = color
+	rect.position = r.position
+	rect.size = r.size
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	raiz.add_child(rect)

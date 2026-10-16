@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/datos_producto.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="2_hoja"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icono"]
+atlas = ExtResource("2_hoja")
+region = Rect2(0, 48, 16, 16)
+
+[resource]
+script = ExtResource("1_item")
+item_name = "Yogur"
+icon = SubResource("AtlasTexture_icono")

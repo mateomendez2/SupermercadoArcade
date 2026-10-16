@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://resources/items/yogur.tres" id="2_item"]
+[ext_resource type="Texture2D" path="res://assets/heladera_yogurt.png" id="3_dibujo"]
+[ext_resource type="Script" path="res://scripts/puertas_heladera.gd" id="4_puertas"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_zona"]
+size = Vector2(56, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_muro"]
+size = Vector2(64, 41)
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_base")]
+item_content = ExtResource("2_item")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+position = Vector2(0, 17)
+shape = SubResource("RectangleShape2D_zona")
+
+[node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_muro")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+texture = ExtResource("3_dibujo")
+region_enabled = false
+hframes = 5
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+position = Vector2(-20, 3)
+region_rect = Rect2(0, 48, 16, 16)
+
+[node name="PuertasHeladera" type="Node" parent="."]
+script = ExtResource("4_puertas")

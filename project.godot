@@ -11,12 +11,12 @@ config_version=5
 [application]
 
 config/name="Videojuego_SuperMercado"
-run/main_scene="uid://7le6r5yuesr1"
+run/main_scene="res://scenes/ui/menu_principal.tscn"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 
 [autoload]
 
-GameManager="*uid://dms31yefs5v3y"
+GameManager="*res://scripts/gestor_juego.gd"
 
 [display]
 
@@ -38,7 +38,7 @@ folder_colors={
 
 [gui]
 
-theme/custom_font="uid://35g5xxgi8fx7"
+theme/custom_font="uid://tlfn74sgebae"
 
 [input]
 

@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_tr0qb"]
+[ext_resource type="Resource" path="res://resources/items/limon.tres" id="2_jhkgq"]
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_tr0qb")]
+item_content = ExtResource("2_jhkgq")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+region_rect = Rect2(256, 288, 32, 32)
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+region_rect = Rect2(32, 16, 16, 16)

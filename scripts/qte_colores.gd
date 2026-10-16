@@ -23,13 +23,17 @@ var cantidad_de_secuencias: int = 4
 var estado_juego: String = "MOSTRANDO" 
 var intentos_restantes: int = 5
 
+@onready var fondo_oscuro: ColorRect = $Fondo
+
 func _ready() -> void:
 	hide()
+	color_fondo_normal = fondo_oscuro.color
 	tex_azul_normal = %BotonAzul.texture
 	tex_rojo_normal = %BotonRojo.texture
 	tex_amarillo_normal = %BotonAmarillo.texture
 
 func start_qte() -> void:
+	sesion += 1
 	show()
 	intentos_restantes = 5
 	generar_secuencia()
@@ -106,6 +110,7 @@ func comprobar_boton(color_apretado: String) -> void:
 	efecto_dedo_jugador(color_apretado)
 	
 	if color_apretado == secuencia_correcta[indice_actual]:
+		_destello_fondo(FONDO_VERDE) # ¡Bien! Le pegaste a este de la secuencia
 		indice_actual += 1 
 		
 		if indice_actual >= secuencia_correcta.size():
@@ -113,6 +118,7 @@ func comprobar_boton(color_apretado: String) -> void:
 			await get_tree().create_timer(0.4).timeout 
 			terminar_juego(true) 
 	else:
+		_destello_fondo(FONDO_ROJO) # Le erraste al orden (después se repite la secuencia como siempre)
 		intentos_restantes -= 1
 		estado_juego = "TERMINADO"
 		await get_tree().create_timer(0.4).timeout 
@@ -153,5 +159,36 @@ func efecto_dedo_jugador(color: String) -> void:
 
 func terminar_juego(victoria: bool) -> void:
 	is_active = false
+	if victoria:
+		# ¡GANÓ! Avisa victoria y festeja con confites antes de cerrarse
+		qte_finished.emit(true)
+		_festejar()
+		return
 	hide()
 	qte_finished.emit(victoria)
+
+# NUEVO: Festejo al ganar. Avisamos el resultado al instante, tiramos confites
+# y el cartel se queda un momento antes de cerrarse.
+const Confites = preload("res://scripts/confites.gd")
+var sesion: int = 0 # Cambia cada vez que arranca, para no cerrar un minijuego nuevo por error
+
+func _festejar() -> void:
+	var mi_sesion = sesion
+	var confites = Confites.new()
+	add_child(confites)
+	await confites.festejar(self)
+	if mi_sesion == sesion:
+		hide()
+
+# NUEVO: El fondo oscuro de atrás del cartel se tiñe un instante de verde (acierto) o rojo (error)
+# y vuelve solo a su color de siempre. Sigue oscuro, pero se nota el color.
+const FONDO_VERDE: Color = Color(0.0, 0.32, 0.08, 0.6)
+const FONDO_ROJO: Color = Color(0.38, 0.0, 0.0, 0.6)
+var color_fondo_normal: Color
+var tween_fondo: Tween
+
+func _destello_fondo(tono: Color) -> void:
+	if tween_fondo: tween_fondo.kill()
+	fondo_oscuro.color = tono
+	tween_fondo = create_tween()
+	tween_fondo.tween_property(fondo_oscuro, "color", color_fondo_normal, 0.35)

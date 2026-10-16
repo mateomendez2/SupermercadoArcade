@@ -1,0 +1,135 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/qte_barrita.gd" id="1_ms3f2"]
+[ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="3_0gn5w"]
+[ext_resource type="Texture2D" uid="uid://b0ayn6j02rtn5" path="res://assets/Panel_QTE_Barra.png" id="3_ssu0i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ouiy"]
+atlas = ExtResource("3_0gn5w")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nwd3d"]
+atlas = ExtResource("3_0gn5w")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ssu0i"]
+load_path = "res://.godot/imported/QuickTimeEvent.png-a57a02cd048503355188178862c86c47.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssu0i"]
+atlas = SubResource("CompressedTexture2D_ssu0i")
+region = Rect2(38, 4, 117, 25)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_o3054"]
+load_path = "res://.godot/imported/QuickTimeEvent.png-a57a02cd048503355188178862c86c47.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0gn5w"]
+atlas = SubResource("CompressedTexture2D_o3054")
+region = Rect2(6, 12, 19, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_151eb"]
+atlas = ExtResource("3_0gn5w")
+region = Rect2(0, 0, 32, 32)
+
+[node name="QTE_Minigame" type="Control" unique_id=620292326]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ms3f2")
+speed = 150.0
+tex_boton_normal = SubResource("AtlasTexture_7ouiy")
+tex_boton_hundido = SubResource("AtlasTexture_nwd3d")
+
+[node name="FondoOscuro" type="ColorRect" parent="." unique_id=2106419682]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="FondoCartel" type="TextureRect" parent="." unique_id=2013166559]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -91.0
+offset_right = 106.5
+offset_bottom = 91.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ssu0i")
+
+[node name="BarraRoja" type="TextureRect" parent="FondoCartel" unique_id=654564872]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -27.0
+offset_right = 75.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_ssu0i")
+
+[node name="ZonaVerde" type="ColorRect" parent="FondoCartel" unique_id=1402030740]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -25.0
+offset_right = -33.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.90588236, 0.28627452, 1)
+
+[node name="Cursor" type="TextureRect" parent="FondoCartel" unique_id=984847146]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = -6.0
+offset_right = -32.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_0gn5w")
+stretch_mode = 2
+
+[node name="BotonVisual" type="TextureRect" parent="FondoCartel" unique_id=1094487301]
+layout_mode = 0
+offset_left = 133.5
+offset_top = 105.0
+offset_right = 181.5
+offset_bottom = 153.0
+texture = SubResource("AtlasTexture_151eb")
+
+[node name="Label" type="Label" parent="." unique_id=436349190]
+layout_mode = 0
+offset_left = 235.0
+offset_top = 147.0
+offset_right = 363.0
+offset_bottom = 171.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -4
+theme_override_font_sizes/font_size = 16
+text = "Atina en el
+momento justo"
+horizontal_alignment = 1
+vertical_alignment = 0

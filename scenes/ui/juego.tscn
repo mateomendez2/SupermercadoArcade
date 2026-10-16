@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/levels/nivel_1.tscn" id="1_jvuow"]
+[ext_resource type="Script" path="res://scripts/gestor_interfaz.gd" id="2_2p1s2"]
+[ext_resource type="Texture2D" uid="uid://c10ck7dy1bqcy" path="res://assets/anotadorobjetos.png" id="2_vspwy"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_barrita.tscn" id="3_02nsg"]
+[ext_resource type="PackedScene" uid="uid://dgvvbtl2w4wsi" path="res://scenes/ui/qte_colores.tscn" id="5_7n028"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_machaque.tscn" id="6_jvuow"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_caida.tscn" id="7_caida"]
+
+[node name="Main" type="Control" unique_id=1195027389]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ContenedorNivel" type="Node" parent="." unique_id=2027435124]
+unique_name_in_owner = true
+
+[node name="Nivel_1" parent="ContenedorNivel" unique_id=1358974874 instance=ExtResource("1_jvuow")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=431529867]
+
+[node name="InterfazFlotante" type="Control" parent="CanvasLayer" unique_id=840824362]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Libreta" type="TextureRect" parent="CanvasLayer/InterfazFlotante" unique_id=400364701]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -93.0
+offset_top = -116.01233
+offset_right = -4.0
+offset_bottom = -5.0370483
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("2_vspwy")
+script = ExtResource("2_2p1s2")
+
+[node name="ListaVisual" type="GridContainer" parent="CanvasLayer/InterfazFlotante/Libreta" unique_id=1836576447]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 18.0
+offset_top = 2.0
+offset_right = 86.0
+offset_bottom = 96.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 2
+
+[node name="RelojVisual" type="Label" parent="CanvasLayer/InterfazFlotante" unique_id=2107490665]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -43.5
+offset_top = 16.0
+offset_right = 43.5
+offset_bottom = 39.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.98039216, 1, 0.5882353, 1)
+theme_override_colors/font_outline_color = Color(0.7490196, 0.21176471, 0.047058824, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 26
+text = "TIEMPO: 90"
+
+[node name="PantallaResultados" type="ColorRect" parent="CanvasLayer/InterfazFlotante" unique_id=1203178356]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09803922, 0, 0.12156863, 0.78431374)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/InterfazFlotante/PantallaResultados" unique_id=733719214]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -81.0
+offset_top = -57.5
+offset_right = 81.0
+offset_bottom = 57.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TituloResultado" type="Label" parent="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer" unique_id=2064124433]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "¡GANASTE!"
+
+[node name="BotonSiguiente" type="Button" parent="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer" unique_id=918670698]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SIGUIENTE NIVEL"
+
+[node name="BotonMenu" type="Button" parent="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer" unique_id=814691076]
+layout_mode = 2
+text = "VOLVER AL MENÚ"
+
+[node name="QTE_Minigame" parent="CanvasLayer/InterfazFlotante" unique_id=620292326 instance=ExtResource("3_02nsg")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="QTE_Colores" parent="CanvasLayer/InterfazFlotante" unique_id=1789568607 instance=ExtResource("5_7n028")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="QTE_Mashing" parent="CanvasLayer/InterfazFlotante" unique_id=1096045055 instance=ExtResource("6_jvuow")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+
+[node name="QTE_Caida" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("7_caida")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+
+[connection signal="pressed" from="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer/BotonSiguiente" to="CanvasLayer/InterfazFlotante/Libreta" method="_on_boton_siguiente_pressed"]
+[connection signal="pressed" from="CanvasLayer/InterfazFlotante/PantallaResultados/VBoxContainer/BotonMenu" to="CanvasLayer/InterfazFlotante/Libreta" method="_on_boton_menu_pressed"]

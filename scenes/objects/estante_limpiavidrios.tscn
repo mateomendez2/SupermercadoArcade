@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_tlbkq"]
+[ext_resource type="Resource" path="res://resources/items/limpiavidrios.tres" id="2_tlbkq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w0ekh"]
+size = Vector2(54, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_so48f"]
+size = Vector2(60, 34)
+
+[node name="Interactable" unique_id=1647453037 instance=ExtResource("1_tlbkq")]
+item_content = ExtResource("2_tlbkq")
+
+[node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
+unique_name_in_owner = true
+position = Vector2(1, 15)
+shape = SubResource("RectangleShape2D_w0ekh")
+
+[node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_so48f")
+
+[node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
+region_rect = Rect2(448, 400, 64, 48)
+
+[node name="ItemVisual" parent="." index="3" unique_id=126991651]
+position = Vector2(10, -5)
+region_rect = Rect2(16, 32, 16, 16)

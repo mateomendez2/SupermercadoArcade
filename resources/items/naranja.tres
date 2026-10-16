@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bpbmnqy6rjxsk"]
+
+[ext_resource type="Script" uid="uid://b18c0et7xn0i5" path="res://scripts/datos_producto.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cixiblcnwpldg" path="res://assets/ObjetosLista.png" id="2_hoja"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_icono"]
+atlas = ExtResource("2_hoja")
+region = Rect2(32, 48, 16, 16)
+
+[resource]
+script = ExtResource("1_item")
+item_name = "Naranja"
+icon = SubResource("AtlasTexture_icono")
