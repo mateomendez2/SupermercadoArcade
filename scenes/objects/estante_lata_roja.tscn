@@ -1,19 +1,19 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b5eo13e3vtcf3"]
 
-[ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_w0ekh"]
-[ext_resource type="Resource" path="res://resources/items/lata_roja.tres" id="2_so48f"]
+[ext_resource type="PackedScene" uid="uid://bcpjk8gybte7h" path="res://scenes/objects/estante_con_producto.tscn" id="1_w0ekh"]
+[ext_resource type="Resource" uid="uid://ct4exvj1hc1yb" path="res://resources/items/lata_roja.tres" id="2_so48f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w0ekh"]
-size = Vector2(54, 26)
+size = Vector2(52, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_so48f"]
-size = Vector2(60, 34)
+size = Vector2(64, 34)
 
 [node name="Interactable" unique_id=1647453037 instance=ExtResource("1_w0ekh")]
 item_content = ExtResource("2_so48f")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
-position = Vector2(1, 15)
+position = Vector2(0, 28)
 shape = SubResource("RectangleShape2D_w0ekh")
 
 [node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
@@ -24,5 +24,5 @@ shape = SubResource("RectangleShape2D_so48f")
 region_rect = Rect2(64, 400, 64, 48)
 
 [node name="ItemVisual" parent="." index="3" unique_id=126991651]
-position = Vector2(5, -3)
+position = Vector2(6, -3)
 region_rect = Rect2(16, 16, 16, 16)

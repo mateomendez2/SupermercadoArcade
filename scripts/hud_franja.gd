@@ -1,6 +1,6 @@
 extends CanvasLayer
 ## LA FRANJA ARCADE DE ARRIBA
-## De izquierda a derecha: NIVEL x | TIEMPO xx + bloques que se van vaciando | LISTA n/m
+## De izquierda a derecha: NIVEL x | TIEMPO xx + bloques que se van vaciando | LISTA
 ## Debajo de "LISTA" cuelga el ticket con los productos (sale "impreso" al empezar el nivel).
 ##
 ## Todo se arma por código con las imágenes de res://assets/ui/hud/ (estilo del título de Nati).
@@ -114,13 +114,10 @@ func _armar_franja() -> void:
 	x_bloques = x
 	caja_bloques = _caja(Vector2(x_bloques, Y_BLOQUES))
 
-	# LISTA n/m (se centra arriba del ticket)
+	# LISTA (sin números; siempre en el mismo lugar, centrado arriba del ticket)
 	grupo_lista = _caja(Vector2(0, Y_TEXTO))
 	_imagen("txt_lista", Vector2.ZERO, grupo_lista)
-	caja_contador = Control.new()
-	caja_contador.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	caja_contador.position = Vector2(tex["txt_lista"].get_width() + ESPACIO_ROTULO, 0)
-	grupo_lista.add_child(caja_contador)
+	_ubicar_rotulo_lista()
 
 	# El ticket: vive adentro de una "ventana" que lo recorta
 	ventana_ticket = _caja(Vector2.ZERO)
@@ -147,10 +144,9 @@ func _armar_ticket(lista: Array[ItemData]) -> void:
 	tildes.clear()
 
 	# Tamaño y lugar: pegado a la derecha, debajo de la franja.
-	# Como mínimo mide lo mismo que "LISTA n/m", así queda justo debajo del rótulo
+	# Tiene un ancho mínimo, así con pocos productos queda justo debajo del rótulo "LISTA"
 	var ancho_productos: int = lista.size() * PASO_ICONO + 12
-	var ancho_rotulo: int = tex["txt_lista"].get_width() + ESPACIO_ROTULO + int(_ancho_numero(3)) + 4
-	ancho_ticket = maxi(ancho_productos, ancho_rotulo)
+	ancho_ticket = maxi(ancho_productos, _ancho_minimo_ticket())
 	var primer_icono_x: int = (int(ancho_ticket) - ancho_productos) / 2 + 8 # Productos centrados
 	var x = ancho_pantalla - MARGEN - ancho_ticket
 	ventana_ticket.position = Vector2(x, ALTO_FRANJA + 2)
@@ -244,12 +240,16 @@ func _actualizar_bloques() -> void:
 		i += 1
 
 func _actualizar_contador() -> void:
-	var texto = str(GameManager.collected_items.size()) + "/" + str(GameManager.target_list.size())
-	_escribir_numero(caja_contador, texto)
-	# Centramos "LISTA n/m" arriba del ticket (sin que se salga de la pantalla)
-	var ancho = tex["txt_lista"].get_width() + ESPACIO_ROTULO + _ancho_numero(texto.length())
-	var centro = ventana_ticket.position.x + ancho_ticket / 2.0
-	grupo_lista.position.x = roundf(minf(centro - ancho / 2.0, ancho_pantalla - 4 - ancho))
+	pass # Ya no mostramos "n/m" al lado de LISTA (los tildes del ticket ya dicen qué tenés)
+
+# Ancho mínimo del ticket (el de siempre). "LISTA" se centra arriba de ese ancho y no se mueve más:
+# si la lista crece, el ticket se estira hacia la izquierda y el rótulo queda en el mismo lugar.
+func _ancho_minimo_ticket() -> int:
+	return tex["txt_lista"].get_width() + ESPACIO_ROTULO + int(_ancho_numero(3)) + 4
+
+func _ubicar_rotulo_lista() -> void:
+	var centro: float = ancho_pantalla - MARGEN - _ancho_minimo_ticket() / 2.0
+	grupo_lista.position.x = roundf(centro - tex["txt_lista"].get_width() / 2.0)
 
 func _on_item_juntado(item: ItemData) -> void:
 	_actualizar_contador()

@@ -1,16 +1,17 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cip2fl0xvqfmm"]
 
 [ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_cldwo"]
-[ext_resource type="Resource" path="res://resources/items/naranja.tres" id="2_qnsva"]
+[ext_resource type="Resource" uid="uid://bpbmnqy6rjxsk" path="res://resources/items/naranja.tres" id="2_qnsva"]
 
 [node name="Interactable" unique_id=1647453037 instance=ExtResource("1_cldwo")]
 item_content = ExtResource("2_qnsva")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
-position = Vector2(-0.75, 2)
+position = Vector2(0, 20)
 
 [node name="ShelfVisual" parent="." index="2" unique_id=1981411517]
 region_rect = Rect2(64, 224, 32, 32)
 
 [node name="ItemVisual" parent="." index="3" unique_id=126991651]
+position = Vector2(9, -1)
 region_rect = Rect2(32, 48, 16, 16)

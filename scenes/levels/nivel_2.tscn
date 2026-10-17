@@ -1,4 +1,4 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://bqpurb1nv5teq"]
 
 [ext_resource type="Script" uid="uid://bqj24uerhpnvi" path="res://scripts/config_nivel.gd" id="1_g6cv8"]
 [ext_resource type="Script" uid="uid://b18c0et7xn0i5" path="res://scripts/datos_producto.gd" id="2_fme1w"]
@@ -11,17 +11,15 @@
 [ext_resource type="PackedScene" path="res://scenes/obstacles/charco.tscn" id="11_l635b"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/npc_movil.tscn" id="12_k8xs4"]
 [ext_resource type="PackedScene" path="res://scenes/objects/puerta_automatica.tscn" id="13_uxvbc"]
-[ext_resource type="PackedScene" uid="uid://dn52t8wv5x8f5" path="res://scenes/obstacles/heladera_obstaculo.tscn" id="14_kx1sk"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="16_ulwrh"]
 [ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="17_lcd71"]
 [ext_resource type="PackedScene" uid="uid://d4nftpl3yfr2a" path="res://scenes/obstacles/baranda_seguridad.tscn" id="18_qyav3"]
 [ext_resource type="PackedScene" uid="uid://b5hlp4t5bhdxt" path="res://scenes/obstacles/baranda_no_paso_larga.tscn" id="19_mgkju"]
-[ext_resource type="PackedScene" path="res://scenes/objects/cajon_manzana.tscn" id="20_xcn28"]
+[ext_resource type="PackedScene" uid="uid://dh2cpksdthcr0" path="res://scenes/objects/cajon_manzana.tscn" id="20_xcn28"]
 [ext_resource type="PackedScene" uid="uid://dp5xtx3iqjrrq" path="res://scenes/obstacles/baranda_no_paso_vertical.tscn" id="20_ytw2u"]
 [ext_resource type="PackedScene" uid="uid://dugn2yb726hpw" path="res://scenes/obstacles/carrito_vacio.tscn" id="21_sp65e"]
 [ext_resource type="PackedScene" uid="uid://csq4gk6pqensf" path="res://scenes/obstacles/canasto_compras.tscn" id="22_2x1nu"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="22_vsphb"]
-[ext_resource type="PackedScene" path="res://scenes/objects/heladera_agua.tscn" id="23_vsphb"]
 [ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="25_f3o0g"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
@@ -1210,10 +1208,7 @@ position = Vector2(216, 16)
 region_rect = Rect2(200, 512, 16, 32)
 
 [node name="Interactable" parent="." unique_id=1647453037 instance=ExtResource("20_xcn28")]
-position = Vector2(212, 192)
-
-[node name="HeladeraObstaculo" parent="." unique_id=783320094 instance=ExtResource("14_kx1sk")]
-position = Vector2(32, 167)
+position = Vector2(208, 192)
 
 [node name="Carrito_Vacio5" parent="." unique_id=717150398 instance=ExtResource("21_sp65e")]
 position = Vector2(212, 74)
@@ -1228,30 +1223,38 @@ position = Vector2(195, 74)
 position = Vector2(176, 72)
 
 [node name="MuebleDecorativo" parent="." unique_id=1289041173 instance=ExtResource("22_vsphb")]
-position = Vector2(129, 184)
+position = Vector2(128, 184)
 
 [node name="MuebleDecorativo2" parent="." unique_id=445185440 instance=ExtResource("22_vsphb")]
-position = Vector2(128, 136)
+position = Vector2(128, 120)
 
 [node name="Sprite2D" parent="MuebleDecorativo2" index="0" unique_id=2001655473]
 region_rect = Rect2(256, 400, 64, 48)
 
-[node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("25_f3o0g")]
-position = Vector2(212, 112)
+[node name="MuebleDecorativo3" parent="." unique_id=967356319 instance=ExtResource("22_vsphb")]
+position = Vector2(32, 184)
+
+[node name="Sprite2D" parent="MuebleDecorativo3" index="0" unique_id=2001655473]
+region_rect = Rect2(256, 400, 64, 48)
+
+[node name="mueble_mitad_decorativo4" parent="." unique_id=190229557 instance=ExtResource("25_f3o0g")]
+position = Vector2(16, 121)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo4" index="0" unique_id=1182334053]
+flip_h = true
+region_rect = Rect2(576, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo2" parent="." unique_id=1973446642 instance=ExtResource("25_f3o0g")]
-position = Vector2(212, 136)
+position = Vector2(208, 154)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo2" index="0" unique_id=1182334053]
-position = Vector2(0, -8)
 region_rect = Rect2(64, 576, 32, 64)
-
-[node name="Interactable2" parent="." unique_id=1394953268 instance=ExtResource("23_vsphb")]
-position = Vector2(35, 110)
 
 [editable path="MovingNPC"]
 [editable path="Canasto_Compras2"]
 [editable path="Canasto_Compras5"]
 [editable path="Canasto_Compras6"]
 [editable path="MuebleDecorativo2"]
+[editable path="MuebleDecorativo3"]
+[editable path="mueble_mitad_decorativo4"]
 [editable path="mueble_mitad_decorativo2"]

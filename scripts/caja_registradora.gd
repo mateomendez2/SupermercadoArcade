@@ -7,7 +7,7 @@ const RUTA_SONIDO_CAJA: String = "res://assets/audio/SonidoCaja.wav"
 @export var texto_aviso: String = "¡POR ACÁ!"
 @export var posicion_aviso: Vector2 = Vector2(-8, -42) # Arriba de la cabeza del cajero
 
-var aviso: Label
+var aviso: PanelContainer # El globo de diálogo "¡POR ACÁ!"
 var sonido_caja: AudioStreamPlayer
 var tween_aparecer: Tween
 var tween_rebote: Tween
@@ -26,22 +26,49 @@ func _ready() -> void:
 	GameManager.game_won.connect(_ocultar_aviso)               # Ya pagó -> escondemos
 
 func _crear_aviso() -> void:
-	# 1. El cartel: un texto con el mismo estilo que el reloj (amarillo con borde naranja)
-	aviso = Label.new()
-	aviso.text = texto_aviso
-	aviso.add_theme_font_size_override("font_size", 16)
-	aviso.add_theme_color_override("font_color", Color(0.98, 1.0, 0.59))
-	aviso.add_theme_color_override("font_outline_color", Color(0.75, 0.21, 0.05))
-	aviso.add_theme_constant_override("outline_size", 4)
-	aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# 1. El cartel: un globo de diálogo blanco con borde negro y letras negras
+	var estilo = StyleBoxFlat.new()
+	estilo.bg_color = Color.WHITE
+	estilo.border_color = Color.BLACK
+	estilo.set_border_width_all(1)
+	estilo.content_margin_left = 4
+	estilo.content_margin_right = 4
+	estilo.content_margin_top = 0
+	estilo.content_margin_bottom = 1
+	estilo.anti_aliasing = false # Bordes pixelados, como el resto del juego
+
+	aviso = PanelContainer.new()
+	aviso.add_theme_stylebox_override("panel", estilo)
+	aviso.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	aviso.z_index = 20 # Siempre por encima de góndolas y personajes
 	aviso.hide()
 	add_child(aviso)
 
+	var texto = Label.new()
+	texto.text = texto_aviso
+	texto.add_theme_font_size_override("font_size", 16)
+	texto.add_theme_color_override("font_color", Color.BLACK)
+	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	texto.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	aviso.add_child(texto)
+
 	# Lo centramos arriba del cajero (el tamaño se calcula recién cuando está en el árbol)
 	aviso.size = aviso.get_minimum_size()
 	aviso.pivot_offset = aviso.size / 2.0 # Para que crezca desde el centro
-	aviso.position = posicion_aviso - aviso.size / 2.0
+	aviso.position = (posicion_aviso - aviso.size / 2.0).round()
+
+	# La "colita" del globo, apuntando al cajero (triángulo negro con uno blanco adentro)
+	var abajo_centro = Vector2(round(aviso.size.x / 2.0), aviso.size.y - 1)
+	var colita_borde = Polygon2D.new()
+	colita_borde.polygon = PackedVector2Array([Vector2(-4, 0), Vector2(4, 0), Vector2(0, 5)])
+	colita_borde.color = Color.BLACK
+	colita_borde.position = abajo_centro
+	aviso.add_child(colita_borde)
+	var colita = Polygon2D.new()
+	colita.polygon = PackedVector2Array([Vector2(-3, 0), Vector2(3, 0), Vector2(0, 3)])
+	colita.color = Color.WHITE
+	colita.position = abajo_centro
+	aviso.add_child(colita)
 
 	# 2. El sonido: AudioStreamPlayer normal (no 2D) para que se escuche aunque estés lejos
 	sonido_caja = AudioStreamPlayer.new()

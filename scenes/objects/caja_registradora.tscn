@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://pdt05egsouk3"]
 
-[ext_resource type="Script" path="res://scripts/caja_registradora.gd" id="1_gtf4q"]
+[ext_resource type="Script" uid="uid://hpuwdl8hmdc" path="res://scripts/caja_registradora.gd" id="1_gtf4q"]
 [ext_resource type="Texture2D" uid="uid://bqnpcy4c1spj7" path="res://assets/Mobiliario_Tilemap.png" id="2_1fqmo"]
 [ext_resource type="Texture2D" uid="uid://bix30osm35yoc" path="res://assets/personajeestaticoabajo.png" id="3_bmao2"]
 [ext_resource type="Texture2D" uid="uid://b1iusruwcfqkd" path="res://assets/personajeestaticoizquierda.png" id="4_vbns1"]
@@ -15,7 +15,9 @@
 [ext_resource type="Texture2D" uid="uid://dh8hynecb5v75" path="res://assets/personajecorrerderecha.png" id="13_ol8tp"]
 [ext_resource type="Texture2D" uid="uid://cxtycne88ve7t" path="res://assets/personajecorrerarriba.png" id="14_yritj"]
 [ext_resource type="Script" uid="uid://7cpnxb64s2yy" path="res://scripts/flecha_guia.gd" id="15_vbns1"]
-[ext_resource type="Texture2D" uid="uid://beq3xp2ecehel" path="res://assets/Flecha_guia.png" id="16_ssg4l"]
+[ext_resource type="Texture2D" uid="uid://0gse4fr0xhld" path="res://assets/ui/globo_pagar.png" id="16_ssg4l"]
+[ext_resource type="Texture2D" uid="uid://ijjlnc2145t5" path="res://assets/ui/billetera.png" id="17_billetera"]
+[ext_resource type="Script" uid="uid://bkm3fgquwfu4w" path="res://scripts/zona_borde.gd" id="18_zona"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1fqmo"]
 size = Vector2(96, 64)
@@ -452,10 +454,15 @@ region_rect = Rect2(0, 128, 64, 64)
 
 [node name="FlechaGuia" type="Node2D" parent="." unique_id=1557287736]
 unique_name_in_owner = true
+visible = false
 script = ExtResource("15_vbns1")
 
 [node name="Sprite2D" type="Sprite2D" parent="FlechaGuia" unique_id=1504040061]
 texture = ExtResource("16_ssg4l")
+offset = Vector2(0, 4)
+
+[node name="Billetera" type="Sprite2D" parent="FlechaGuia" unique_id=1504040062]
+texture = ExtResource("17_billetera")
 
 [node name="ZonaVisual" type="ColorRect" parent="." unique_id=1945427290]
 unique_name_in_owner = true
@@ -466,6 +473,7 @@ offset_top = -32.0
 offset_right = 64.0
 offset_bottom = 32.0
 color = Color(0.29803923, 0.8509804, 0.39215687, 0.5882353)
+script = ExtResource("18_zona")
 
 [node name="DetectorPantalla" type="VisibleOnScreenNotifier2D" parent="." unique_id=1551316676]
 unique_name_in_owner = true

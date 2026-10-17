@@ -1,19 +1,19 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bf0abx6hs1llc"]
 
-[ext_resource type="PackedScene" path="res://scenes/objects/estante_con_producto.tscn" id="1_base"]
+[ext_resource type="PackedScene" uid="uid://bcpjk8gybte7h" path="res://scenes/objects/estante_con_producto.tscn" id="1_base"]
 [ext_resource type="Resource" path="res://resources/items/frasco_violeta.tres" id="2_item"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_zona"]
-size = Vector2(54, 26)
+size = Vector2(52, 12)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_muro"]
-size = Vector2(60, 34)
+size = Vector2(64, 34)
 
 [node name="Interactable" unique_id=1647453037 instance=ExtResource("1_base")]
 item_content = ExtResource("2_item")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=599446482]
-position = Vector2(1, 15)
+position = Vector2(0, 28)
 shape = SubResource("RectangleShape2D_zona")
 
 [node name="CollisionShape2D" parent="SolidWall" parent_id_path=PackedInt32Array(1867264389) index="0" unique_id=875642291]
