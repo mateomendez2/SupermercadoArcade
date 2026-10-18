@@ -6,10 +6,10 @@
 [ext_resource type="Texture2D" uid="uid://7cj62ghthl0b" path="res://assets/pasto.png" id="5_byonv"]
 [ext_resource type="Texture2D" uid="uid://cn6eocf0dme6x" path="res://assets/ParedesySuelo.png" id="6_4fcs3"]
 [ext_resource type="PackedScene" uid="uid://cprcw7pxrir8f" path="res://scenes/characters/jugador.tscn" id="7_k62lq"]
-[ext_resource type="PackedScene" path="res://scenes/objects/caja_registradora.tscn" id="9_eonm1"]
+[ext_resource type="PackedScene" uid="uid://pdt05egsouk3" path="res://scenes/objects/caja_registradora.tscn" id="9_eonm1"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/caja_obstaculo.tscn" id="10_iejq2"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/charco.tscn" id="11_l635b"]
-[ext_resource type="PackedScene" path="res://scenes/obstacles/npc_movil.tscn" id="12_k8xs4"]
+[ext_resource type="PackedScene" uid="uid://bt0w0vefxtsgg" path="res://scenes/obstacles/npc_movil.tscn" id="12_k8xs4"]
 [ext_resource type="PackedScene" path="res://scenes/objects/puerta_automatica.tscn" id="13_uxvbc"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="16_ulwrh"]
 [ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="17_lcd71"]
@@ -1120,16 +1120,16 @@ unique_name_in_owner = true
 position = Vector2(160, -32)
 
 [node name="ObstacleBox2" parent="." unique_id=487653766 instance=ExtResource("10_iejq2")]
-position = Vector2(80, 144)
+position = Vector2(80, 128)
 
 [node name="ObstacleBox6" parent="." unique_id=579991991 instance=ExtResource("10_iejq2")]
 position = Vector2(176, 192)
 
 [node name="HazardSpill3" parent="." unique_id=524601528 instance=ExtResource("11_l635b")]
-position = Vector2(176, 112)
+position = Vector2(176, 96)
 
 [node name="HazardSpill4" parent="." unique_id=694686905 instance=ExtResource("11_l635b")]
-position = Vector2(16, 208)
+position = Vector2(48, 160)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("12_k8xs4")]
 position = Vector2(112, 208)
@@ -1138,13 +1138,13 @@ position = Vector2(112, 208)
 position = Vector2(-32, 0)
 
 [node name="Punto2" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="1" unique_id=158643228]
-position = Vector2(-32, -32)
+position = Vector2(-32, -64)
 
 [node name="Punto3" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="2" unique_id=1495986653]
-position = Vector2(64, -32)
+position = Vector2(64, -64)
 
 [node name="Punto4" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="3" unique_id=933207079]
-position = Vector2(64, -64)
+position = Vector2(64, -96)
 
 [node name="AutomaticDoor" parent="." unique_id=1890407894 instance=ExtResource("13_uxvbc")]
 position = Vector2(160, -25)
@@ -1161,15 +1161,16 @@ position = Vector2(64, -37)
 region_rect = Rect2(320, 96, 128, 32)
 
 [node name="Label" type="Label" parent="Letrero" unique_id=357049464]
-offset_left = -57.0
-offset_top = -7.0
+offset_left = -59.0
+offset_top = -6.0
 offset_right = 59.0
-offset_bottom = 12.0
+offset_bottom = 13.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "SECTOR COBRO"
 horizontal_alignment = 1
 vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="CheckoutDesk2" parent="." unique_id=1421087247 instance=ExtResource("9_eonm1")]
 position = Vector2(32, 47)
@@ -1178,31 +1179,31 @@ position = Vector2(32, 47)
 position = Vector2(112, 39)
 
 [node name="Baranda_Seguridad2" parent="." unique_id=1595132844 instance=ExtResource("18_qyav3")]
-position = Vector2(112, 0)
+position = Vector2(112, -4)
 
 [node name="Baranda_NoPaso_Larga2" parent="." unique_id=1873527359 instance=ExtResource("19_mgkju")]
-position = Vector2(194, 80)
+position = Vector2(195, 64)
 
 [node name="Baranda_NoPaso_Vertical" parent="." unique_id=1188214765 instance=ExtResource("20_ytw2u")]
-position = Vector2(112, 64)
+position = Vector2(112, 48)
 
 [node name="Canasto_Compras2" parent="." unique_id=1801299192 instance=ExtResource("22_2x1nu")]
-position = Vector2(215, 4)
+position = Vector2(214, 4)
 
 [node name="Sprite2D" parent="Canasto_Compras2" index="0" unique_id=2084915334]
 region_rect = Rect2(264, 520, 16, 24)
 
 [node name="Canasto_Compras3" parent="." unique_id=950854403 instance=ExtResource("22_2x1nu")]
-position = Vector2(199, 20)
+position = Vector2(198, 20)
 
 [node name="Canasto_Compras5" parent="." unique_id=739677518 instance=ExtResource("22_2x1nu")]
-position = Vector2(199, 0)
+position = Vector2(198, 0)
 
 [node name="Sprite2D" parent="Canasto_Compras5" index="0" unique_id=2084915334]
 region_rect = Rect2(200, 512, 16, 32)
 
 [node name="Canasto_Compras6" parent="." unique_id=357004343 instance=ExtResource("22_2x1nu")]
-position = Vector2(216, 16)
+position = Vector2(215, 16)
 
 [node name="Sprite2D" parent="Canasto_Compras6" index="0" unique_id=2084915334]
 region_rect = Rect2(200, 512, 16, 32)
@@ -1211,16 +1212,16 @@ region_rect = Rect2(200, 512, 16, 32)
 position = Vector2(208, 192)
 
 [node name="Carrito_Vacio5" parent="." unique_id=717150398 instance=ExtResource("21_sp65e")]
-position = Vector2(212, 74)
+position = Vector2(213, 58)
 
 [node name="Carrito_Vacio6" parent="." unique_id=2032210900 instance=ExtResource("21_sp65e")]
-position = Vector2(212, 63)
+position = Vector2(213, 47)
 
 [node name="Carrito_Vacio7" parent="." unique_id=172970363 instance=ExtResource("21_sp65e")]
-position = Vector2(195, 74)
+position = Vector2(196, 58)
 
 [node name="Carrito_Vacio8" parent="." unique_id=373938557 instance=ExtResource("21_sp65e")]
-position = Vector2(176, 72)
+position = Vector2(177, 56)
 
 [node name="MuebleDecorativo" parent="." unique_id=1289041173 instance=ExtResource("22_vsphb")]
 position = Vector2(128, 184)
@@ -1238,14 +1239,14 @@ position = Vector2(32, 184)
 region_rect = Rect2(256, 400, 64, 48)
 
 [node name="mueble_mitad_decorativo4" parent="." unique_id=190229557 instance=ExtResource("25_f3o0g")]
-position = Vector2(16, 121)
+position = Vector2(16, 153)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo4" index="0" unique_id=1182334053]
 flip_h = true
 region_rect = Rect2(576, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo2" parent="." unique_id=1973446642 instance=ExtResource("25_f3o0g")]
-position = Vector2(208, 154)
+position = Vector2(208, 153)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo2" index="0" unique_id=1182334053]
 region_rect = Rect2(64, 576, 32, 64)

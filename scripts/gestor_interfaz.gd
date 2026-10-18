@@ -54,6 +54,12 @@ func _ready() -> void:
 	GameManager.qte_cancelled.connect(%QTE_Caida.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Caida.is_active = false)
 	
+	# NUEVO: el minijuego del truco del color (apretar el color de la tinta)
+	GameManager.start_qte_tinta.connect(%QTE_Tinta.start_qte)
+	%QTE_Tinta.qte_finished.connect(GameManager.resolve_qte)
+	GameManager.qte_cancelled.connect(%QTE_Tinta.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Tinta.is_active = false)
+	
 	GameManager.qte_cancelled.connect(%QTE_Minigame.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Minigame.is_active = false)
 	

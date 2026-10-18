@@ -7,6 +7,7 @@ signal game_won
 signal start_qte_colores 
 signal start_qte_mashing
 signal start_qte_caida # NUEVO: el minijuego de los círculos que caen
+signal start_qte_tinta # NUEVO: el minijuego del truco del color
 signal lista_lista_para_pagar # Avisa que ya tenemos todo
 signal lista_incompleta       # Avisa que nos robaron algo y ya no tenemos todo
 
@@ -119,8 +120,8 @@ func request_qte(gondola: Interactable) -> void:
 	# ¿La góndola ya tiene un minijuego guardado en su memoria?
 	if gondola_actual.minijuego_guardado == "":
 		
-		# Tiramos un dado de 4 caras (del 0 al 3)
-		var dado = randi() % 4
+		# Tiramos un dado de 5 caras (del 0 al 4)
+		var dado = randi() % 5
 		
 		if dado == 0:
 			gondola_actual.minijuego_guardado = "barrita"
@@ -128,8 +129,10 @@ func request_qte(gondola: Interactable) -> void:
 			gondola_actual.minijuego_guardado = "colores"
 		elif dado == 2:
 			gondola_actual.minijuego_guardado = "mashing"
-		else:
+		elif dado == 3:
 			gondola_actual.minijuego_guardado = "caida"
+		else:
+			gondola_actual.minijuego_guardado = "tinta"
 			
 	# Ahora leemos la memoria y abrimos el correcto
 	if gondola_actual.minijuego_guardado == "barrita":
@@ -144,6 +147,9 @@ func request_qte(gondola: Interactable) -> void:
 	elif gondola_actual.minijuego_guardado == "caida":
 		print("Abriendo la Caída...")
 		start_qte_caida.emit()
+	elif gondola_actual.minijuego_guardado == "tinta":
+		print("Abriendo el Truco del Color...")
+		start_qte_tinta.emit()
 
 func resolve_qte(success: bool) -> void:
 	# GUARDIA DE SEGURIDAD (Evita el crash rojo por si acaso)

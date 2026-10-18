@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bt0w0vefxtsgg"]
 
-[ext_resource type="Script" path="res://scripts/npc_movil.gd" id="1_o4fq0"]
+[ext_resource type="Script" uid="uid://8scj3kotpa6u" path="res://scripts/npc_movil.gd" id="1_o4fq0"]
 [ext_resource type="Texture2D" uid="uid://bix30osm35yoc" path="res://assets/personajeestaticoabajo.png" id="2_h27u7"]
-[ext_resource type="Shader" path="res://scripts/npc_movil.gdshader" id="2_s3p6f"]
+[ext_resource type="Shader" uid="uid://c3wbapwx7iov7" path="res://scripts/npc_movil.gdshader" id="2_s3p6f"]
 [ext_resource type="Texture2D" uid="uid://b1iusruwcfqkd" path="res://assets/personajeestaticoizquierda.png" id="3_s3p6f"]
 [ext_resource type="Texture2D" uid="uid://bu52nhc8o1o66" path="res://assets/personajeestaticoderecha.png" id="4_jih75"]
 [ext_resource type="Texture2D" uid="uid://cwef7s2ra2sh7" path="res://assets/personajeestaticoarriba.png" id="5_dxla1"]
@@ -16,7 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cxtycne88ve7t" path="res://assets/personajecorrerarriba.png" id="13_r4i3a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d47hv"]
-size = Vector2(28, 28)
+size = Vector2(24, 18)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jih75"]
 shader = ExtResource("2_s3p6f")
@@ -429,6 +429,7 @@ tiempo_espera = 0.5
 unique_name_in_owner = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1028322893]
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_d47hv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Hitbox" unique_id=1225584199]

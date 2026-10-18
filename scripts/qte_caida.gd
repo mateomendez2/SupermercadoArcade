@@ -9,6 +9,10 @@ extends Control
 
 signal qte_finished(success: bool)
 
+# Corazones al costado del cartel: uno por vida, se rompen con cada error
+const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
+var corazones
+
 const Confites = preload("res://scripts/confites.gd")
 const CARPETA_ARTE: String = "res://assets/ui/qte/"
 const COLORES: Array[String] = ["azul", "rojo", "amarillo"]
@@ -67,6 +71,8 @@ func _ready() -> void:
 		tex_normal[color] = botones[color].texture
 	tex_hundido = {"azul": tex_azul_hundido, "rojo": tex_rojo_hundido, "amarillo": tex_amarillo_hundido}
 	_armar()
+	corazones = CorazonesQTE.new()
+	cartel.add_child(corazones)
 
 # =====================================================================
 # ARMADO (todo se ubica a partir de dónde están los botones)
@@ -145,6 +151,7 @@ func start_qte() -> void:
 	circulos.clear()
 	aciertos = 0
 	intentos_restantes = errores_maximos
+	corazones.armar(errores_maximos)
 	barra.max_value = aciertos_para_ganar
 	barra.value = 0
 	for color in COLORES:
@@ -270,6 +277,7 @@ func _error(color: String) -> void:
 	_destello_aro(color, Color(1.0, 0.3, 0.3))
 	_destello_fondo(FONDO_ROJO)
 	intentos_restantes -= 1
+	corazones.perder_vida()
 	print("¡Fallaste! Te quedan: ", intentos_restantes, " intentos.")
 	if intentos_restantes <= 0:
 		_perder()

@@ -8,15 +8,18 @@
 [ext_resource type="PackedScene" uid="uid://cprcw7pxrir8f" path="res://scenes/characters/jugador.tscn" id="6_wvsfj"]
 [ext_resource type="PackedScene" path="res://scenes/objects/puerta_automatica.tscn" id="7_kdvya"]
 [ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="8_83ewa"]
-[ext_resource type="PackedScene" path="res://scenes/objects/caja_registradora.tscn" id="9_lnp6k"]
+[ext_resource type="PackedScene" uid="uid://pdt05egsouk3" path="res://scenes/objects/caja_registradora.tscn" id="9_lnp6k"]
 [ext_resource type="PackedScene" uid="uid://d4nftpl3yfr2a" path="res://scenes/obstacles/baranda_seguridad.tscn" id="10_j18gt"]
 [ext_resource type="PackedScene" uid="uid://csq4gk6pqensf" path="res://scenes/obstacles/canasto_compras.tscn" id="11_1xew3"]
 [ext_resource type="PackedScene" uid="uid://dugn2yb726hpw" path="res://scenes/obstacles/carrito_vacio.tscn" id="12_8xain"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="13_tfyej"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="15_v552e"]
 [ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="16_7n813"]
-[ext_resource type="PackedScene" path="res://scenes/objects/cajon_limon.tscn" id="17_64odk"]
+[ext_resource type="PackedScene" uid="uid://dp5xtx3iqjrrq" path="res://scenes/obstacles/baranda_no_paso_vertical.tscn" id="17_7prpn"]
+[ext_resource type="PackedScene" uid="uid://cuia8o6p4o072" path="res://scenes/objects/cajon_limon.tscn" id="17_64odk"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/caja_obstaculo.tscn" id="18_lh0ur"]
+[ext_resource type="PackedScene" uid="uid://b5hlp4t5bhdxt" path="res://scenes/obstacles/baranda_no_paso_larga.tscn" id="18_lx63y"]
+[ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="19_b7im0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ooak4"]
 texture = ExtResource("4_krahd")
@@ -1124,10 +1127,10 @@ position = Vector2(64, -37)
 region_rect = Rect2(320, 96, 128, 32)
 
 [node name="Label" type="Label" parent="Letrero" unique_id=486120497]
-offset_left = -57.0
-offset_top = -7.0
+offset_left = -59.0
+offset_top = -6.0
 offset_right = 59.0
-offset_bottom = 12.0
+offset_bottom = 13.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 24
 text = "SECTOR COBRO"
@@ -1138,39 +1141,59 @@ vertical_alignment = 1
 position = Vector2(32, 48)
 
 [node name="Baranda_Seguridad" parent="." unique_id=1466667907 instance=ExtResource("10_j18gt")]
-position = Vector2(112, 0)
+position = Vector2(112, -4)
+
+[node name="Baranda_Seguridad2" parent="." unique_id=1063375267 instance=ExtResource("10_j18gt")]
+position = Vector2(112, 39)
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("11_1xew3")]
-position = Vector2(206, 4)
+position = Vector2(203, 11)
 
 [node name="Canasto_Compras2" parent="." unique_id=459534574 instance=ExtResource("11_1xew3")]
-position = Vector2(214, 14)
+position = Vector2(214, 24)
 
 [node name="Carrito_Vacio" parent="." unique_id=717150398 instance=ExtResource("12_8xain")]
-position = Vector2(212, 52)
+position = Vector2(214, 38)
 
 [node name="Carrito_Vacio2" parent="." unique_id=1659999811 instance=ExtResource("12_8xain")]
-position = Vector2(212, 63)
-
-[node name="MuebleDecorativo" parent="." unique_id=1289041173 instance=ExtResource("13_tfyej")]
-position = Vector2(176, 120)
-
-[node name="Sprite2D" parent="MuebleDecorativo" index="0" unique_id=2001655473]
-region_rect = Rect2(128, 400, 64, 48)
+position = Vector2(214, 46)
 
 [node name="CartelOfertas" parent="." unique_id=886368352 instance=ExtResource("15_v552e")]
-position = Vector2(208, 96)
+position = Vector2(17, 17)
 
-[node name="CanastoDecorativo" parent="." unique_id=405200317 instance=ExtResource("16_7n813")]
-position = Vector2(48, 128)
+[node name="Sprite2D" parent="CartelOfertas" index="0" unique_id=1648568606]
+position = Vector2(-1, -13)
+region_rect = Rect2(512, 112, 32, 48)
 
 [node name="CajonLimon" parent="." unique_id=1647453037 instance=ExtResource("17_64odk")]
 position = Vector2(16, 128)
 
 [node name="ObstacleBox" parent="." unique_id=2106728863 instance=ExtResource("18_lh0ur")]
-position = Vector2(144, 96)
+position = Vector2(176, 96)
 
 [node name="ObstacleBox2" parent="." unique_id=960600513 instance=ExtResource("18_lh0ur")]
-position = Vector2(80, 96)
+position = Vector2(112, 128)
 
-[editable path="MuebleDecorativo"]
+[node name="MuebleDecorativo2" parent="." unique_id=1053088901 instance=ExtResource("13_tfyej")]
+position = Vector2(64, 120)
+
+[node name="Baranda_NoPaso_Vertical" parent="." unique_id=1188214765 instance=ExtResource("17_7prpn")]
+position = Vector2(112, 48)
+
+[node name="Baranda_NoPaso_Larga" parent="." unique_id=440938138 instance=ExtResource("18_lx63y")]
+position = Vector2(192, 64)
+
+[node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("19_b7im0")]
+position = Vector2(208, 153)
+
+[node name="Sprite2D" parent="mueble_mitad_decorativo" index="0" unique_id=1182334053]
+region_rect = Rect2(320, 576, 32, 64)
+
+[node name="mueble_mitad_decorativo2" parent="." unique_id=385647385 instance=ExtResource("19_b7im0")]
+position = Vector2(208, 112)
+
+[node name="CanastoDecorativo" parent="." unique_id=405200317 instance=ExtResource("16_7n813")]
+position = Vector2(144, 128)
+
+[editable path="CartelOfertas"]
+[editable path="mueble_mitad_decorativo"]

@@ -2,6 +2,10 @@ extends Control
 
 signal qte_finished(success: bool)
 
+# Corazones al costado del cartel: uno por vida, se rompen con cada error
+const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
+var corazones
+
 @export var speed: float = 400.0 
 var direction: int = 1
 var is_active: bool = false
@@ -23,12 +27,15 @@ var intentos_restantes: int = 5
 func _ready() -> void:
 	hide()
 	_estilizar_barra()
+	corazones = CorazonesQTE.new()
+	$FondoCartel.add_child(corazones)
 
 func start_qte() -> void:
 	sesion += 1
 	if tex_boton_normal: boton_visual.texture = tex_boton_normal
 	
 	intentos_restantes = 5 # ¡NUEVO! Reseteamos los intentos
+	corazones.armar(intentos_restantes)
 	
 	show()
 	cursor.position.x = barra_roja.position.x 
@@ -96,10 +103,15 @@ func check_win() -> void:
 	else:
 		# ¡FALLÓ! Restamos una vida
 		intentos_restantes -= 1
+		corazones.perder_vida()
 		print("¡Fallaste! Te quedan: ", intentos_restantes, " intentos.")
 		
 		if intentos_restantes <= 0:
-			# Se acabaron las vidas. Se cierra y avisa derrota.
+			# Se acabaron las vidas. Esperamos un instante para que se vea
+			# romperse el último corazón, y se cierra avisando derrota.
+			var mi_sesion = sesion
+			await get_tree().create_timer(0.35).timeout
+			if mi_sesion != sesion: return
 			hide()
 			qte_finished.emit(false)
 		else:

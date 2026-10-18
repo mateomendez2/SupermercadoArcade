@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://d3fihmorcnev5"]
 
-[ext_resource type="Script" path="res://scripts/qte_machaque.gd" id="1_xdo60"]
+[ext_resource type="Script" uid="uid://bp35sd3fwabqj" path="res://scripts/qte_machaque.gd" id="1_xdo60"]
 [ext_resource type="Texture2D" uid="uid://ba5tkwlk3ib3h" path="res://assets/BotonAzul.png" id="2_7l4m2"]
 [ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="3_hy0a7"]
 [ext_resource type="Texture2D" uid="uid://cp65ce77te2tl" path="res://assets/BotonAmarillo.png" id="4_iesky"]
@@ -124,14 +124,12 @@ stretch_mode = 5
 
 [node name="Label" type="Label" parent="." unique_id=2066954111]
 layout_mode = 0
-offset_left = 235.0
-offset_top = 147.0
-offset_right = 363.0
-offset_bottom = 171.0
+offset_left = 233.0
+offset_top = 148.0
+offset_right = 365.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -4
-theme_override_font_sizes/font_size = 16
 text = "Presiona rápido
 el mismo color"
 horizontal_alignment = 1
-vertical_alignment = 0

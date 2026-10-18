@@ -1,0 +1,150 @@
+[gd_scene format=3 uid="uid://b8e6h456xb0se"]
+
+[ext_resource type="Script" uid="uid://chyos4a2v88ar" path="res://scripts/qte_tinta.gd" id="1_tinta"]
+[ext_resource type="Texture2D" uid="uid://b0ayn6j02rtn5" path="res://assets/Panel_QTE_Barra.png" id="2_panel"]
+[ext_resource type="Texture2D" uid="uid://ba5tkwlk3ib3h" path="res://assets/BotonAzul.png" id="3_azul"]
+[ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="4_rojo"]
+[ext_resource type="Texture2D" uid="uid://cp65ce77te2tl" path="res://assets/BotonAmarillo.png" id="5_amarillo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_azul_hundido"]
+atlas = ExtResource("3_azul")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rojo_hundido"]
+atlas = ExtResource("4_rojo")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amarillo_hundido"]
+atlas = ExtResource("5_amarillo")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_azul_normal"]
+atlas = ExtResource("3_azul")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rojo_normal"]
+atlas = ExtResource("4_rojo")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amarillo_normal"]
+atlas = ExtResource("5_amarillo")
+region = Rect2(0, 0, 32, 32)
+
+[node name="QTE_Tinta" type="Control" unique_id=1889524887]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tinta")
+tex_azul_hundido = SubResource("AtlasTexture_azul_hundido")
+tex_rojo_hundido = SubResource("AtlasTexture_rojo_hundido")
+tex_amarillo_hundido = SubResource("AtlasTexture_amarillo_hundido")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=159662698]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="FondoCartel" type="TextureRect" parent="." unique_id=686612513]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -91.0
+offset_right = 106.5
+offset_bottom = 91.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_panel")
+
+[node name="BotonAzul" type="TextureRect" parent="FondoCartel" unique_id=160100435]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 71.5
+offset_top = 119.0
+offset_right = 103.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_azul_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonRojo" type="TextureRect" parent="FondoCartel" unique_id=52496296]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 113.5
+offset_top = 119.0
+offset_right = 145.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_rojo_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel" unique_id=632616906]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 155.5
+offset_top = 119.0
+offset_right = 187.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_amarillo_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Regla" type="Label" parent="FondoCartel" unique_id=274516153]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 51.5
+offset_top = 23.0
+offset_right = 183.5
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -4
+text = "Apretá el color
+de la palabra"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarcoTiempo" type="ColorRect" parent="FondoCartel" unique_id=2014471364]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 62.0
+offset_right = 184.0
+offset_bottom = 68.0
+mouse_filter = 2
+color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+
+[node name="BarraTiempo" type="ColorRect" parent="FondoCartel/MarcoTiempo" unique_id=1245669922]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 107.0
+offset_bottom = 5.0
+mouse_filter = 2
+color = Color(0.96862745, 0.70980394, 0, 1)
+
+[node name="Palabra" type="Label" parent="FondoCartel" unique_id=259577040]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 66.0
+offset_top = 72.0
+offset_right = 194.0
+offset_bottom = 112.0
+scale = Vector2(1, 1.5)
+pivot_offset = Vector2(64, 20)
+theme_override_colors/font_color = Color(0.21176471, 0.40784314, 0.9882353, 1)
+theme_override_colors/font_outline_color = Color(0.105882354, 0.105882354, 0.105882354, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 32
+text = "ROJO"
+horizontal_alignment = 1
+vertical_alignment = 1

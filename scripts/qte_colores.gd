@@ -2,6 +2,10 @@ extends Control
 
 signal qte_finished(success: bool)
 
+# Corazones al costado del cartel: uno por vida, se rompen con cada error
+const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
+var corazones
+
 @export var tex_azul_hundido: Texture2D
 @export var tex_rojo_hundido: Texture2D
 @export var tex_amarillo_hundido: Texture2D
@@ -28,6 +32,8 @@ var intentos_restantes: int = 5
 func _ready() -> void:
 	hide()
 	color_fondo_normal = fondo_oscuro.color
+	corazones = CorazonesQTE.new()
+	$FondoCartel.add_child(corazones)
 	tex_azul_normal = %BotonAzul.texture
 	tex_rojo_normal = %BotonRojo.texture
 	tex_amarillo_normal = %BotonAmarillo.texture
@@ -36,6 +42,7 @@ func start_qte() -> void:
 	sesion += 1
 	show()
 	intentos_restantes = 5
+	corazones.armar(intentos_restantes)
 	generar_secuencia()
 	apagar_botones()
 	
@@ -120,6 +127,7 @@ func comprobar_boton(color_apretado: String) -> void:
 	else:
 		_destello_fondo(FONDO_ROJO) # Le erraste al orden (después se repite la secuencia como siempre)
 		intentos_restantes -= 1
+		corazones.perder_vida()
 		estado_juego = "TERMINADO"
 		await get_tree().create_timer(0.4).timeout 
 		

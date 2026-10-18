@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dgvvbtl2w4wsi" path="res://scenes/ui/qte_colores.tscn" id="5_7n028"]
 [ext_resource type="PackedScene" path="res://scenes/ui/qte_machaque.tscn" id="6_jvuow"]
 [ext_resource type="PackedScene" path="res://scenes/ui/qte_caida.tscn" id="7_caida"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_tinta.tscn" id="8_tinta"]
 
 [node name="Main" type="Control" unique_id=1195027389]
 layout_mode = 3
@@ -137,6 +138,13 @@ offset_top = -1.0
 offset_bottom = -1.0
 
 [node name="QTE_Caida" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("7_caida")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+
+[node name="QTE_Tinta" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("8_tinta")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
