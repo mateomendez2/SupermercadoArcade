@@ -1570,7 +1570,7 @@ position = Vector2(-96, -208)
 position = Vector2(0, -208)
 
 [node name="MuebleDecorativo" parent="." unique_id=1844873278 instance=ExtResource("28_qxm3b")]
-position = Vector2(351, 315)
+position = Vector2(352, 315)
 
 [node name="Sprite2D" parent="MuebleDecorativo" index="0" unique_id=2001655473]
 position = Vector2(0, 4)

@@ -2,6 +2,10 @@ extends Control
 
 @onready var texto_comenzar: Label = $TextoComenzar
 
+# --- MÚSICA DEL MENÚ ---
+const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
+const VOLUMEN_MUSICA_MENU: float = -8.0
+
 func _ready() -> void:
 	# --- EFECTO VISUAL: TEXTO PARPADEANTE (Blinking) ---
 	var parpadeo = create_tween().set_loops()
@@ -9,6 +13,16 @@ func _ready() -> void:
 	# Desaparece en medio segundo, y vuelve a aparecer en medio segundo
 	parpadeo.tween_property(texto_comenzar, "modulate:a", 0.0, 0.5)
 	parpadeo.tween_property(texto_comenzar, "modulate:a", 1.0, 0.5)
+
+	# Música del menú en loop (se corta sola al entrar al juego, porque se cambia de escena)
+	if ResourceLoader.exists(RUTA_MUSICA_MENU):
+		var musica = AudioStreamPlayer.new()
+		var cancion: AudioStream = load(RUTA_MUSICA_MENU)
+		cancion.loop = true
+		musica.stream = cancion
+		musica.volume_db = VOLUMEN_MUSICA_MENU
+		add_child(musica)
+		musica.play()
 
 # --- ESCUCHAMOS EL TABLERO ARCADE ---
 func _unhandled_input(event: InputEvent) -> void:

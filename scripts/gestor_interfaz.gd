@@ -151,6 +151,7 @@ func _on_boton_siguiente_pressed() -> void:
 		if not ultimo_resultado_gano:
 			nuevo_nivel.position = posicion_nivel_anterior
 		contenedor.add_child(nuevo_nivel)
+		_musica_del_nivel() # Cada nivel con su canción
 	else:
 		print("¡JUEGO COMPLETADO!")
 		get_tree().change_scene_to_file("res://scenes/ui/menu_principal.tscn")
@@ -166,19 +167,41 @@ func _on_game_over() -> void:
 	mostrar_resultados("¡SE ACABÓ EL TIEMPO!", false)
 
 # --- MÚSICA DE FONDO ---
-const RUTA_MUSICA: String = "res://assets/audio/MusicaSuper.ogg"
+# Las canciones se van turnando nivel por nivel: nivel 1 la primera, nivel 2 la segunda,
+# nivel 3 la tercera, nivel 4 vuelve a la primera, y así. Para sumar otra, agregala a la lista.
+const RUTAS_MUSICA: Array[String] = [
+	"res://assets/audio/MusicaSuper.ogg",  # Niveles 1 y 4
+	"res://assets/audio/MusicaSuper2.ogg", # Nivel 2
+	"res://assets/audio/MusicaSuper3.ogg", # Nivel 3
+]
 const VOLUMEN_MUSICA: float = -8.0 # En decibeles: más negativo = más bajito
+const FUNDIDO_MUSICA: float = 0.5  # Segundos que tarda en bajar la canción vieja al cambiar de nivel
 var musica: AudioStreamPlayer
+var ruta_sonando: String = ""
 
 func _poner_musica() -> void:
-	if not ResourceLoader.exists(RUTA_MUSICA): return
 	musica = AudioStreamPlayer.new()
-	musica.stream = load(RUTA_MUSICA)
-	musica.stream.loop = true # Al terminar vuelve a empezar, sin cortes
 	musica.volume_db = VOLUMEN_MUSICA
 	# Sigue sonando aunque el juego esté en pausa (pantalla de resultados)
 	musica.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(musica)
+	_musica_del_nivel(false)
+
+# Pone la canción que le toca al nivel actual. Si ya está sonando esa
+# (por ejemplo, al reintentar el mismo nivel), la deja seguir sin cortarla.
+func _musica_del_nivel(con_fundido: bool = true) -> void:
+	var ruta: String = RUTAS_MUSICA[nivel_actual % RUTAS_MUSICA.size()]
+	if ruta == ruta_sonando or not ResourceLoader.exists(ruta): return
+	ruta_sonando = ruta
+	if con_fundido and musica.playing:
+		var bajar = musica.create_tween()
+		bajar.tween_property(musica, "volume_db", -40.0, FUNDIDO_MUSICA)
+		await bajar.finished
+		if ruta != ruta_sonando: return # Mientras bajaba ya se pidió otra
+	var cancion: AudioStream = load(ruta)
+	cancion.loop = true # Al terminar vuelve a empezar, sin cortes
+	musica.stream = cancion
+	musica.volume_db = VOLUMEN_MUSICA
 	musica.play()
 
 # --- CARTEL "NIVEL X" CON PANTALLA NEGRA ---

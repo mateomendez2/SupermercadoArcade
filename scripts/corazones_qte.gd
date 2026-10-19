@@ -10,14 +10,21 @@ extends Control
 
 const TEX_LLENO = preload("res://assets/ui/qte/corazon.png")
 const TEX_VACIO = preload("res://assets/ui/qte/corazon_gris.png")
+const RUTA_SONIDO_VIDA_PERDIDA: String = "res://assets/audio/VidaPerdida.wav" # El "bup-buuu" de error
+const VOLUMEN_VIDA_PERDIDA: float = -5.0
 const SEPARACION: float = 3.0     # Espacio entre corazón y corazón
 const DISTANCIA_CARTEL: float = 5.0 # Cuánto se separa del borde derecho del cartel
 
 var corazones: Array[TextureRect] = []
 var vidas: int = 0
+var sonido: AudioStreamPlayer
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	sonido = AudioStreamPlayer.new()
+	sonido.stream = load(RUTA_SONIDO_VIDA_PERDIDA)
+	sonido.volume_db = VOLUMEN_VIDA_PERDIDA
+	add_child(sonido)
 
 # Crea los corazones (todos llenos) y los centra al costado del cartel
 func armar(cantidad: int) -> void:
@@ -45,6 +52,7 @@ func perder_vida() -> void:
 	if vidas <= 0: return
 	var c: TextureRect = corazones[corazones.size() - vidas]
 	vidas -= 1
+	sonido.play()
 	c.texture = TEX_VACIO
 	c.modulate = Color(2.0, 2.0, 2.0) # Destello blanco
 	c.scale = Vector2(1.4, 1.4)

@@ -9,6 +9,8 @@ extends Node2D
 ##     await confites.festejar(self)
 
 const DURACION: float = 1.2 # Cuánto dura el festejo (después se borra solo)
+const RUTA_SONIDO_GANADO: String = "res://assets/audio/QteGanado.wav" # Mini fanfarria de victoria
+const VOLUMEN_GANADO: float = -4.0
 
 # Colores del juego: los del título "MANDADOS A FULL" + los de los botones + el verde
 const COLORES: Array[Color] = [
@@ -19,6 +21,7 @@ const COLORES: Array[Color] = [
 
 func festejar(qte: Control) -> void:
 	# Buscamos el cartel del minijuego para saber dónde están sus esquinas
+	_sonar_fanfarria(qte)
 	var cartel: Control = qte.get_node("FondoCartel")
 	var rect: Rect2 = cartel.get_global_rect()
 	rect.position -= qte.global_position
@@ -82,3 +85,12 @@ func _papelito() -> Texture2D:
 	var img = Image.create(2, 3, false, Image.FORMAT_RGBA8)
 	img.fill(Color.WHITE)
 	return ImageTexture.create_from_image(img)
+
+# La fanfarria va colgada del minijuego (no de los confites), así no se corta si los confites se borran antes
+func _sonar_fanfarria(qte: Control) -> void:
+	var sonido = AudioStreamPlayer.new()
+	sonido.stream = load(RUTA_SONIDO_GANADO)
+	sonido.volume_db = VOLUMEN_GANADO
+	qte.add_child(sonido)
+	sonido.finished.connect(sonido.queue_free)
+	sonido.play()

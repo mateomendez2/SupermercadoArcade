@@ -26,9 +26,24 @@ var reloj_tween: Tween
 
 var minijuego_guardado: String = "" # Puede ser "barrita", "colores" o ""
 
+# --- TIC-TAC DEL RELOJ ---
+# Mientras la góndola está bloqueada, si el jugador está parado en su zona se escucha el reloj
+const RUTA_TIC: String = "res://assets/audio/RelojTic.wav"
+const RUTA_TAC: String = "res://assets/audio/RelojTac.wav"
+var sonido_tic: AudioStream
+var sonido_tac: AudioStream
+const TIEMPO_TIC: float = 0.5   # Medio segundo entre "tic" y "tac"
+const VOLUMEN_TIC: float = -10.0
+var sonido_reloj: AudioStreamPlayer
+
 func _ready() -> void:
 	# Nos suscribimos a la señal del GameManager para saber cuándo se le cae algo al jugador
 	GameManager.item_dropped.connect(_on_item_devuelto)
+	sonido_tic = load(RUTA_TIC)
+	sonido_tac = load(RUTA_TAC)
+	sonido_reloj = AudioStreamPlayer.new()
+	sonido_reloj.volume_db = VOLUMEN_TIC
+	add_child(sonido_reloj)
 
 func interact() -> ItemData:
 	# NUEVO: Si está bloqueada, no hacemos nada y rechazamos la interacción
@@ -102,6 +117,8 @@ func iniciar_cooldown() -> void:
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	# ---------------------------------------------
 	
+	_tic_tac() # Arranca el sonido del reloj (solo suena si el jugador está cerca)
+
 	var tiempo_por_frame = tiempo_castigo / float(cooldown_clock.hframes)
 	
 	for i in range(cooldown_clock.hframes):
@@ -150,3 +167,19 @@ func _on_item_devuelto(item_perdido: ItemData) -> void:
 		item_visual.position.y = item_pos_y_original
 		
 		print("Góndola: He recuperado mi ", item_content.item_name)
+
+# Mientras dure el bloqueo, cada medio segundo suena "tic" o "tac" si el jugador está en la zona
+func _tic_tac() -> void:
+	var agudo := true
+	while is_locked:
+		if _jugador_cerca():
+			sonido_reloj.stream = sonido_tic if agudo else sonido_tac
+			sonido_reloj.play()
+		agudo = not agudo
+		await get_tree().create_timer(TIEMPO_TIC, false).timeout
+
+func _jugador_cerca() -> bool:
+	for area in get_overlapping_areas():
+		if area.get_parent() is Player:
+			return true
+	return false
