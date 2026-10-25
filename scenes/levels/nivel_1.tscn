@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://csq4gk6pqensf" path="res://scenes/obstacles/canasto_compras.tscn" id="11_1xew3"]
 [ext_resource type="PackedScene" uid="uid://dugn2yb726hpw" path="res://scenes/obstacles/carrito_vacio.tscn" id="12_8xain"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="13_tfyej"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="14_1nojv"]
 [ext_resource type="PackedScene" uid="uid://culfc0rki2dr0" path="res://scenes/obstacles/cartel_ofertas.tscn" id="15_v552e"]
 [ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="16_7n813"]
 [ext_resource type="PackedScene" uid="uid://dp5xtx3iqjrrq" path="res://scenes/obstacles/baranda_no_paso_vertical.tscn" id="17_7prpn"]
@@ -1147,7 +1148,7 @@ position = Vector2(112, -4)
 position = Vector2(112, 39)
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("11_1xew3")]
-position = Vector2(203, 11)
+position = Vector2(203, 26)
 
 [node name="Canasto_Compras2" parent="." unique_id=459534574 instance=ExtResource("11_1xew3")]
 position = Vector2(214, 24)
@@ -1164,6 +1165,9 @@ position = Vector2(17, 17)
 [node name="Sprite2D" parent="CartelOfertas" index="0" unique_id=1648568606]
 position = Vector2(-1, -13)
 region_rect = Rect2(512, 112, 32, 48)
+
+[node name="PoliciaQuieto" parent="CartelOfertas" unique_id=1683574991 instance=ExtResource("14_1nojv")]
+position = Vector2(186, -17)
 
 [node name="CajonLimon" parent="." unique_id=1647453037 instance=ExtResource("17_64odk")]
 position = Vector2(16, 128)

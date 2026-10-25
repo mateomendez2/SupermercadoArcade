@@ -1,11 +1,6 @@
 [gd_scene format=4 uid="uid://c8grm0v0o8ypc"]
 
 [ext_resource type="Script" uid="uid://bqj24uerhpnvi" path="res://scripts/config_nivel.gd" id="1_y1ars"]
-[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="85_letrero"]
-[ext_resource type="Script" uid="uid://b18c0et7xn0i5" path="res://scripts/datos_producto.gd" id="80_datos"]
-[ext_resource type="Resource" uid="uid://d113l3vxhmuv2" path="res://resources/items/agua.tres" id="81_agua"]
-[ext_resource type="Resource" uid="uid://dxd1avkx2o2mr" path="res://resources/items/lata_grande_roja.tres" id="82_lata"]
-[ext_resource type="Resource" uid="uid://5yuv8shpew7v" path="res://resources/items/gaseosa_roja.tres" id="83_gaseosa"]
 [ext_resource type="Texture2D" uid="uid://7cj62ghthl0b" path="res://assets/pasto.png" id="5_l3e3j"]
 [ext_resource type="Texture2D" uid="uid://cn6eocf0dme6x" path="res://assets/ParedesySuelo.png" id="6_hmeyb"]
 [ext_resource type="PackedScene" uid="uid://cprcw7pxrir8f" path="res://scenes/characters/jugador.tscn" id="7_noq3f"]
@@ -24,6 +19,12 @@
 [ext_resource type="PackedScene" uid="uid://datwviv7g5w3t" path="res://scenes/objects/estante_lata_grande_roja.tscn" id="19_uvm6j"]
 [ext_resource type="PackedScene" uid="uid://bt0w0vefxtsgg" path="res://scenes/obstacles/npc_movil.tscn" id="20_viu78"]
 [ext_resource type="PackedScene" uid="uid://drvn8ysbfsbkv" path="res://scenes/obstacles/canasto_decorativo.tscn" id="21_ae6do"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="27_64ajl"]
+[ext_resource type="Script" uid="uid://b18c0et7xn0i5" path="res://scripts/datos_producto.gd" id="80_datos"]
+[ext_resource type="Resource" uid="uid://d113l3vxhmuv2" path="res://resources/items/agua.tres" id="81_agua"]
+[ext_resource type="Resource" uid="uid://dxd1avkx2o2mr" path="res://resources/items/lata_grande_roja.tres" id="82_lata"]
+[ext_resource type="Resource" uid="uid://5yuv8shpew7v" path="res://resources/items/gaseosa_roja.tres" id="83_gaseosa"]
+[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="85_letrero"]
 [ext_resource type="Texture2D" uid="uid://cnpu0e6w2e17j" path="res://assets/guias/plano_nivel_5.png" id="90_guia"]
 [ext_resource type="Script" uid="uid://b3s6g6qplfm4a" path="res://scripts/guia_plano.gd" id="91_guia"]
 
@@ -1534,6 +1535,24 @@ position = Vector2(240, 369)
 [node name="Sprite2D" parent="CanastoDecorativo4" index="0" unique_id=1039621797]
 region_rect = Rect2(256, 288, 32, 32)
 
+[node name="Letrero" parent="." unique_id=364892320 instance=ExtResource("85_letrero")]
+z_index = 1
+position = Vector2(328, -32)
+region_rect = Rect2(320, 96, 128, 32)
+
+[node name="Label" type="Label" parent="Letrero" unique_id=1438518376]
+offset_left = -59.0
+offset_top = -6.0
+offset_right = 59.0
+offset_bottom = 13.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "SECTOR COBRO"
+horizontal_alignment = 1
+
+[node name="PoliciaQuieto" parent="." unique_id=1613378873 instance=ExtResource("27_64ajl")]
+position = Vector2(272, 0)
+
 [editable path="mueble_mitad_decorativo"]
 [editable path="mueble_mitad_decorativo2"]
 [editable path="mueble_mitad_decorativo3"]
@@ -1573,18 +1592,3 @@ region_rect = Rect2(256, 288, 32, 32)
 [editable path="CanastoDecorativo5"]
 [editable path="CanastoDecorativo3"]
 [editable path="CanastoDecorativo4"]
-
-[node name="Letrero" parent="." instance=ExtResource("85_letrero")]
-z_index = 1
-position = Vector2(328, -32)
-region_rect = Rect2(320, 96, 128, 32)
-
-[node name="Label" type="Label" parent="Letrero"]
-offset_left = -59.0
-offset_top = -6.0
-offset_right = 59.0
-offset_bottom = 13.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "SECTOR COBRO"
-horizontal_alignment = 1

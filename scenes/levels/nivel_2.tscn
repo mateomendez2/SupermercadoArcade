@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://dh2cpksdthcr0" path="res://scenes/objects/cajon_manzana.tscn" id="20_xcn28"]
 [ext_resource type="PackedScene" uid="uid://dp5xtx3iqjrrq" path="res://scenes/obstacles/baranda_no_paso_vertical.tscn" id="20_ytw2u"]
 [ext_resource type="PackedScene" uid="uid://dugn2yb726hpw" path="res://scenes/obstacles/carrito_vacio.tscn" id="21_sp65e"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="22_1edas"]
 [ext_resource type="PackedScene" uid="uid://csq4gk6pqensf" path="res://scenes/obstacles/canasto_compras.tscn" id="22_2x1nu"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="22_vsphb"]
 [ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="25_f3o0g"]
@@ -1250,6 +1251,9 @@ position = Vector2(208, 153)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo2" index="0" unique_id=1182334053]
 region_rect = Rect2(64, 576, 32, 64)
+
+[node name="PoliciaQuieto" parent="." unique_id=1734833179 instance=ExtResource("22_1edas")]
+position = Vector2(80, 0)
 
 [editable path="MovingNPC"]
 [editable path="Canasto_Compras2"]

@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc_quieto.gd" id="1_quieto"]
+[ext_resource type="Texture2D" path="res://assets/policia_estatico_abajo.png" id="2_abajo"]
+[ext_resource type="Texture2D" path="res://assets/policia_estatico_izquierda.png" id="3_izquierda"]
+[ext_resource type="Texture2D" path="res://assets/policia_estatico_derecha.png" id="4_derecha"]
+[ext_resource type="Texture2D" path="res://assets/policia_estatico_arriba.png" id="5_arriba"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pies"]
+size = Vector2(18, 10)
+
+[sub_resource type="AtlasTexture" id="Atlas_abajo_0"]
+atlas = ExtResource("2_abajo")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_abajo_1"]
+atlas = ExtResource("2_abajo")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_abajo_2"]
+atlas = ExtResource("2_abajo")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_izquierda_0"]
+atlas = ExtResource("3_izquierda")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_izquierda_1"]
+atlas = ExtResource("3_izquierda")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_izquierda_2"]
+atlas = ExtResource("3_izquierda")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_derecha_0"]
+atlas = ExtResource("4_derecha")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_derecha_1"]
+atlas = ExtResource("4_derecha")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_derecha_2"]
+atlas = ExtResource("4_derecha")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_arriba_0"]
+atlas = ExtResource("5_arriba")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_arriba_1"]
+atlas = ExtResource("5_arriba")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_arriba_2"]
+atlas = ExtResource("5_arriba")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_policia"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_abajo_0")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_abajo_1")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_abajo_2")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_izquierda_0")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_izquierda_1")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_izquierda_2")
+}],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_derecha_0")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_derecha_1")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_derecha_2")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_arriba_0")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_arriba_1")
+},
+{
+"duration": 1.0,
+"texture": SubResource("Atlas_arriba_2")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}]
+
+[node name="PoliciaQuieto" type="StaticBody2D"]
+script = ExtResource("1_quieto")
+mirando = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 9)
+shape = SubResource("RectangleShape2D_pies")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -2)
+sprite_frames = SubResource("SpriteFrames_policia")
+animation = &"idle_down"
+autoplay = "idle_down"

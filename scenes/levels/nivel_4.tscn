@@ -29,6 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://bbq1xnor671it" path="res://scenes/objects/estante_limpiavidrios.tscn" id="27_qxm3b"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="28_qxm3b"]
 [ext_resource type="PackedScene" uid="uid://sxsmadmsrea2" path="res://scenes/objects/estante_lata_verde.tscn" id="29_axhd4"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="30_f8fem"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_l3e3j")
@@ -1582,6 +1583,9 @@ position = Vector2(289, 315)
 [node name="Sprite2D" parent="MuebleDecorativo2" index="0" unique_id=2001655473]
 position = Vector2(-1, 4)
 region_rect = Rect2(576, 408, 64, 40)
+
+[node name="PoliciaQuieto" parent="." unique_id=724019143 instance=ExtResource("30_f8fem")]
+position = Vector2(336, 0)
 
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]
