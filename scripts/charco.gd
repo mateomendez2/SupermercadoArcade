@@ -41,10 +41,13 @@ func animar_ciclo(tiempo_de_vida: float) -> void:
 	sprite.frame = 0 # Arrancamos chiquitos
 	anim_tween = create_tween()
 	
+	_mojar() # Por si venía de secarse en el turno anterior
+	
 	# Calculamos los tiempos
 	var tiempo_crecer = 1.0
-	var tiempo_achicar = 1.0
-	var tiempo_espera = tiempo_de_vida - tiempo_crecer - tiempo_achicar
+	var tiempo_achicar = 0.8
+	var tiempo_desaparecer = 0.25
+	var tiempo_espera = tiempo_de_vida - tiempo_crecer - tiempo_achicar - tiempo_desaparecer
 	
 	# Por seguridad, si el tiempo es muy corto, no esperamos nada
 	if tiempo_espera < 0: tiempo_espera = 0.1 
@@ -55,5 +58,41 @@ func animar_ciclo(tiempo_de_vida: float) -> void:
 	# 2. Quedarse grande (Pausa la animación)
 	anim_tween.tween_interval(tiempo_espera)
 	
-	# 3. Encogerse antes de desaparecer (Pasa del 3 al 0 en 1 segundo)
+	# 3. Encogerse antes de desaparecer (Pasa del 3 al 0)
 	anim_tween.tween_property(sprite, "frame", 0, tiempo_achicar)
+	
+	# 4. NUEVO: Termina de secarse del todo (antes quedaba un charquito chiquito un rato largo)
+	anim_tween.tween_property(sprite, "modulate:a", 0.0, tiempo_desaparecer)
+	anim_tween.tween_callback(_secar)
+
+# Cambia cuánto le queda al charco SIN reiniciar su animación (se queda grande y se seca a tiempo).
+# Lo usa el nivel al arrancar el primer turno, porque los primeros charcos aparecen
+# antes de la entrada del jugador y si no se secaban unos segundos antes de la primera mezcla.
+func ajustar_vida(tiempo_restante: float) -> void:
+	if not sprite.visible: return
+	if anim_tween: anim_tween.kill()
+	anim_tween = create_tween()
+	var tiempo_achicar = 0.8
+	var tiempo_desaparecer = 0.25
+	var tiempo_crecer = 0.0
+	if sprite.frame < 3:
+		tiempo_crecer = 0.3
+		anim_tween.tween_property(sprite, "frame", 3, tiempo_crecer)
+	anim_tween.tween_interval(maxf(0.1, tiempo_restante - tiempo_crecer - tiempo_achicar - tiempo_desaparecer))
+	anim_tween.tween_property(sprite, "frame", 0, tiempo_achicar)
+	anim_tween.tween_property(sprite, "modulate:a", 0.0, tiempo_desaparecer)
+	anim_tween.tween_callback(_secar)
+
+# El charco ya no está: no se ve y no hace resbalar
+func _secar() -> void:
+	sprite.hide()
+	set_deferred("monitoring", false)
+	for body in get_overlapping_bodies():
+		if body is Player:
+			body.set_slippery(false)
+
+# El charco vuelve a aparecer: se ve y hace resbalar de nuevo
+func _mojar() -> void:
+	sprite.modulate.a = 1.0
+	sprite.show()
+	set_deferred("monitoring", true)

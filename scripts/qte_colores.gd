@@ -116,6 +116,7 @@ func comprobar_boton(color_apretado: String) -> void:
 	# El jugador lo hunde con su dedo (Cortito para que no se trabe)
 	efecto_dedo_jugador(color_apretado)
 	
+	var mi_sesion = sesion # Para saber si mientras esperamos se cerró el minijuego
 	if color_apretado == secuencia_correcta[indice_actual]:
 		_destello_fondo(FONDO_VERDE) # ¡Bien! Le pegaste a este de la secuencia
 		indice_actual += 1 
@@ -123,6 +124,7 @@ func comprobar_boton(color_apretado: String) -> void:
 		if indice_actual >= secuencia_correcta.size():
 			estado_juego = "TERMINADO"
 			await get_tree().create_timer(0.4).timeout 
+			if _se_cerro(mi_sesion): return # BUGFIX: te alejaste justo: no te da el producto
 			terminar_juego(true) 
 	else:
 		_destello_fondo(FONDO_ROJO) # Le erraste al orden (después se repite la secuencia como siempre)
@@ -130,6 +132,9 @@ func comprobar_boton(color_apretado: String) -> void:
 		corazones.perder_vida()
 		estado_juego = "TERMINADO"
 		await get_tree().create_timer(0.4).timeout 
+		# BUGFIX: si te alejaste de la góndola en ese medio segundo, el minijuego ya se cerró.
+		# Antes se volvía a "prender" escondido y se tragaba los botones (no podías agarrar nada).
+		if _se_cerro(mi_sesion): return
 		
 		if intentos_restantes <= 0:
 			terminar_juego(false)
@@ -200,3 +205,7 @@ func _destello_fondo(tono: Color) -> void:
 	fondo_oscuro.color = tono
 	tween_fondo = create_tween()
 	tween_fondo.tween_property(fondo_oscuro, "color", color_fondo_normal, 0.35)
+
+# ¿Se cerró el minijuego (te alejaste) o arrancó otro mientras esperábamos?
+func _se_cerro(mi_sesion: int) -> bool:
+	return mi_sesion != sesion or not visible

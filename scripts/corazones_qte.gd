@@ -1,6 +1,6 @@
 extends Control
 ## CORAZONES DE LOS MINIJUEGOS
-## Columna de corazones al costado derecho del cartel del minijuego.
+## Fila de corazones arriba del cartel del minijuego (al doble de tamaño, para que se noten).
 ## Cada error apaga un corazón (se pone gris), empezando por el de arriba.
 ## Se puede usar en cualquier QTE:
 ##   var corazones = CorazonesQTE.new()
@@ -12,8 +12,9 @@ const TEX_LLENO = preload("res://assets/ui/qte/corazon.png")
 const TEX_VACIO = preload("res://assets/ui/qte/corazon_gris.png")
 const RUTA_SONIDO_VIDA_PERDIDA: String = "res://assets/audio/VidaPerdida.wav" # El "bup-buuu" de error
 const VOLUMEN_VIDA_PERDIDA: float = -5.0
-const SEPARACION: float = 3.0     # Espacio entre corazón y corazón
-const DISTANCIA_CARTEL: float = 5.0 # Cuánto se separa del borde derecho del cartel
+const ESCALA: float = 2.0          # Tamaño de los corazones (2 = el doble del dibujo)
+const SEPARACION: float = 2.0      # Espacio entre corazón y corazón (en pixeles del dibujo)
+const DISTANCIA_CARTEL: float = 4.0 # Cuánto se separa del borde de arriba del cartel
 
 var corazones: Array[TextureRect] = []
 var vidas: int = 0
@@ -34,20 +35,23 @@ func armar(cantidad: int) -> void:
 	vidas = cantidad
 
 	var cartel = get_parent() as Control
+	var ancho_corazon: float = TEX_LLENO.get_width()
 	var alto_corazon: float = TEX_LLENO.get_height()
-	var alto_total: float = cantidad * alto_corazon + (cantidad - 1) * SEPARACION
-	position = Vector2(cartel.size.x + DISTANCIA_CARTEL, round((cartel.size.y - alto_total) / 2.0))
+	var ancho_total: float = (cantidad * ancho_corazon + (cantidad - 1) * SEPARACION) * ESCALA
+	# Centrados arriba del cartel
+	scale = Vector2(ESCALA, ESCALA)
+	position = Vector2(round((cartel.size.x - ancho_total) / 2.0), -alto_corazon * ESCALA - DISTANCIA_CARTEL)
 
 	for i in cantidad:
 		var c = TextureRect.new()
 		c.texture = TEX_LLENO
 		c.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		c.position = Vector2(0, i * (alto_corazon + SEPARACION))
+		c.position = Vector2(i * (ancho_corazon + SEPARACION), 0)
 		c.pivot_offset = TEX_LLENO.get_size() / 2.0
 		add_child(c)
 		corazones.append(c)
 
-# Apaga el corazón de más arriba que siga lleno, con un saltito
+# Apaga el primer corazón lleno (de izquierda a derecha), con un saltito
 func perder_vida() -> void:
 	if vidas <= 0: return
 	var c: TextureRect = corazones[corazones.size() - vidas]

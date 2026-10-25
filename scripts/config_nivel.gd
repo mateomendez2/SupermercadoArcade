@@ -16,6 +16,7 @@ var mis_charcos: Array = []
 var charcos_viejos: Array = []
 
 var duracion_turno_actual: float = 15.0
+var fin_turno_ms: int = 0 # Cuándo termina el turno actual (para saber cuánto le queda)
 
 # --- LÍMITES DE LA CÁMARA ---
 const ALTO_FRANJA_MUNDO: int = 14
@@ -54,8 +55,9 @@ func _ready() -> void:
 		if self.is_ancestor_of(charco):
 			mis_charcos.append(charco)
 			
-	mezclar_cajas()
-	mezclar_charcos()
+	tex_aviso = load(RUTA_AVISO)
+	# Al empezar el nivel los obstáculos ya están puestos (sin cartel de aviso)
+	_poner_al_empezar()
 	
 	# -------------------------------------------------------------
 	# 3. CINEMÁTICA DE ENTRADA DEL JUGADOR
@@ -91,95 +93,162 @@ func _ready() -> void:
 	# Prendemos el reloj de los obstáculos AL FINAL
 	bucle_de_tiempo_aleatorio()
 	
-# --- LA FUNCIÓN PRINCIPAL QUE MEZCLA LAS CAJAS ---
-func mezclar_cajas() -> void:
-	mis_cajas.shuffle() # Mezclamos la baraja
-	
-	var cajas_encendidas = 0 
-	var nuevas_cajas_viejas: Array = [] # Las que encendamos HOY, serán las viejas de MAÑANA
-	
+# =====================================================================
+# OBSTÁCULOS QUE CAMBIAN DE LUGAR (cajas y charcos)
+# =====================================================================
+# Cómo es cada cambio:
+#  1. Aparecen carteles amarillos de aviso donde van a estar los obstáculos NUEVOS.
+#     Mientras tanto, los de ahora siguen en su lugar.
+#  2. A los TIEMPO_AVISO segundos, en el mismo instante: los viejos se van y aparecen los nuevos.
+# Pasa al final de cada turno (cada 15 a 25 segundos) y cuando agarrás un producto.
+
+const RUTA_AVISO: String = "res://assets/ui/aviso_peligro.png"
+const TIEMPO_AVISO: float = 3.0          # Segundos de aviso antes del cambio
+const DISTANCIA_LIBRE_CAJA: float = 26.0 # Si estás parado donde va una caja, espera a que te corras
+var tex_aviso: Texture2D
+var cambio_pendiente: bool = false       # Hay carteles puestos esperando el cambio
+
+# Al empezar el nivel: los obstáculos ya están puestos, sin carteles
+func _poner_al_empezar() -> void:
+	cajas_viejas = _elegir(mis_cajas, [], cajas_activas, true)
+	charcos_viejos = _elegir(mis_charcos, [], charcos_activos, false)
 	for caja in mis_cajas:
-		var es_seguro_encender = true
-		
-		# REGLA 1: Distancia al jugador
-		if jugador != null:
-			var distancia = caja.global_position.distance_to(jugador.global_position)
-			if distancia < 60.0:
-				es_seguro_encender = false
-				
-		# REGLA 2 (NUEVA): Anti-Repetición
-		# Si esta caja está en la memoria del turno anterior, la prohibimos
-		if caja in cajas_viejas:
-			es_seguro_encender = false
-		
-		# Evaluamos si la encendemos o la apagamos
-		if cajas_encendidas < cajas_activas and es_seguro_encender:
-			# ENCENDER CAJA
-			caja.show() 
-			caja.process_mode = Node.PROCESS_MODE_INHERIT 
-			cajas_encendidas += 1 
-			
-			# La anotamos en la lista de memoria
-			nuevas_cajas_viejas.append(caja)
-		else:
-			# APAGAR CAJA
-			caja.hide() 
-			caja.process_mode = Node.PROCESS_MODE_DISABLED
+		_encender_caja(caja, caja in cajas_viejas)
+	for charco in mis_charcos:
+		_encender_charco(charco, charco in charcos_viejos)
 
-	# Al final de todo el proceso, sobreescribimos la memoria para el PRÓXIMO turno
-	cajas_viejas = nuevas_cajas_viejas
+# Elige al azar cuáles se prenden: nunca los mismos que están ahora,
+# y las cajas tampoco pegadas al jugador
+func _elegir(todos: Array, actuales: Array, cantidad: int, lejos_del_jugador: bool) -> Array:
+	var candidatos = todos.duplicate()
+	candidatos.shuffle()
+	var elegidos: Array = []
+	for obstaculo in candidatos:
+		if elegidos.size() >= cantidad: break
+		if obstaculo in actuales: continue
+		if lejos_del_jugador and jugador != null and obstaculo.global_position.distance_to(jugador.global_position) < 60.0:
+			continue
+		elegidos.append(obstaculo)
+	return elegidos
 
-# --- LOS GATILLOS (Lo que provoca que se mezclen) ---
+func _encender_caja(caja: Node2D, prender: bool) -> void:
+	caja.visible = prender
+	caja.process_mode = Node.PROCESS_MODE_INHERIT if prender else Node.PROCESS_MODE_DISABLED
 
-# Gatillo 1: Cuando agarramos una fruta
+func _encender_charco(charco: Node2D, prender: bool) -> void:
+	charco.visible = prender
+	charco.process_mode = Node.PROCESS_MODE_INHERIT if prender else Node.PROCESS_MODE_DISABLED
+	# Le avisamos al charco cuánto tiempo tiene para animarse (lo que queda hasta el próximo cambio)
+	if prender and charco.has_method("animar_ciclo"):
+		charco.animar_ciclo(_tiempo_que_queda_del_turno())
+
+# PASO 1: carteles donde van a estar los nuevos (los de ahora siguen ahí)
+func preparar_cambio() -> void:
+	if cambio_pendiente: return # Ya hay un cambio en camino: no hace falta otro
+	cambio_pendiente = true
+	var nuevas_cajas = _elegir(mis_cajas, cajas_viejas, cajas_activas, true)
+	var nuevos_charcos = _elegir(mis_charcos, charcos_viejos, charcos_activos, false)
+	var carteles: Dictionary = {} # obstáculo -> su cartel
+	for obstaculo in nuevas_cajas + nuevos_charcos:
+		carteles[obstaculo] = _poner_cartel(obstaculo)
+	# Los charcos de ahora terminan de secarse justo en el momento del cambio
+	for charco in charcos_viejos:
+		if charco.visible and charco.has_method("ajustar_vida"):
+			charco.ajustar_vida(TIEMPO_AVISO)
+	await get_tree().create_timer(TIEMPO_AVISO).timeout
+	_hacer_cambio(nuevas_cajas, nuevos_charcos, carteles)
+
+# PASO 2: en el mismo instante se van los viejos y aparecen los nuevos
+func _hacer_cambio(nuevas_cajas: Array, nuevos_charcos: Array, carteles: Dictionary) -> void:
+	cambio_pendiente = false
+	if not GameManager.juego_activo: # Se terminó el nivel mientras tanto: solo sacamos los carteles
+		for cartel in carteles.values(): _sacar_cartel(cartel)
+		return
+	for caja in cajas_viejas: _encender_caja(caja, false)
+	for charco in charcos_viejos: _encender_charco(charco, false)
+	cajas_viejas = nuevas_cajas
+	charcos_viejos = nuevos_charcos
+	for charco in nuevos_charcos:
+		_sacar_cartel(carteles[charco])
+		_encender_charco(charco, true)
+	for caja in nuevas_cajas:
+		_aparecer_caja_cuando_se_pueda(caja, carteles[caja])
+
+# Una caja no puede aparecer encima tuyo: si estás parado ahí, el cartel sigue hasta que te corras
+func _aparecer_caja_cuando_se_pueda(caja: Node2D, cartel: Sprite2D) -> void:
+	if not caja in cajas_viejas or not GameManager.juego_activo:
+		_sacar_cartel(cartel) # Mientras esperaba ya hubo otro cambio: esta caja no va más
+		return
+	if jugador != null and jugador.global_position.distance_to(caja.global_position) < DISTANCIA_LIBRE_CAJA:
+		var otra_vez = cartel.create_tween()
+		otra_vez.tween_interval(0.2)
+		otra_vez.tween_callback(_aparecer_caja_cuando_se_pueda.bind(caja, cartel))
+		return
+	_sacar_cartel(cartel)
+	_encender_caja(caja, true)
+
+# --- LOS GATILLOS (lo que provoca un cambio) ---
+
+# Gatillo 1: Cuando agarramos un producto
 func _on_item_recolectado(_item: ItemData) -> void:
-	print("¡Fruta agarrada! Mezclando obstáculos...")
-	mezclar_cajas()
-	mezclar_charcos() # Ahora también mezcla los charcos al ganar un QTE
+	print("¡Producto agarrado! Preparando cambio de obstáculos...")
+	preparar_cambio()
 
-# Gatillo 2: El tiempo aleatorio
+# Gatillo 2: El tiempo. Los carteles salen TIEMPO_AVISO segundos antes de que termine el turno,
+# así el cambio pasa justo al final.
 func bucle_de_tiempo_aleatorio() -> void:
-	# 1. Calculamos y GUARDAMOS el tiempo para este turno (ej: 20 segundos)
-	duracion_turno_actual = randf_range(15.0, 25.0) 
-	
-	# 2. Esperamos ESE tiempo exacto (Corrutina)
-	await get_tree().create_timer(duracion_turno_actual).timeout
-	
-	# 3. Cuando termina la espera, verificamos si el juego sigue vivo
+	# En el PRIMER turno, los charcos que ya están puestos se acomodan para secarse justo
+	# cuando termina (aparecieron antes, durante la entrada del jugador)
+	if fin_turno_ms == 0:
+		for charco in mis_charcos:
+			if charco.visible and charco.has_method("ajustar_vida"):
+				charco.ajustar_vida(duracion_turno_actual)
+
+	# Anotamos cuándo termina este turno
+	fin_turno_ms = Time.get_ticks_msec() + int(duracion_turno_actual * 1000.0)
+
+	# Esperamos hasta un poco antes del final (lo que dura el aviso)
+	await get_tree().create_timer(maxf(0.1, duracion_turno_actual - TIEMPO_AVISO)).timeout
+	if not GameManager.juego_activo: return
+
+	print("¡Evento de Tiempo! Preparando cambio de obstáculos...")
+	# Sorteamos el PRÓXIMO turno antes de preparar el cambio: arranca justo cuando pasa el cambio
+	duracion_turno_actual = randf_range(15.0, 25.0)
+	fin_turno_ms = Time.get_ticks_msec() + int((TIEMPO_AVISO + duracion_turno_actual) * 1000.0)
+	preparar_cambio()
+
+	await get_tree().create_timer(TIEMPO_AVISO).timeout
 	if GameManager.juego_activo:
-		print("¡Evento de Tiempo! Mezclando obstáculos...")
-		mezclar_cajas()
-		mezclar_charcos() 
-		
-		# 4. Volvemos a llamarnos a nosotros mismos para el SIGUIENTE turno
 		bucle_de_tiempo_aleatorio()
 
-# --- LA FUNCIÓN QUE MEZCLA LOS CHARCOS ---
-func mezclar_charcos() -> void:
-	mis_charcos.shuffle() 
-	
-	var charcos_encendidos = 0 
-	var nuevos_charcos_viejos: Array = [] 
-	
-	for charco in mis_charcos:
-		var es_seguro_encender = true
-		
-		# Anti-Repetición
-		if charco in charcos_viejos:
-			es_seguro_encender = false
-		
-		if charcos_encendidos < charcos_activos and es_seguro_encender:
-			charco.show() 
-			charco.process_mode = Node.PROCESS_MODE_INHERIT 
-			
-			# ¡NUEVA LÍNEA! Le avisamos al charco cuánto tiempo tiene para animarse
-			if charco.has_method("animar_ciclo"):
-				charco.animar_ciclo(duracion_turno_actual)
-				
-			charcos_encendidos += 1 
-			nuevos_charcos_viejos.append(charco)
-		else:
-			charco.hide() 
-			charco.process_mode = Node.PROCESS_MODE_DISABLED
+# Cuánto falta para el próximo cambio. Así los charcos se secan justo antes de que pase.
+func _tiempo_que_queda_del_turno() -> float:
+	if fin_turno_ms == 0:
+		return duracion_turno_actual
+	return maxf(3.0, (fin_turno_ms - Time.get_ticks_msec()) / 1000.0)
 
-	charcos_viejos = nuevos_charcos_viejos
+# --- CARTEL DE AVISO ---
+# El cartelito amarillo de peligro, rebotando 1 pixel, en el lugar donde va a aparecer algo
+func _poner_cartel(obstaculo: Node2D) -> Sprite2D:
+	var cartel = Sprite2D.new()
+	cartel.texture = tex_aviso
+	cartel.offset = Vector2(0, -7) # La punta de abajo del cartel queda sobre el lugar
+	cartel.position = to_local(obstaculo.global_position)
+	cartel.scale = Vector2(0.3, 0.3)
+	add_child(cartel)
+	# Aparece con un saltito
+	var entrada = cartel.create_tween()
+	entrada.tween_property(cartel, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# Rebota arriba y abajo, solo 1 pixel
+	var rebote = cartel.create_tween().set_loops()
+	rebote.tween_interval(0.35)
+	rebote.tween_callback(func(): cartel.offset.y = -8)
+	rebote.tween_interval(0.35)
+	rebote.tween_callback(func(): cartel.offset.y = -7)
+	return cartel
+
+func _sacar_cartel(cartel: Sprite2D) -> void:
+	if not is_instance_valid(cartel): return
+	var salida = cartel.create_tween()
+	salida.tween_property(cartel, "scale", Vector2.ZERO, 0.1)
+	salida.tween_callback(cartel.queue_free)

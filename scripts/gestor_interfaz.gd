@@ -127,6 +127,8 @@ const RUTAS_NIVELES: Array[String] = [
 	"res://scenes/levels/nivel_2.tscn", # 1 -> NIVEL 2
 	"res://scenes/levels/nivel_3.tscn", # 2 -> NIVEL 3
 	"res://scenes/levels/nivel_4.tscn", # 3 -> NIVEL 4
+	"res://scenes/levels/nivel_5.tscn", # 4 -> NIVEL 5 (el del plano de la hoja, en armado)
+	"res://scenes/levels/nivel_6.tscn", # 5 -> NIVEL 6 (en armado)
 ]
 
 func _on_boton_siguiente_pressed() -> void:

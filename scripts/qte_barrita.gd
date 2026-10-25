@@ -94,7 +94,12 @@ func check_win() -> void:
 	var success = (cursor_center >= min_x) and (cursor_center <= max_x)
 	
 	# La pausa mágica para ver el botón hundido
+	var mi_sesion = sesion
 	await get_tree().create_timer(0.3).timeout
+	# BUGFIX: si te alejaste de la góndola en esa pausa, el minijuego ya se cerró:
+	# no hay que darte el producto ni volver a "prenderlo" escondido (se tragaba los botones)
+	if mi_sesion != sesion or not visible:
+		return
 	
 	if success:
 		# ¡GANÓ! Avisa victoria y festeja con confites antes de cerrarse
@@ -109,7 +114,6 @@ func check_win() -> void:
 		if intentos_restantes <= 0:
 			# Se acabaron las vidas. Esperamos un instante para que se vea
 			# romperse el último corazón, y se cierra avisando derrota.
-			var mi_sesion = sesion
 			await get_tree().create_timer(0.35).timeout
 			if mi_sesion != sesion: return
 			hide()

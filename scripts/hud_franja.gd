@@ -1,6 +1,6 @@
 extends CanvasLayer
 ## LA FRANJA ARCADE DE ARRIBA
-## De izquierda a derecha: NIVEL x | TIEMPO xx + bloques que se van vaciando | LISTA
+## De izquierda a derecha: NIVEL x | reloj 01:30 (en el medio) | LISTA
 ## Debajo de "LISTA" cuelga el ticket con los productos (sale "impreso" al empezar el nivel).
 ##
 ## Todo se arma por código con las imágenes de res://assets/ui/hud/ (estilo del título de Nati).
@@ -13,15 +13,14 @@ const CARPETA: String = "res://assets/ui/hud/"
 # --- MEDIDAS (en pixeles de pantalla) ---
 const ALTO_FRANJA: int = 26     # Alto de la parte negra
 const Y_TEXTO: int = 4          # Altura de las letras dentro de la franja
-const Y_BLOQUES: int = 5        # Altura de los bloques de tiempo
 const MARGEN: int = 8           # Separación con los bordes de la pantalla
 const ESPACIO_ROTULO: int = 4   # Entre "NIVEL" y su número
 const ESPACIO_GRUPO: int = 16   # Entre un grupo y el siguiente
 const PASO_DIGITO: int = 12     # Cada cuánto va un dígito
-const PASO_BLOQUE: int = 13     # Cada cuánto va un bloque de tiempo
+const ANCHO_DOS_PUNTOS: int = 9 # Lo que ocupan los ":" del reloj (más angostos que un número)
 const PASO_ICONO: int = 36      # Cada cuánto va un producto en el ticket
 const ALTO_TICKET: int = 48
-const SEGUNDOS_ALERTA: int = 10 # Debajo de esto, los bloques titilan en rojo
+const SEGUNDOS_ALERTA: int = 10 # Debajo de esto, el reloj titila en rojo
 
 # Colores del título "MANDADOS A FULL"
 const COLOR_BORDE: Color = Color8(191, 54, 12)
@@ -33,8 +32,6 @@ var raiz: Control
 
 var caja_nivel: Control
 var caja_tiempo: Control
-var caja_bloques: Control
-var x_bloques: float = 0.0
 var grupo_lista: Control
 var caja_contador: Control
 
@@ -49,7 +46,6 @@ var tween_sello: Tween
 
 var material_gris: ShaderMaterial
 var tiempo_mostrado: int = -1
-var bloques_llenos: int = -1
 var tween_alerta: Tween
 
 func _ready() -> void:
@@ -79,8 +75,7 @@ func _ready() -> void:
 # ARMADO
 # =====================================================================
 func _cargar_texturas() -> void:
-	var nombres = ["txt_nivel", "txt_tiempo", "txt_lista", "num_barra",
-		"bloque_lleno", "bloque_vacio", "ticket", "tilde"]
+	var nombres = ["txt_nivel", "txt_lista", "num_barra", "num_dos_puntos", "ticket", "tilde"]
 	for i in range(10):
 		nombres.append("num_" + str(i))
 	for nombre in nombres:
@@ -104,15 +99,8 @@ func _armar_franja() -> void:
 	caja_nivel = _caja(Vector2(x, Y_TEXTO))
 	x += _ancho_numero(2) + ESPACIO_GRUPO
 
-	# TIEMPO xx (lugar reservado para 3 dígitos, así los bloques no se mueven)
-	_imagen("txt_tiempo", Vector2(x, Y_TEXTO), raiz)
-	x += tex["txt_tiempo"].get_width() + ESPACIO_ROTULO
-	caja_tiempo = _caja(Vector2(x, Y_TEXTO))
-	x += _ancho_numero(3) + ESPACIO_GRUPO
-
-	# Bloques de tiempo (cuántos entran se calcula cuando sabemos el ancho del ticket)
-	x_bloques = x
-	caja_bloques = _caja(Vector2(x_bloques, Y_BLOQUES))
+	# RELOJ 01:30, centrado en la franja
+	caja_tiempo = _caja(Vector2(roundf((ancho_pantalla - _ancho_reloj()) / 2.0), Y_TEXTO))
 
 	# LISTA (sin números; siempre en el mismo lugar, centrado arriba del ticket)
 	grupo_lista = _caja(Vector2(0, Y_TEXTO))
@@ -191,14 +179,6 @@ func _armar_ticket(lista: Array[ItemData]) -> void:
 	sello.hide()
 	ticket.add_child(sello)
 
-func _armar_bloques() -> void:
-	_vaciar(caja_bloques)
-	# Entran todos los bloques que haya lugar entre el tiempo y la lista (entre 5 y 20)
-	var lugar: float = grupo_lista.position.x - 10 - x_bloques
-	var cantidad = clampi(int(lugar / PASO_BLOQUE), 5, 20)
-	for i in range(cantidad):
-		_imagen("bloque_vacio", Vector2(i * PASO_BLOQUE, 0), caja_bloques)
-	bloques_llenos = -1
 
 # =====================================================================
 # ACTUALIZACIONES
@@ -209,7 +189,6 @@ func poner_nivel(numero: int) -> void:
 func _on_lista_generada(lista: Array[ItemData]) -> void:
 	_armar_ticket(lista)
 	_actualizar_contador()
-	_armar_bloques()
 	_frenar_alerta()
 	tiempo_mostrado = -1
 
@@ -218,8 +197,7 @@ func _on_tiempo(tiempo: int) -> void:
 	if tiempo == tiempo_mostrado:
 		return # El GameManager avisa en cada frame; solo redibujamos cuando cambia el segundo
 	tiempo_mostrado = tiempo
-	_escribir_numero(caja_tiempo, str(tiempo))
-	_actualizar_bloques()
+	_escribir_reloj(tiempo)
 
 	# Últimos segundos: ¡todo titila en rojo!
 	if tiempo > 0 and tiempo <= SEGUNDOS_ALERTA and GameManager.juego_activo:
@@ -227,17 +205,6 @@ func _on_tiempo(tiempo: int) -> void:
 	else:
 		_frenar_alerta()
 
-func _actualizar_bloques() -> void:
-	var cantidad = caja_bloques.get_child_count()
-	if cantidad == 0: return
-	var total: float = maxf(GameManager.tiempo_total, 1.0)
-	var llenos = clampi(ceili(float(tiempo_mostrado) * cantidad / total), 0, cantidad)
-	if llenos == bloques_llenos: return
-	bloques_llenos = llenos
-	var i = 0
-	for bloque in caja_bloques.get_children():
-		bloque.texture = tex["bloque_lleno"] if i < llenos else tex["bloque_vacio"]
-		i += 1
 
 func _actualizar_contador() -> void:
 	pass # Ya no mostramos "n/m" al lado de LISTA (los tildes del ticket ya dicen qué tenés)
@@ -312,16 +279,11 @@ func _ocultar_sello() -> void:
 func _empezar_alerta() -> void:
 	if tween_alerta and tween_alerta.is_valid(): return # Ya está titilando
 	tween_alerta = create_tween().set_loops()
-	tween_alerta.set_parallel(true)
-	tween_alerta.tween_property(caja_bloques, "modulate", Color(1.0, 0.3, 0.25), 0.25)
 	tween_alerta.tween_property(caja_tiempo, "modulate", Color(1.0, 0.3, 0.25), 0.25)
-	tween_alerta.chain()
-	tween_alerta.tween_property(caja_bloques, "modulate", Color.WHITE, 0.25)
 	tween_alerta.tween_property(caja_tiempo, "modulate", Color.WHITE, 0.25)
 
 func _frenar_alerta() -> void:
 	if tween_alerta: tween_alerta.kill()
-	if caja_bloques: caja_bloques.modulate = Color.WHITE
 	if caja_tiempo: caja_tiempo.modulate = Color.WHITE
 
 # =====================================================================
@@ -334,6 +296,21 @@ func _escribir_numero(caja: Control, texto: String) -> void:
 		var nombre = "num_barra" if letra == "/" else "num_" + letra
 		if tex.has(nombre):
 			_imagen(nombre, Vector2(i * PASO_DIGITO, 0), caja)
+
+# El reloj en minutos y segundos: 90 -> "01:30". Los ":" son más angostos que los números.
+func _escribir_reloj(segundos: int) -> void:
+	_vaciar(caja_tiempo)
+	var texto = "%02d%02d" % [int(segundos / 60.0), segundos % 60]
+	var x: float = 0.0
+	for i in range(4):
+		_imagen("num_" + texto[i], Vector2(x, 0), caja_tiempo)
+		x += PASO_DIGITO
+		if i == 1:
+			_imagen("num_dos_puntos", Vector2(x, 0), caja_tiempo)
+			x += ANCHO_DOS_PUNTOS
+
+func _ancho_reloj() -> float:
+	return 3 * PASO_DIGITO + ANCHO_DOS_PUNTOS + tex["num_0"].get_width()
 
 # Saca los hijos de un nodo EN EL MOMENTO (queue_free solo los borra al final del frame)
 func _vaciar(nodo: Node) -> void:
