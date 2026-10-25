@@ -7,6 +7,8 @@ extends TextureRect
 @onready var pantalla_resultados: ColorRect = %PantallaResultados
 @onready var titulo_resultado: Label = %TituloResultado
 @onready var boton_siguiente: Button = %BotonSiguiente
+@onready var boton_niveles: Button = %BotonNiveles
+@onready var boton_menu: Button = %BotonMenu
 @onready var reloj_visual: Label = %RelojVisual
 @onready var libreta: TextureRect = %Libreta
 
@@ -15,6 +17,15 @@ const HudFranja = preload("res://scripts/hud_franja.gd")
 var hud: HudFranja
 
 func _ready() -> void:
+	# NUEVO: Arrancamos en el nivel que se eligió en la pantalla de niveles
+	nivel_actual = clampi(GameManager.nivel_elegido, 0, GameManager.RUTAS_NIVELES.size() - 1)
+	
+	# NUEVO: Los botones de la pantalla de resultados se recorren con el joystick
+	for boton in [boton_siguiente, boton_niveles, boton_menu]:
+		boton.gui_input.connect(_mover_entre_botones)
+		_pintar_boton(boton) # Amarillo con letra y borde naranja
+	boton_siguiente.get_parent().add_theme_constant_override("separation", 6)
+	
 	# NUEVO: La libreta y el reloj viejos se esconden: ahora todo eso está en la franja
 	libreta.texture = null
 	lista_visual.hide()
@@ -66,8 +77,9 @@ func _ready() -> void:
 	GameManager.qte_cancelled.connect(%QTE_Colores.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Colores.is_active = false)
 	
-	# El primer nivel arma su lista ANTES de que exista la interfaz, así que arrancamos a mano
-	_on_lista_generada(GameManager.target_list)
+	# NUEVO: Cargamos el nivel elegido. Al entrar, el nivel arma su lista
+	# y eso dispara _on_lista_generada (cartel "NIVEL X", ticket, etc.)
+	_cargar_nivel()
 
 # --- CADA VEZ QUE EMPIEZA UN NIVEL ---
 # (La franja se encarga sola de dibujar la lista en el ticket)
@@ -113,23 +125,69 @@ func mostrar_resultados(mensaje: String, gano: bool) -> void:
 	else:
 		boton_siguiente.text = "REINTENTAR"
 
+	# NUEVO: Si ganó el último nivel, no hay "siguiente": queda elegir otro nivel o volver al menú
+	var era_el_ultimo = gano and nivel_actual >= GameManager.RUTAS_NIVELES.size() - 1
+	boton_siguiente.visible = not era_el_ultimo
+
 	pantalla_resultados.show()
-	boton_siguiente.grab_focus()
+	if era_el_ultimo:
+		boton_niveles.grab_focus()
+	else:
+		boton_siguiente.grab_focus()
+
+# NUEVO: Botones amarillos con letra y borde naranja (igual que "VOLVER AL MENÚ" de la pantalla de niveles)
+const BOTON_AMARILLO: Color = Color8(255, 214, 40)
+const BOTON_AMARILLO_APRETADO: Color = Color8(230, 170, 20)
+const BOTON_BORDE: Color = Color8(232, 96, 8)
+const BOTON_LETRA: Color = Color8(214, 78, 6)
+const BOTON_ILUMINADO: Color = Color(1.18, 1.18, 1.18) # Cuánto se ilumina el botón elegido
+
+func _pintar_boton(boton: Button) -> void:
+	var normal = StyleBoxFlat.new()
+	normal.bg_color = BOTON_AMARILLO
+	normal.set_border_width_all(2)
+	normal.border_width_bottom = 4
+	normal.border_color = BOTON_BORDE
+	normal.set_corner_radius_all(3)
+	normal.anti_aliasing = false
+	normal.content_margin_left = 12
+	normal.content_margin_right = 12
+	normal.content_margin_top = 3
+	normal.content_margin_bottom = 5
+	var apretado = normal.duplicate()
+	apretado.bg_color = BOTON_AMARILLO_APRETADO
+	# El elegido no lleva borde extra: se ilumina un poco todo el botón (ver abajo)
+	var foco = StyleBoxEmpty.new()
+	boton.add_theme_stylebox_override("normal", normal)
+	boton.add_theme_stylebox_override("hover", normal)
+	boton.add_theme_stylebox_override("pressed", apretado)
+	boton.add_theme_stylebox_override("hover_pressed", apretado)
+	boton.add_theme_stylebox_override("focus", foco)
+	for clave in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
+		boton.add_theme_color_override(clave, BOTON_LETRA)
+	boton.add_theme_font_size_override("font_size", 16)
+	# Al quedar elegido se ilumina (el amarillo y el naranja se aclaran un toque)
+	boton.focus_entered.connect(func(): boton.modulate = BOTON_ILUMINADO)
+	boton.focus_exited.connect(func(): boton.modulate = Color.WHITE)
+
+# NUEVO: Arriba/abajo con el joystick (o WASD) para pasar de un botón a otro
+func _mover_entre_botones(event: InputEvent) -> void:
+	var paso = 0
+	if event.is_action_pressed("move_up") or event.is_action_pressed("ui_up"): paso = -1
+	elif event.is_action_pressed("move_down") or event.is_action_pressed("ui_down"): paso = 1
+	if paso == 0: return
+	get_viewport().set_input_as_handled()
+	var botones = [boton_siguiente, boton_niveles, boton_menu].filter(func(b): return b.visible)
+	var actual = botones.find(get_viewport().gui_get_focus_owner())
+	botones[clampi(actual + paso, 0, botones.size() - 1)].grab_focus()
 
 # Arranca en 0, que es el primer nivel de la lista
 var nivel_actual: int = 0
 var ultimo_resultado_gano: bool = false
 
-# La lista de niveles en orden. Para agregar un nivel nuevo, sumalo al final.
-# (El primero es el que ya viene puesto en juego.tscn)
-const RUTAS_NIVELES: Array[String] = [
-	"res://scenes/levels/nivel_1.tscn", # 0 -> NIVEL 1
-	"res://scenes/levels/nivel_2.tscn", # 1 -> NIVEL 2
-	"res://scenes/levels/nivel_3.tscn", # 2 -> NIVEL 3
-	"res://scenes/levels/nivel_4.tscn", # 3 -> NIVEL 4
-	"res://scenes/levels/nivel_5.tscn", # 4 -> NIVEL 5 (el del plano de la hoja, en armado)
-	"res://scenes/levels/nivel_6.tscn", # 5 -> NIVEL 6 (en armado)
-]
+# NUEVO: La lista de niveles ahora está en GameManager (gestor_juego.gd -> RUTAS_NIVELES),
+# porque también la usa la pantalla de selección de niveles. Para agregar un nivel, sumalo ahí.
+const RUTA_SELECCION_NIVELES: String = "res://scenes/ui/seleccion_niveles.tscn"
 
 func _on_boton_siguiente_pressed() -> void:
 	get_tree().paused = false
@@ -139,30 +197,49 @@ func _on_boton_siguiente_pressed() -> void:
 	if ultimo_resultado_gano:
 		nivel_actual += 1 # Suma 1. Así que del 0 pasará al 1.
 
+	if nivel_actual < GameManager.RUTAS_NIVELES.size():
+		GameManager.nivel_elegido = nivel_actual
+		# Si es un reintento, lo ponemos exactamente donde estaba el anterior
+		_cargar_nivel(not ultimo_resultado_gano)
+		_musica_del_nivel() # Cada nivel con su canción
+	else:
+		print("¡JUEGO COMPLETADO!")
+		get_tree().change_scene_to_file(RUTA_SELECCION_NIVELES)
+
+# NUEVO: Saca el nivel que esté puesto y pone el de nivel_actual
+func _cargar_nivel(misma_posicion: bool = false) -> void:
 	var contenedor = %ContenedorNivel
-	# Guardamos la posición del nivel viejo (por si el de juego.tscn está corrido)
+	# Guardamos la posición del nivel viejo (por si estaba corrido)
 	var posicion_nivel_anterior := Vector2.ZERO
 	for hijo in contenedor.get_children():
 		if hijo is Node2D:
 			posicion_nivel_anterior = hijo.position
 		hijo.queue_free()
+	var ruta = GameManager.RUTAS_NIVELES[nivel_actual]
+	if not ResourceLoader.exists(ruta):
+		push_error("No existe el nivel: " + ruta)
+		return
+	var nuevo_nivel = load(ruta).instantiate()
+	if misma_posicion:
+		nuevo_nivel.position = posicion_nivel_anterior
+	contenedor.add_child(nuevo_nivel)
 
-	if nivel_actual < RUTAS_NIVELES.size() and ResourceLoader.exists(RUTAS_NIVELES[nivel_actual]):
-		var nuevo_nivel = load(RUTAS_NIVELES[nivel_actual]).instantiate()
-		# Si es un reintento, lo ponemos exactamente donde estaba el anterior
-		if not ultimo_resultado_gano:
-			nuevo_nivel.position = posicion_nivel_anterior
-		contenedor.add_child(nuevo_nivel)
-		_musica_del_nivel() # Cada nivel con su canción
+# NUEVO: Botón "SELECCIÓN DE NIVELES" de la pantalla de resultados
+func _on_boton_niveles_pressed() -> void:
+	get_tree().paused = false
+	# La pantalla de niveles arranca parada en el que sigue (si ganó) o en este (si perdió)
+	if ultimo_resultado_gano and nivel_actual + 1 < GameManager.RUTAS_NIVELES.size():
+		GameManager.nivel_elegido = nivel_actual + 1
 	else:
-		print("¡JUEGO COMPLETADO!")
-		get_tree().change_scene_to_file("res://scenes/ui/menu_principal.tscn")
+		GameManager.nivel_elegido = nivel_actual
+	get_tree().change_scene_to_file(RUTA_SELECCION_NIVELES)
 
 func _on_boton_menu_pressed() -> void:
 	get_tree().paused = false 
 	get_tree().change_scene_to_file("res://scenes/ui/menu_principal.tscn")
 
 func _on_victoria() -> void:
+	GameManager.desbloquear_nivel(nivel_actual + 1) # NUEVO: Se abre el nivel que sigue
 	mostrar_resultados("¡NIVEL COMPLETADO!", true)
 
 func _on_game_over() -> void:

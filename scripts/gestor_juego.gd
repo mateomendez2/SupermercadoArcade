@@ -40,8 +40,49 @@ signal item_dropped(item: ItemData) # ¡NUEVA! Avisa qué ítem se nos cayó
 var mostrando_cartel: bool = false
 signal cartel_nivel_terminado # La UI avisa cuando la pantalla negra empieza a disolverse
 
+# --- NIVELES Y PROGRESO ---
+# La lista de niveles en orden. Para agregar un nivel nuevo, sumalo al final.
+# (La usan la pantalla de selección de niveles y el juego)
+const RUTAS_NIVELES: Array[String] = [
+	"res://scenes/levels/nivel_1.tscn", # 0 -> NIVEL 1
+	"res://scenes/levels/nivel_2.tscn", # 1 -> NIVEL 2
+	"res://scenes/levels/nivel_3.tscn", # 2 -> NIVEL 3
+	"res://scenes/levels/nivel_4.tscn", # 3 -> NIVEL 4
+	"res://scenes/levels/nivel_5.tscn", # 4 -> NIVEL 5
+	"res://scenes/levels/nivel_6.tscn", # 5 -> NIVEL 6
+]
+const GUARDAR_PROGRESO: bool = true  # false = cada vez que se abre el juego arranca con el nivel 1 solo
+const DESBLOQUEAR_TODO: bool = false # true = todos los niveles abiertos (para probar)
+const ARCHIVO_PROGRESO: String = "user://progreso.cfg"
+
+var nivel_elegido: int = 0         # El nivel que se eligió en la pantalla de niveles (0 = NIVEL 1)
+var nivel_desbloqueado: int = 0    # Hasta qué nivel se puede jugar (0 = solo el NIVEL 1)
+var posicion_musica_menu: float = 0.0 # Para que la música del menú no arranque de cero al pasar de pantalla
+
 func _ready() -> void:
-	pass # Ya no generamos la lista aquí automáticamente
+	_cargar_progreso()
+
+func esta_desbloqueado(indice: int) -> bool:
+	return DESBLOQUEAR_TODO or indice <= nivel_desbloqueado
+
+# Se llama al ganar un nivel: abre el siguiente (si existe)
+func desbloquear_nivel(indice: int) -> void:
+	indice = mini(indice, RUTAS_NIVELES.size() - 1)
+	if indice <= nivel_desbloqueado: return
+	nivel_desbloqueado = indice
+	_guardar_progreso()
+
+func _cargar_progreso() -> void:
+	if not GUARDAR_PROGRESO: return
+	var archivo = ConfigFile.new()
+	if archivo.load(ARCHIVO_PROGRESO) == OK:
+		nivel_desbloqueado = clampi(archivo.get_value("niveles", "desbloqueado", 0), 0, RUTAS_NIVELES.size() - 1)
+
+func _guardar_progreso() -> void:
+	if not GUARDAR_PROGRESO: return
+	var archivo = ConfigFile.new()
+	archivo.set_value("niveles", "desbloqueado", nivel_desbloqueado)
+	archivo.save(ARCHIVO_PROGRESO)
 
 # --- LÓGICA DE GENERACIÓN ---
 # Ahora recibimos la lista exacta de frutas y el tiempo

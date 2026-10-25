@@ -36,15 +36,23 @@ const TIEMPO_TIC: float = 0.5   # Medio segundo entre "tic" y "tac"
 const VOLUMEN_TIC: float = -10.0
 var sonido_reloj: AudioStreamPlayer
 
-# --- BRUMA EN LA ZONA DE AGARRAR ---
-# Una bruma del color del producto sale del cuadrado de adelante, donde hay que pararse para agarrarlo.
-# Solo se ve mientras el producto está disponible (no si ya lo agarraste o si está el reloj).
-@export var color_bruma: Color = Color(0, 0, 0, 0) # Transparente = automático (se saca del dibujo del producto)
-const CUADRADO_PISO: float = 16.0 # Los cuadraditos del piso: la bruma ocupa uno hacia abajo
+# --- MARCA EN EL PISO (ESQUINITAS) ---
+# Cuatro esquinitas del color del producto marcan el cuadrado de adelante, donde hay que pararse para agarrarlo.
+# Titilan suave. Solo se ven mientras el producto está disponible (no si ya lo agarraste o si está el reloj)
+# y cuando el jugador anda cerca.
+@export var color_bruma: Color = Color(0, 0, 0, 0) # Color de las esquinitas. Transparente = automático (sale del dibujo del producto)
+const CUADRADO_PISO: float = 16.0 # Los cuadraditos del piso: la marca llega hasta la línea que sigue hacia abajo
 const ALCANCE_JUGADOR: float = 12.0 # Mitad del alto del área con la que el jugador detecta (para estirar la zona)
-static var textura_bruma: ImageTexture # Una sola para todas las góndolas
-var bruma: CPUParticles2D
-# La bruma aparece recién cuando el jugador está cerca (no apenas se ve en pantalla)
+const LARGO_ESQUINA: int = 5   # Largo de cada patita de la esquina (en pixeles)
+const GROSOR_ESQUINA: int = 2  # Grosor de la esquina
+const MARGEN_MARCA: Vector2 = Vector2(3, 2) # Cuánto se abren las esquinas por fuera de la zona (a los costados y abajo)
+const MARGEN_ARRIBA: float = -3.0 # Las de arriba van unos pixeles adentro, para no pisar el mueble
+const TITILAR_MIN: float = 0.55 # Opacidad más baja del titileo (1 = no titila)
+const TITILAR_TIEMPO: float = 0.5 # Segundos de cada ida o vuelta del titileo
+var marca: Node2D
+var tween_marca: Tween
+var marca_prendida: bool = false
+# La marca aparece recién cuando el jugador está cerca (no apenas se ve en pantalla)
 const DISTANCIA_BRUMA: float = 80.0 # En pixeles (32 = una baldosa). Más grande = aparece desde más lejos
 var jugador_cerca: bool = false
 var espera_chequeo: float = 0.0
@@ -57,7 +65,7 @@ func _ready() -> void:
 	sonido_reloj = AudioStreamPlayer.new()
 	sonido_reloj.volume_db = VOLUMEN_TIC
 	add_child(sonido_reloj)
-	_crear_bruma()
+	_crear_marca()
 
 func interact() -> ItemData:
 	# NUEVO: Si está bloqueada, no hacemos nada y rechazamos la interacción
@@ -76,7 +84,7 @@ func interact() -> ItemData:
 func succesful_interaction() -> void:
 	minijuego_guardado = "" 
 	is_empty = true 
-	_actualizar_bruma()
+	_actualizar_marca()
 	
 	# --- ¡CAMBIO DE ORDEN! ---
 	# Le avisamos al GameManager AL INSTANTE. 
@@ -118,7 +126,7 @@ func failed_interaction() -> void:
 # La rutina que bloquea y anima el reloj
 func iniciar_cooldown() -> void:
 	is_locked = true
-	_actualizar_bruma()
+	_actualizar_marca()
 	cooldown_clock.show()
 	
 	# --- EFECTO VISUAL: SUBIR Y BAJAR (FLOTAR) ---
@@ -150,7 +158,7 @@ func iniciar_cooldown() -> void:
 	cooldown_clock.frame = 0 
 	fallos = 0 
 	is_locked = false
-	_actualizar_bruma()
+	_actualizar_marca()
 	print("Góndola: ¡Desbloqueada!")
 
 # Cuando el jugador se aleja de la góndola
@@ -182,7 +190,7 @@ func _on_item_devuelto(item_perdido: ItemData) -> void:
 		item_visual.modulate.a = 1.0
 		item_visual.scale = Vector2(1.0, 1.0)
 		item_visual.position.y = item_pos_y_original
-		_actualizar_bruma()
+		_actualizar_marca()
 		
 		print("Góndola: He recuperado mi ", item_content.item_name)
 
@@ -203,72 +211,92 @@ func _jugador_cerca() -> bool:
 	return false
 
 # =====================================================================
-# BRUMA
+# MARCA EN EL PISO (ESQUINITAS)
 # =====================================================================
-func _crear_bruma() -> void:
+func _crear_marca() -> void:
 	var zona: CollisionShape2D = get_node_or_null("CollisionShape2D")
 	if zona == null or not zona.shape is RectangleShape2D: return
 	var forma: RectangleShape2D = zona.shape
 	var arriba: float = zona.position.y - forma.size.y / 2.0
 	var abajo: float = zona.position.y + forma.size.y / 2.0
-	# La bruma baja hasta la línea de cuadraditos del piso que sigue (un cuadradito hacia abajo)
+	# La marca baja hasta la línea de cuadraditos del piso que sigue (un cuadradito hacia abajo)
 	var arriba_global: float = global_position.y + arriba
 	var linea: float = ceilf((arriba_global + CUADRADO_PISO / 2.0) / CUADRADO_PISO) * CUADRADO_PISO
-	var abajo_bruma: float = linea - global_position.y
+	var abajo_marca: float = linea - global_position.y
 	# Estiramos un poco la zona hacia abajo (copia propia, no toca la de las otras góndolas):
-	# así, parado en cualquier parte de la bruma, el jugador puede agarrar
-	var extra: float = maxf(0.0, (abajo_bruma - ALCANCE_JUGADOR) - abajo)
+	# así, parado en cualquier parte de la marca, el jugador puede agarrar
+	var extra: float = maxf(0.0, (abajo_marca - ALCANCE_JUGADOR) - abajo)
 	if extra > 0.0:
 		var nueva: RectangleShape2D = forma.duplicate()
 		nueva.size.y += extra
 		zona.shape = nueva
 		zona.position.y += extra / 2.0
 
-	var alto_bruma: float = abajo_bruma - arriba
-	bruma = CPUParticles2D.new()
-	bruma.name = "Bruma"
-	bruma.z_index = 1 # Por encima del jugador: si estás parado ahí, quedás "adentro" de la bruma
-	bruma.position = Vector2(zona.position.x, arriba + alto_bruma / 2.0)
-	bruma.texture = _textura_bruma()
-	bruma.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	bruma.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
-	bruma.emission_rect_extents = Vector2(forma.size.x / 2.0, alto_bruma / 2.0)
-	bruma.amount = int(clampf(forma.size.x * alto_bruma / 45.0, 10, 40))
-	bruma.lifetime = 1.8
-	bruma.preprocess = 2.0
-	bruma.direction = Vector2(0, -1)
-	bruma.spread = 25.0
-	bruma.gravity = Vector2.ZERO
-	bruma.initial_velocity_min = 2.0
-	bruma.initial_velocity_max = 5.0
-	bruma.scale_amount_min = 0.9
-	bruma.scale_amount_max = 1.4
+	# El rectángulo que encierran las esquinas
+	var izq: float = round(zona.position.x - forma.size.x / 2.0 - MARGEN_MARCA.x)
+	var der: float = round(zona.position.x + forma.size.x / 2.0 + MARGEN_MARCA.x)
+	var sup: float = round(arriba - MARGEN_ARRIBA)
+	var inf: float = round(abajo_marca + MARGEN_MARCA.y)
+
 	var tono: Color = color_bruma if color_bruma.a > 0.0 else _color_del_producto()
-	var rampa = Gradient.new()
-	rampa.offsets = PackedFloat32Array([0.0, 0.35, 1.0])
-	rampa.colors = PackedColorArray([Color(tono, 0.0), Color(tono, 0.9), Color(tono.lightened(0.3), 0.0)])
-	bruma.color_ramp = rampa
-	add_child(bruma)
-	_actualizar_bruma()
+	var textura = _textura_esquina(tono)
+	var tam: float = textura.get_width()
+	marca = Node2D.new()
+	marca.name = "Marca"
+	marca.z_index = 0 # Pegada al piso: el jugador pasa por encima
+	marca.modulate.a = 0.0
+	add_child(marca)
+	# Una esquina por cada punta, dada vuelta según corresponda
+	for punta in [Vector2(0, 0), Vector2(1, 0), Vector2(0, 1), Vector2(1, 1)]:
+		var esquina = Sprite2D.new()
+		esquina.texture = textura
+		esquina.centered = false
+		esquina.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		esquina.flip_h = punta.x == 1
+		esquina.flip_v = punta.y == 1
+		esquina.position = Vector2(izq - 1 if punta.x == 0 else der - tam + 1, sup - 1 if punta.y == 0 else inf - tam + 1)
+		marca.add_child(esquina)
+	_actualizar_marca()
 
 # Prendida solo si el producto se puede agarrar y el jugador está cerca
-func _actualizar_bruma() -> void:
-	if bruma:
-		bruma.emitting = jugador_cerca and not is_empty and not is_locked and item_content != null
+func _actualizar_marca() -> void:
+	if marca == null: return
+	var prender: bool = jugador_cerca and not is_empty and not is_locked and item_content != null
+	if prender == marca_prendida: return
+	marca_prendida = prender
+	if tween_marca: tween_marca.kill()
+	tween_marca = create_tween()
+	if prender:
+		# Aparece y queda titilando suave
+		tween_marca.tween_property(marca, "modulate:a", 1.0, 0.15)
+		tween_marca.tween_callback(_titilar)
+	else:
+		tween_marca.tween_property(marca, "modulate:a", 0.0, 0.15)
+
+func _titilar() -> void:
+	if tween_marca: tween_marca.kill()
+	tween_marca = create_tween().set_loops()
+	tween_marca.tween_property(marca, "modulate:a", TITILAR_MIN, TITILAR_TIEMPO).set_trans(Tween.TRANS_SINE)
+	tween_marca.tween_property(marca, "modulate:a", 1.0, TITILAR_TIEMPO).set_trans(Tween.TRANS_SINE)
 
 # Cada un ratito nos fijamos si el jugador se acercó o se alejó
 func _process(delta: float) -> void:
-	if bruma == null: return
+	if marca == null: return
 	espera_chequeo -= delta
 	if espera_chequeo > 0.0: return
 	espera_chequeo = 0.15
 	var jugador = get_tree().get_first_node_in_group("Player")
-	var cerca: bool = jugador != null and jugador.global_position.distance_to(bruma.global_position) < DISTANCIA_BRUMA
+	var centro: Vector2 = marca.global_position + _centro_marca()
+	var cerca: bool = jugador != null and jugador.global_position.distance_to(centro) < DISTANCIA_BRUMA
 	if cerca != jugador_cerca:
 		jugador_cerca = cerca
-		_actualizar_bruma()
+		_actualizar_marca()
 
-# El color de la bruma sale del dibujo del producto: el promedio de sus colores más vivos, aclarado
+func _centro_marca() -> Vector2:
+	var zona: CollisionShape2D = get_node_or_null("CollisionShape2D")
+	return zona.position if zona else Vector2.ZERO
+
+# El color sale del dibujo del producto: el promedio de sus colores más vivos, aclarado
 func _color_del_producto() -> Color:
 	var defecto = Color(0.75, 0.9, 1.0)
 	if item_content == null or item_content.icon == null: return defecto
@@ -289,16 +317,23 @@ func _color_del_producto() -> Color:
 	# Bien vivo y clarito, para que se vea sobre el piso
 	return Color.from_hsv(promedio.h, clampf(promedio.s, 0.45, 0.75), 1.0)
 
-# Una mancha redonda suave (se arma una sola vez)
-static func _textura_bruma() -> ImageTexture:
-	if textura_bruma: return textura_bruma
-	var tam = 18
+# Dibuja una esquina (forma de L) del color pedido, con un borde oscuro alrededor.
+# Es la de arriba a la izquierda; las otras tres se dan vuelta.
+func _textura_esquina(tono: Color) -> ImageTexture:
+	var tam: int = LARGO_ESQUINA + 2
 	var img = Image.create(tam, tam, false, Image.FORMAT_RGBA8)
-	var centro = (tam - 1) / 2.0
+	var borde: Color = tono.darkened(0.7)
+	var dentro = func(x: int, y: int) -> bool:
+		x -= 1; y -= 1
+		if x < 0 or y < 0 or x >= LARGO_ESQUINA or y >= LARGO_ESQUINA: return false
+		return x < GROSOR_ESQUINA or y < GROSOR_ESQUINA
 	for y in tam:
 		for x in tam:
-			var d = Vector2(x - centro, y - centro).length() / (tam / 2.0)
-			var a = clampf(1.0 - d, 0.0, 1.0)
-			img.set_pixel(x, y, Color(1, 1, 1, a * a))
-	textura_bruma = ImageTexture.create_from_image(img)
-	return textura_bruma
+			if dentro.call(x, y):
+				img.set_pixel(x, y, tono)
+			else:
+				for v in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1), Vector2i(1, 1), Vector2i(-1, -1), Vector2i(1, -1), Vector2i(-1, 1)]:
+					if dentro.call(x + v.x, y + v.y):
+						img.set_pixel(x, y, borde)
+						break
+	return ImageTexture.create_from_image(img)
