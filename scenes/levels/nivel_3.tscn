@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://b5eo13e3vtcf3" path="res://scenes/objects/estante_lata_roja.tscn" id="26_v41fw"]
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="27_vl3x1"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="28_6bwkx"]
+[ext_resource type="PackedScene" path="res://scenes/obstacles/npc_quieto.tscn" id="29_trcui"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_e73x4")
@@ -1054,7 +1055,6 @@ y_sort_enabled = true
 script = ExtResource("1_82jax")
 frutas_del_nivel = Array[ExtResource("2_72usu")]([ExtResource("3_tiu8x"), ExtResource("4_oopf4")])
 cajas_activas = 1
-charcos_activos = 1
 cam_limite_arriba = -80
 cam_limite_abajo = 416
 cam_limite_izquierdo = -96
@@ -1080,61 +1080,64 @@ unique_name_in_owner = true
 position = Vector2(288, -32)
 
 [node name="Interactable31" parent="." unique_id=213418887 instance=ExtResource("4_s28vq")]
-position = Vector2(48, 288)
+position = Vector2(48, 304)
 
 [node name="CheckoutDesk" parent="." unique_id=1181652669 instance=ExtResource("9_vhmxl")]
 position = Vector2(28, 63)
 
 [node name="ObstacleBox" parent="." unique_id=2106728863 instance=ExtResource("14_11fms")]
-position = Vector2(272, 201)
+position = Vector2(272, 208)
 
 [node name="ObstacleBox2" parent="." unique_id=487653766 instance=ExtResource("14_11fms")]
 position = Vector2(304, 112)
 
 [node name="ObstacleBox3" parent="." unique_id=2052167080 instance=ExtResource("14_11fms")]
-position = Vector2(241, 271)
+position = Vector2(240, 272)
 
 [node name="ObstacleBox6" parent="." unique_id=579991991 instance=ExtResource("14_11fms")]
-position = Vector2(16, 256)
+position = Vector2(16, 272)
 
 [node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("7_uc16u")]
-position = Vector2(208, 201)
+position = Vector2(208, 208)
 
 [node name="HazardSpill3" parent="." unique_id=524601528 instance=ExtResource("7_uc16u")]
 position = Vector2(144, 160)
 
 [node name="HazardSpill4" parent="." unique_id=694686905 instance=ExtResource("7_uc16u")]
-position = Vector2(145, 272)
+position = Vector2(144, 304)
 
 [node name="MovingNPC" parent="." unique_id=1691588292 instance=ExtResource("15_oopf4")]
-position = Vector2(368, 304)
+position = Vector2(336, 368)
+
+[node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
+frame_progress = 0.9409691
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
-position = Vector2(-224, 0)
+position = Vector2(-192, 0)
 
 [node name="Punto2" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="1" unique_id=158643228]
-position = Vector2(-224, -112)
+position = Vector2(-192, -160)
 
 [node name="Punto3" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="2" unique_id=1495986653]
-position = Vector2(-128, -112)
+position = Vector2(-96, -160)
 
 [node name="Punto4" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="3" unique_id=933207079]
-position = Vector2(-128, -176)
+position = Vector2(-96, -224)
 
 [node name="HazardSpill5" parent="." unique_id=1379264887 instance=ExtResource("7_uc16u")]
-position = Vector2(337, 272)
+position = Vector2(336, 272)
 
 [node name="HazardSpill6" parent="." unique_id=55870278 instance=ExtResource("7_uc16u")]
-position = Vector2(208, 112)
+position = Vector2(48, 160)
 
 [node name="AutomaticDoor" parent="." unique_id=1890407894 instance=ExtResource("15_e73x4")]
 position = Vector2(288, -25)
 
 [node name="HeladeraObstaculo" parent="." unique_id=783320094 instance=ExtResource("17_0ew28")]
-position = Vector2(33, 215)
+position = Vector2(33, 231)
 
 [node name="HeladeraObstaculo2" parent="." unique_id=442184802 instance=ExtResource("17_0ew28")]
-position = Vector2(96, 215)
+position = Vector2(96, 231)
 textura_variante = ExtResource("15_o0o1h")
 
 [node name="Props" type="Node2D" parent="." unique_id=328304417]
@@ -1171,19 +1174,19 @@ horizontal_alignment = 1
 position = Vector2(124, 63)
 
 [node name="Baranda_Seguridad" parent="." unique_id=1466667907 instance=ExtResource("24_5c5jg")]
-position = Vector2(225, 39)
+position = Vector2(224, 27)
 
 [node name="Baranda_Seguridad2" parent="." unique_id=1595132844 instance=ExtResource("24_5c5jg")]
-position = Vector2(225, -4)
-
-[node name="Baranda_NoPaso_Larga" parent="." unique_id=440938138 instance=ExtResource("25_o0o1h")]
-position = Vector2(227, 79)
+position = Vector2(225, -5)
 
 [node name="Baranda_NoPaso_Larga2" parent="." unique_id=1873527359 instance=ExtResource("25_o0o1h")]
 position = Vector2(318, 79)
 
 [node name="Baranda_NoPaso_Vertical" parent="." unique_id=1188214765 instance=ExtResource("26_0plqf")]
-position = Vector2(196, 63)
+position = Vector2(224, 42)
+
+[node name="Baranda_NoPaso_Vertical2" parent="." unique_id=2110961238 instance=ExtResource("26_0plqf")]
+position = Vector2(224, 64)
 
 [node name="Carrito_Vacio" parent="." unique_id=717150398 instance=ExtResource("25_0plqf")]
 position = Vector2(357, 79)
@@ -1210,40 +1213,65 @@ position = Vector2(357, 43)
 position = Vector2(374, 43)
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("25_v41fw")]
-position = Vector2(207, 73)
+position = Vector2(240, 61)
 
 [node name="Canasto_Compras2" parent="." unique_id=1801299192 instance=ExtResource("25_v41fw")]
-position = Vector2(224, 73)
+position = Vector2(337, 78)
 
 [node name="Sprite2D" parent="Canasto_Compras2" index="0" unique_id=2084915334]
 region_rect = Rect2(264, 520, 16, 24)
 
 [node name="Canasto_Compras3" parent="." unique_id=950854403 instance=ExtResource("25_v41fw")]
-position = Vector2(241, 78)
+position = Vector2(304, 68)
 
 [node name="Canasto_Compras4" parent="." unique_id=1048681805 instance=ExtResource("25_v41fw")]
-position = Vector2(206, 51)
+position = Vector2(235, 32)
 
 [node name="Canasto_Compras5" parent="." unique_id=739677518 instance=ExtResource("25_v41fw")]
-position = Vector2(223, 53)
+position = Vector2(235, 41)
 
 [node name="Sprite2D" parent="Canasto_Compras5" index="0" unique_id=2084915334]
 region_rect = Rect2(200, 512, 16, 32)
 
+[node name="CollisionShape2D" parent="Canasto_Compras5" index="1" unique_id=59165455]
+position = Vector2(0, 8)
+
 [node name="Canasto_Compras6" parent="." unique_id=357004343 instance=ExtResource("25_v41fw")]
-position = Vector2(241, 57)
+position = Vector2(320, 77)
 
 [node name="Sprite2D" parent="Canasto_Compras6" index="0" unique_id=2084915334]
 region_rect = Rect2(200, 512, 16, 32)
 
+[node name="CollisionShape2D" parent="Canasto_Compras6" index="1" unique_id=59165455]
+position = Vector2(0, 8)
+
 [node name="CanastoDecorativo2" parent="." unique_id=1401365574 instance=ExtResource("20_b7im0")]
-position = Vector2(80, 288)
+position = Vector2(80, 304)
 
 [node name="Sprite2D" parent="CanastoDecorativo2" index="0" unique_id=1039621797]
 region_rect = Rect2(128, 288, 32, 32)
 
+[node name="CanastoDecorativo3" parent="." unique_id=405200317 instance=ExtResource("20_b7im0")]
+position = Vector2(16, 368)
+
+[node name="Sprite2D" parent="CanastoDecorativo3" index="0" unique_id=1039621797]
+position = Vector2(0, -4)
+region_rect = Rect2(480, 216, 32, 40)
+
+[node name="CanastoDecorativo4" parent="." unique_id=703733008 instance=ExtResource("20_b7im0")]
+position = Vector2(48, 368)
+
+[node name="Sprite2D" parent="CanastoDecorativo4" index="0" unique_id=1039621797]
+region_rect = Rect2(384, 352, 32, 32)
+
+[node name="CanastoDecorativo6" parent="." unique_id=1679616479 instance=ExtResource("20_b7im0")]
+position = Vector2(112, 368)
+
+[node name="Sprite2D" parent="CanastoDecorativo6" index="0" unique_id=1039621797]
+region_rect = Rect2(64, 288, 32, 32)
+
 [node name="Cartel_Amarillo" parent="." unique_id=1683338028 instance=ExtResource("24_o0o1h")]
-position = Vector2(112, 292)
+position = Vector2(112, 308)
 
 [node name="Label" type="Label" parent="Cartel_Amarillo" unique_id=131870513]
 offset_left = -12.0
@@ -1256,96 +1284,103 @@ text = "20%
 off"
 horizontal_alignment = 1
 
+[node name="Cartel_Amarillo2" parent="." unique_id=103794299 instance=ExtResource("24_o0o1h")]
+position = Vector2(368, 224)
+
+[node name="Label" type="Label" parent="Cartel_Amarillo2" unique_id=1302477285]
+offset_left = -12.0
+offset_top = -22.0
+offset_right = 14.0
+offset_bottom = 5.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = 0
+text = "20%
+off"
+horizontal_alignment = 1
+
 [node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("25_6d0ty")]
-position = Vector2(177, 281)
+position = Vector2(176, 329)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo" index="0" unique_id=1182334053]
 region_rect = Rect2(576, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo2" parent="." unique_id=387925372 instance=ExtResource("25_6d0ty")]
-position = Vector2(177, 242)
+position = Vector2(177, 265)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo2" index="0" unique_id=1182334053]
 region_rect = Rect2(576, 96, 32, 64)
 
 [node name="mueble_mitad_decorativo3" parent="." unique_id=161871095 instance=ExtResource("25_6d0ty")]
-position = Vector2(208, 281)
+position = Vector2(208, 329)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo3" index="0" unique_id=1182334053]
 flip_h = true
 
 [node name="mueble_mitad_decorativo4" parent="." unique_id=327472164 instance=ExtResource("25_6d0ty")]
-position = Vector2(208, 242)
+position = Vector2(208, 265)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo4" index="0" unique_id=1182334053]
 flip_h = true
 
 [node name="mueble_mitad_decorativo5" parent="." unique_id=891395139 instance=ExtResource("25_6d0ty")]
-position = Vector2(273, 242)
+position = Vector2(272, 265)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo5" index="0" unique_id=1182334053]
 region_rect = Rect2(352, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo6" parent="." unique_id=593316967 instance=ExtResource("25_6d0ty")]
-position = Vector2(273, 281)
+position = Vector2(272, 329)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo6" index="0" unique_id=1182334053]
 region_rect = Rect2(320, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo11" parent="." unique_id=1494665575 instance=ExtResource("25_6d0ty")]
-position = Vector2(368, 281)
+position = Vector2(368, 329)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo11" index="0" unique_id=1182334053]
 region_rect = Rect2(544, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo12" parent="." unique_id=309655201 instance=ExtResource("25_6d0ty")]
-position = Vector2(368, 242)
+position = Vector2(368, 265)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo12" index="0" unique_id=1182334053]
 region_rect = Rect2(576, 96, 32, 64)
 
 [node name="mueble_mitad_decorativo7" parent="." unique_id=600081566 instance=ExtResource("25_6d0ty")]
-position = Vector2(304, 242)
+position = Vector2(304, 265)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo7" index="0" unique_id=1182334053]
 flip_h = true
 region_rect = Rect2(512, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo10" parent="." unique_id=2120572027 instance=ExtResource("25_6d0ty")]
-position = Vector2(16, 152)
+position = Vector2(16, 169)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo10" index="0" unique_id=1182334053]
 flip_h = true
 region_rect = Rect2(192, 576, 32, 64)
 
-[node name="mueble_mitad_decorativo14" parent="." unique_id=303500565 instance=ExtResource("25_6d0ty")]
-position = Vector2(16, 191)
-
-[node name="Sprite2D" parent="mueble_mitad_decorativo14" index="0" unique_id=1182334053]
-flip_h = true
-region_rect = Rect2(192, 576, 32, 64)
-
 [node name="mueble_mitad_decorativo8" parent="." unique_id=1896769012 instance=ExtResource("25_6d0ty")]
-position = Vector2(304, 281)
+position = Vector2(304, 329)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo8" index="0" unique_id=1182334053]
 flip_h = true
 region_rect = Rect2(512, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo9" parent="." unique_id=1280189283 instance=ExtResource("25_6d0ty")]
-position = Vector2(272, 161)
+position = Vector2(272, 169)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo9" index="0" unique_id=1182334053]
 region_rect = Rect2(64, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo13" parent="." unique_id=1648317276 instance=ExtResource("25_6d0ty")]
-position = Vector2(177, 162)
+position = Vector2(176, 169)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo13" index="0" unique_id=1182334053]
 region_rect = Rect2(160, 576, 32, 64)
 
 [node name="mueble_mitad_decorativo15" parent="." unique_id=893233358 instance=ExtResource("25_6d0ty")]
-position = Vector2(208, 162)
+position = Vector2(208, 169)
 
 [node name="Sprite2D" parent="mueble_mitad_decorativo15" index="0" unique_id=1182334053]
 flip_h = true
@@ -1355,7 +1390,7 @@ region_rect = Rect2(64, 576, 32, 64)
 position = Vector2(352, 135)
 
 [node name="MuebleDecorativo" parent="." unique_id=1289041173 instance=ExtResource("27_vl3x1")]
-position = Vector2(96, 135)
+position = Vector2(96, 153)
 
 [node name="Sprite2D" parent="MuebleDecorativo" index="0" unique_id=2001655473]
 position = Vector2(0, 4)
@@ -1364,12 +1399,22 @@ region_rect = Rect2(320, 408, 64, 40)
 [node name="PoliciaQuieto" parent="." unique_id=13883039 instance=ExtResource("28_6bwkx")]
 position = Vector2(336, 0)
 
+[node name="NPCQuieto" parent="." unique_id=1145991858 instance=ExtResource("29_trcui")]
+position = Vector2(16, 199)
+
+[node name="NPCQuieto2" parent="." unique_id=1901470664 instance=ExtResource("29_trcui")]
+position = Vector2(80, 360)
+mirando = 2
+
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]
 [editable path="Canasto_Compras2"]
 [editable path="Canasto_Compras5"]
 [editable path="Canasto_Compras6"]
 [editable path="CanastoDecorativo2"]
+[editable path="CanastoDecorativo3"]
+[editable path="CanastoDecorativo4"]
+[editable path="CanastoDecorativo6"]
 [editable path="mueble_mitad_decorativo"]
 [editable path="mueble_mitad_decorativo2"]
 [editable path="mueble_mitad_decorativo3"]
@@ -1380,7 +1425,6 @@ position = Vector2(336, 0)
 [editable path="mueble_mitad_decorativo12"]
 [editable path="mueble_mitad_decorativo7"]
 [editable path="mueble_mitad_decorativo10"]
-[editable path="mueble_mitad_decorativo14"]
 [editable path="mueble_mitad_decorativo8"]
 [editable path="mueble_mitad_decorativo9"]
 [editable path="mueble_mitad_decorativo13"]

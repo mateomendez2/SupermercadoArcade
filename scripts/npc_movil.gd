@@ -1,4 +1,15 @@
+@tool
 extends Node2D
+
+# --- QUÉ EMPLEADO ES (se elige en el Inspector y se ve en el editor) ---
+const RUTAS_VARIANTES: Array[String] = [
+	"res://assets/empleados/empleado_1.tres", # Variante 1: rubio
+	"res://assets/empleados/empleado_2.tres", # Variante 2: castaño
+]
+@export_enum("Variante 1 (rubio)", "Variante 2 (castaño)") var variante: int = 0:
+	set(valor):
+		variante = valor
+		if is_node_ready(): _aplicar_variante()
 
 @export var velocidad: float = 50.0 # Píxeles por segundo (más alto = más rápido)
 @export var tiempo_espera: float = 0.2
@@ -14,6 +25,8 @@ var ultima_posicion: Vector2
 var last_direction: Vector2 = Vector2(1, 0) # Memoria de hacia dónde mira
 
 func _ready() -> void:
+	_aplicar_variante()
+	if Engine.is_editor_hint(): return # En el editor solo mostramos el dibujo, no camina
 	ultima_posicion = hitbox.position # Anotamos dónde arranca
 	iniciar_patrullaje()
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
@@ -56,6 +69,7 @@ func iniciar_patrullaje() -> void:
 
 # --- NUEVO: CEREBRO DE ANIMACIÓN ---
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
 	# Medimos cuánto se movió en este microsegundo
 	var movimiento = hitbox.position - ultima_posicion
 	ultima_posicion = hitbox.position # Guardamos la posición para el siguiente cálculo
@@ -67,22 +81,26 @@ func _physics_process(delta: float) -> void:
 		update_animation(false)
 
 func update_animation(is_moving: bool) -> void:
-	anim_sprite.flip_h = false 
-	
 	# Comprobamos si se mueve más en horizontal o en vertical
+	var nombre: String
 	if abs(last_direction.x) > abs(last_direction.y):
-		if last_direction.x > 0:
-			anim_sprite.play("walk_right" if is_moving else "idle_right")
-		else:
-			anim_sprite.play("walk_left" if is_moving else "idle_left")
+		nombre = "right" if last_direction.x > 0 else "left"
 	else:
-		if last_direction.y > 0:
-			anim_sprite.play("walk_down" if is_moving else "idle_down")
-		else:
-			anim_sprite.play("walk_up" if is_moving else "idle_up")
+		nombre = "down" if last_direction.y > 0 else "up"
+	anim_sprite.play(("walk_" if is_moving else "idle_") + nombre)
+
+# Pone el dibujo del empleado elegido
+func _aplicar_variante() -> void:
+	var sprite = get_node_or_null("%Hitbox/AnimatedSprite2D") as AnimatedSprite2D
+	if sprite == null: return
+	var ruta = RUTAS_VARIANTES[clampi(variante, 0, RUTAS_VARIANTES.size() - 1)]
+	if not ResourceLoader.exists(ruta): return
+	sprite.sprite_frames = load(ruta)
+	sprite.play("idle_down")
 
 # --- CASTIGO AL JUGADOR ---
 func _on_hitbox_body_entered(body: Node2D) -> void:
+	if Engine.is_editor_hint(): return
 	if body is Player:
 		# BUGFIX: Si el jugador todavía está parpadeando (castigado), es invulnerable.
 		# Antes igual le sacábamos otro ítem en cada choque.

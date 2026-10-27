@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://b36kygdfxf6dy" path="res://scenes/obstacles/mueble_mitad_decorativo.tscn" id="1_base"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_completa"]
+size = Vector2(32, 64)
+
+[node name="mueble_mitad_decorativo_colision_completa" unique_id=969787911 instance=ExtResource("1_base")]
+
+[node name="CollisionShape2D" parent="." index="1" unique_id=868496563]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_completa")

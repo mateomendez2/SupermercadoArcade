@@ -1,6 +1,17 @@
+@tool
 extends Area2D
 
 var player_in_range: bool = false
+
+# --- QUÉ CAJERO ES (se elige en el Inspector y se ve en el editor) ---
+const RUTAS_VARIANTES: Array[String] = [
+	"res://assets/empleados/empleado_1.tres", # Variante 1: rubio
+	"res://assets/empleados/empleado_2.tres", # Variante 2: castaño
+]
+@export_enum("Variante 1 (rubio)", "Variante 2 (castaño)") var variante: int = 0:
+	set(valor):
+		variante = valor
+		if is_node_ready(): _aplicar_variante()
 
 # --- AVISO DEL CAJERO (aparece cuando completás la lista) ---
 const RUTA_SONIDO_CAJA: String = "res://assets/audio/SonidoCaja.wav"
@@ -13,6 +24,9 @@ var tween_aparecer: Tween
 var tween_rebote: Tween
 
 func _ready() -> void:
+	_aplicar_variante()
+	if Engine.is_editor_hint(): return # En el editor solo mostramos el dibujo del cajero
+
 	# Nos avisa cuando el jugador está frente a la caja
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -114,7 +128,17 @@ func _on_body_exited(body: Node2D) -> void:
 		player_in_range = false
 
 func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint(): return
 	# Si el jugador aprieta "E" y está frente al mostrador...
 	if player_in_range and event.is_action_pressed("interact"):
 		# Le decimos al GameManager que evalúe la lista
 		GameManager.intentar_pagar()
+
+# Pone el dibujo del cajero elegido (quieto, mirando para adelante)
+func _aplicar_variante() -> void:
+	var sprite = get_node_or_null("SpriteCajero") as AnimatedSprite2D
+	if sprite == null: return
+	var ruta = RUTAS_VARIANTES[clampi(variante, 0, RUTAS_VARIANTES.size() - 1)]
+	if not ResourceLoader.exists(ruta): return
+	sprite.sprite_frames = load(ruta)
+	sprite.play("idle_down")
