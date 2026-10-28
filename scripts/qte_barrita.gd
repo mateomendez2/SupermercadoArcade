@@ -1,6 +1,9 @@
 extends Control
 
 signal qte_finished(success: bool)
+# Modo 2 jugadores: con los botones de quién se juega ("p1_" o "p2_"). Vacío = los de siempre.
+var prefijo: String = ""
+const IconosMando = preload("res://scripts/iconos_mando.gd") # Botones del mando, o teclas si no hay mando
 
 # Corazones al costado del cartel: uno por vida, se rompen con cada error
 const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
@@ -29,8 +32,12 @@ func _ready() -> void:
 	_estilizar_barra()
 	corazones = CorazonesQTE.new()
 	$FondoCartel.add_child(corazones)
+	# Botones del mando o teclas (y se cambian solos si se conecta o desconecta el mando)
+	IconosMando.aplicar(self)
+	Input.joy_connection_changed.connect(_cambio_de_mando)
 
 func start_qte() -> void:
+	IconosMando.aplicar(self)
 	sesion += 1
 	if tex_boton_normal: boton_visual.texture = tex_boton_normal
 	
@@ -76,7 +83,7 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
-	if event.is_action_pressed("interact"):
+	if event.is_action_pressed(prefijo + "interact"):
 		get_viewport().set_input_as_handled() 
 		is_active = false
 		
@@ -184,3 +191,6 @@ func _festejar() -> void:
 	await confites.festejar(self)
 	if mi_sesion == sesion:
 		hide()
+
+func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
+	IconosMando.aplicar(self)

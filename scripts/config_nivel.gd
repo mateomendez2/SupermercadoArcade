@@ -71,13 +71,18 @@ func _ready() -> void:
 	if GameManager.mostrando_cartel:
 		await GameManager.cartel_nivel_terminado
 
-	jugador.anim_sprite.play("walk_down")
+	# NUEVO (modo 2 jugadores): si está el jugador 2, entran los dos en fila
+	var jugador_2 = get_node_or_null("Player2")
+	if jugador_2:
+		await _entrada_de_a_dos(jugador_2)
+	else:
+		jugador.anim_sprite.play("walk_down")
 
-	var intro_tween = create_tween()
-	var destino_y = jugador.position.y + 64.0 
-	intro_tween.tween_property(jugador, "position:y", destino_y, 1.5)
-	
-	await intro_tween.finished
+		var intro_tween = create_tween()
+		var destino_y = jugador.position.y + 64.0 
+		intro_tween.tween_property(jugador, "position:y", destino_y, 1.5)
+		
+		await intro_tween.finished
 	
 	jugador.last_direction = Vector2(0, 1)
 	jugador.update_animation(false)
@@ -93,6 +98,38 @@ func _ready() -> void:
 	# Prendemos el reloj de los obstáculos AL FINAL
 	bucle_de_tiempo_aleatorio()
 	
+# =====================================================================
+# ENTRADA DE LOS DOS JUGADORES (modo 2 jugadores)
+# =====================================================================
+# Pasan la puerta en fila (el 2 viene atrás del 1, a la misma velocidad de siempre).
+# Al llegar, el 1 se corre un poquito a la izquierda y el 2 un poquito a la derecha,
+# y quedan los dos mirando para abajo.
+const ENTRADA_BAJADA: float = 64.0    # Cuánto bajan desde la puerta (igual que en el modo de un jugador)
+const ENTRADA_TIEMPO: float = 1.5     # En cuánto tiempo baja el jugador 1 esos 64 pixeles
+const ENTRADA_COSTADO: float = 14.0   # Cuánto se corre cada uno para su lado al final
+const ENTRADA_TIEMPO_COSTADO: float = 0.3
+
+func _entrada_de_a_dos(jugador_2: Node2D) -> void:
+	var velocidad: float = ENTRADA_BAJADA / ENTRADA_TIEMPO
+	var llegada_y: float = jugador.position.y + ENTRADA_BAJADA
+	var tiempo_2: float = (llegada_y - jugador_2.position.y) / velocidad # El 2 viene de más atrás
+	_caminar_y_correrse(jugador, llegada_y, ENTRADA_TIEMPO, -ENTRADA_COSTADO)
+	await _caminar_y_correrse(jugador_2, llegada_y, tiempo_2, ENTRADA_COSTADO)
+	jugador_2.last_direction = Vector2(0, 1)
+	jugador_2.update_animation(false)
+	jugador_2.is_frozen = false
+
+# Baja hasta llegada_y, después da un pasito al costado (negativo = izquierda) y queda mirando abajo
+func _caminar_y_correrse(quien: Node2D, llegada_y: float, tiempo: float, costado: float) -> void:
+	quien.is_frozen = true
+	quien.anim_sprite.play("walk_down")
+	var t = create_tween()
+	t.tween_property(quien, "position:y", llegada_y, tiempo)
+	t.tween_callback(func(): quien.anim_sprite.play("walk_left" if costado < 0 else "walk_right"))
+	t.tween_property(quien, "position:x", quien.position.x + costado, ENTRADA_TIEMPO_COSTADO)
+	t.tween_callback(func(): quien.anim_sprite.play("idle_down"))
+	await t.finished
+
 # =====================================================================
 # OBSTÁCULOS QUE CAMBIAN DE LUGAR (cajas y charcos)
 # =====================================================================

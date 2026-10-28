@@ -1,15 +1,21 @@
 extends Control
 ## PANTALLA DE SELECCIÓN DE NIVELES
-## Va entre el menú principal y el juego. Arma una tarjeta por cada nivel
+## Va entre la pantalla de modo y la de elegir personaje. Arma una tarjeta por cada nivel
 ## (los de GameManager.RUTAS_NIVELES), en dos columnas.
+## La usan los dos modos: con "cooperativo" prendido (seleccion_niveles_coop.tscn) muestra los niveles
+## del modo 2 JUGADORES (GameManager.RUTAS_NIVELES_COOP), en azul, y después va a elegir los ladrones.
 ## - Los niveles abiertos se ven en color; los bloqueados, en gris con un candado.
 ## - Se mueve con el joystick / flechas / WASD y se elige con cualquier botón.
 ## Los nodos Titulo y Grilla se pueden mover desde el editor.
 
 const RUTA_JUEGO: String = "res://scenes/ui/juego.tscn"
+const RUTA_PERSONAJE: String = "res://scenes/ui/seleccion_avatar.tscn" # Después de elegir el nivel, se elige con quién jugar
+const RUTA_LADRONES: String = "res://scenes/ui/seleccion_personajes.tscn" # (en el modo 2 jugadores, se eligen los ladrones)
 const RUTA_MENU: String = "res://scenes/ui/menu_principal.tscn"
 const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
 const VOLUMEN_MUSICA_MENU: float = -8.0
+
+@export var cooperativo: bool = false # true = niveles del modo 2 JUGADORES (ROBO)
 
 # --- TAMAÑOS (se pueden cambiar desde el Inspector) ---
 @export var tamano_tarjeta: Vector2 = Vector2(168, 64)
@@ -18,6 +24,8 @@ const VOLUMEN_MUSICA_MENU: float = -8.0
 # --- COLORES ---
 const COLOR_ABIERTO: Color = Color8(247, 122, 18)        # Naranja
 const COLOR_ABIERTO_BORDE: Color = Color8(92, 30, 8)
+const COLOR_ABIERTO_COOP: Color = Color8(54, 104, 252)   # Azul (modo 2 jugadores, como su tarjeta en la pantalla de modo)
+const COLOR_ABIERTO_COOP_BORDE: Color = Color8(16, 30, 92)
 const COLOR_BLOQUEADO: Color = Color8(118, 118, 130)     # Gris
 const COLOR_BLOQUEADO_BORDE: Color = Color8(44, 44, 52)
 const COLOR_SELECCION: Color = Color.WHITE               # Borde de la tarjeta de nivel elegida
@@ -49,14 +57,14 @@ func _ready() -> void:
 	_poner_musica()
 
 	# Una tarjeta por nivel
-	for i in GameManager.RUTAS_NIVELES.size():
+	for i in _cantidad():
 		var tarjeta = _crear_tarjeta(i)
 		grilla.add_child(tarjeta)
 		tarjetas.append(tarjeta)
 
 	# Arrancamos parados en el último nivel jugado (o el primero)
-	seleccion = clampi(GameManager.nivel_elegido, 0, GameManager.RUTAS_NIVELES.size() - 1)
-	if not GameManager.esta_desbloqueado(seleccion):
+	seleccion = clampi(_nivel_elegido(), 0, _cantidad() - 1)
+	if not _abierto(seleccion):
 		seleccion = 0
 	await get_tree().process_frame # Los contenedores acomodan las tarjetas
 	_marcar_seleccion(false)
@@ -69,14 +77,31 @@ func _ready() -> void:
 	listo_para_tocar = true
 
 # =====================================================================
+# DATOS DE CADA MODO (1 jugador o 2 jugadores)
+# =====================================================================
+func _cantidad() -> int:
+	if cooperativo:
+		return maxi(GameManager.LUGARES_NIVELES_COOP, GameManager.RUTAS_NIVELES_COOP.size())
+	return GameManager.RUTAS_NIVELES.size()
+
+func _abierto(indice: int) -> bool:
+	if cooperativo: return GameManager.esta_desbloqueado_coop(indice)
+	return GameManager.esta_desbloqueado(indice)
+
+func _nivel_elegido() -> int:
+	return GameManager.nivel_coop_elegido if cooperativo else GameManager.nivel_elegido
+
+# =====================================================================
 # ARMADO DE LAS TARJETAS
 # =====================================================================
 func _crear_tarjeta(indice: int) -> Panel:
-	var abierto = GameManager.esta_desbloqueado(indice)
+	var abierto = _abierto(indice)
 	var tarjeta = Panel.new()
 	tarjeta.custom_minimum_size = tamano_tarjeta
 	tarjeta.mouse_filter = Control.MOUSE_FILTER_STOP
-	if abierto:
+	if abierto and cooperativo:
+		_estilo(tarjeta, COLOR_ABIERTO_COOP, COLOR_ABIERTO_COOP_BORDE)
+	elif abierto:
 		_estilo(tarjeta, COLOR_ABIERTO, COLOR_ABIERTO_BORDE)
 	else:
 		_estilo(tarjeta, COLOR_BLOQUEADO, COLOR_BLOQUEADO_BORDE)
@@ -189,18 +214,23 @@ func _tocado_con_mouse(event: InputEvent, indice: int) -> void:
 
 func _elegir() -> void:
 	# Nivel bloqueado: sacudón y sonido de "no"
-	if not GameManager.esta_desbloqueado(seleccion):
+	if not _abierto(seleccion):
 		_tocar(SONIDO_BLOQUEADO)
 		_sacudir(tarjetas[seleccion])
 		return
 	# ¡A jugar!
 	_tocar(SONIDO_ELEGIR)
-	GameManager.nivel_elegido = seleccion
-	_irse_a(RUTA_JUEGO)
+	if cooperativo:
+		GameManager.nivel_coop_elegido = seleccion
+		_irse_a(RUTA_LADRONES)
+	else:
+		GameManager.nivel_elegido = seleccion
+		_irse_a(RUTA_PERSONAJE)
 
 func _irse_a(ruta: String) -> void:
 	eligiendo = true
-	if ruta == RUTA_MENU and musica:
+	var sigue_la_musica: bool = ruta == RUTA_MENU or ruta == RUTA_PERSONAJE or ruta == RUTA_LADRONES
+	if sigue_la_musica and musica:
 		GameManager.posicion_musica_menu = musica.get_playback_position()
 	# Destello de la tarjeta elegida y fundido a negro
 	var tarjeta = tarjetas[seleccion]
@@ -208,7 +238,7 @@ func _irse_a(ruta: String) -> void:
 	t.tween_property(tarjeta, "modulate", Color(1.8, 1.8, 1.8), 0.06)
 	t.tween_property(tarjeta, "modulate", tarjeta.modulate, 0.12)
 	t.tween_property(fundido, "color:a", 1.0, 0.3)
-	if musica:
+	if musica and not sigue_la_musica:
 		t.parallel().tween_property(musica, "volume_db", -40.0, 0.3)
 	await t.finished
 	get_tree().change_scene_to_file(ruta)

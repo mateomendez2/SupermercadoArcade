@@ -3,6 +3,10 @@ class_name Player
 
 @onready var sonido_recoger: AudioStreamPlayer2D = $SonidoRecoger
 
+# NUEVO (modo cooperativo): qué controles usa este personaje.
+# Vacío = los de siempre (modo de un jugador). "p1_" o "p2_" = los del jugador 1 o 2 (los arma juego_coop.gd)
+@export var prefijo_acciones: String = ""
+
 @export var speed: float = 75.0
 @export var acceleration: float = 1500.0
 @export var friction: float = 1200.0
@@ -35,6 +39,14 @@ func _ready() -> void:
 	GameManager.item_collected.connect(_on_item_recolectado)
 	GameManager.item_dropped.connect(_animar_perdida_item)
 
+	# Modo de un jugador: se viste con el personaje que se eligió (chica o chico)
+	if prefijo_acciones == "":
+		var avatar: SpriteFrames = GameManager.animaciones_avatar()
+		if avatar:
+			var animacion: StringName = anim_sprite.animation
+			anim_sprite.sprite_frames = avatar
+			if avatar.has_animation(animacion): anim_sprite.play(animacion)
+
 func _physics_process(delta: float) -> void:
 	if is_frozen:
 		return 
@@ -48,7 +60,8 @@ func move_state(delta: float) -> void:
 		return 
 	
 	# 1. Leemos la palanca y la redondeamos: cada eje queda en -1, 0 o 1
-	var raw_direction: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var p: String = prefijo_acciones
+	var raw_direction: Vector2 = Input.get_vector(p + "move_left", p + "move_right", p + "move_up", p + "move_down")
 	var x: float = round(raw_direction.x)
 	var y: float = round(raw_direction.y)
 
@@ -102,10 +115,10 @@ func update_animation(is_moving: bool) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if is_frozen: return 
 	
-	if event.is_action_pressed("interact") and current_interactable != null:
+	if event.is_action_pressed(prefijo_acciones + "interact") and current_interactable != null:
 		get_viewport().set_input_as_handled() 
 		velocity = Vector2.ZERO 
-		current_interactable.interact()
+		current_interactable.interact(self)
 
 func _on_area_entered(area: Area2D) -> void:
 	if area is Interactable:
@@ -135,6 +148,8 @@ func set_slippery(is_slippery: bool) -> void:
 		pass
 
 func _on_item_recolectado(_item: ItemData) -> void:
+	# Modo 2 jugadores: solo hace la animación el que lo agarró
+	if GameManager.quien_agarro != "" and GameManager.quien_agarro != prefijo_acciones: return
 	sonido_recoger.play()
 	is_frozen = true 
 	

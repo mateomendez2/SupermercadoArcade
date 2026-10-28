@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/seleccion_niveles.gd" id="1_sel"]
+[ext_resource type="Texture2D" uid="uid://cnuaff5gv8gu8" path="res://assets/FondoMenuInicio.png" id="2_cielo"]
+[ext_resource type="Shader" path="res://scripts/menu_principal.gdshader" id="3_nubes"]
+[ext_resource type="Texture2D" uid="uid://0go5mlwem36t" path="res://assets/NubesMenuInicio.png" id="4_nubes"]
+[ext_resource type="Texture2D" uid="uid://bqcb624psl3a0" path="res://assets/MenuInicio.png" id="5_super"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nubes"]
+shader = ExtResource("3_nubes")
+shader_parameter/velocidad = 0.05
+
+[node name="SeleccionNivelesCoop" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sel")
+cooperativo = true
+
+[node name="FondoCielo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_cielo")
+
+[node name="Nubes" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_nubes")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_nubes")
+
+[node name="FondoSupermercado" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_super")
+
+[node name="Oscuro" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09803922, 0, 0.12156863, 0.6)
+
+[node name="Titulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 16.0
+offset_bottom = 76.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.98039216, 1, 0.5882353, 1)
+theme_override_colors/font_outline_color = Color(0.7490196, 0.21176471, 0.047058824, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 48
+text = "ELEGÍ UN NIVEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Grilla" type="GridContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -180.0
+offset_top = 88.0
+offset_right = 180.0
+offset_bottom = 308.0
+grow_horizontal = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 14
+columns = 2
+
+[node name="Fundido" type="ColorRect" parent="."]
+unique_name_in_owner = true
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

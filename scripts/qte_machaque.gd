@@ -1,6 +1,9 @@
 extends Control
 
 signal qte_finished(success: bool)
+# Modo 2 jugadores: con los botones de quién se juega ("p1_" o "p2_"). Vacío = los de siempre.
+var prefijo: String = ""
+const IconosMando = preload("res://scripts/iconos_mando.gd") # Botones del mando, o teclas si no hay mando
 
 @onready var barra_progreso: ProgressBar = $FondoCartel/ProgressBar
 
@@ -41,8 +44,12 @@ func _ready() -> void:
 	tex_azul_normal = %BotonAzul.texture
 	tex_rojo_normal = %BotonRojo.texture
 	tex_amarillo_normal = %BotonAmarillo.texture
+	# Botones del mando o teclas (y se cambian solos si se conecta o desconecta el mando)
+	IconosMando.aplicar(self)
+	Input.joy_connection_changed.connect(_cambio_de_mando)
 
 func start_qte() -> void:
+	IconosMando.aplicar(self)
 	sesion += 1
 	progreso = 20.0 
 	barra_progreso.value = progreso
@@ -88,15 +95,15 @@ func cambiar_color_al_azar() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
-	var toco_boton = event.is_action_pressed("btn_azul") or event.is_action_pressed("btn_rojo") or event.is_action_pressed("btn_amarillo") or event.is_action_pressed("interact")
+	var toco_boton = event.is_action_pressed(prefijo + "btn_azul") or event.is_action_pressed(prefijo + "btn_rojo") or event.is_action_pressed(prefijo + "btn_amarillo") or event.is_action_pressed(prefijo + "interact")
 	
 	if toco_boton:
 		get_viewport().set_input_as_handled() 
 		
 		var apreto = ""
-		if event.is_action_pressed("btn_azul"): apreto = "azul"
-		elif event.is_action_pressed("btn_rojo"): apreto = "rojo"
-		elif event.is_action_pressed("btn_amarillo"): apreto = "amarillo"
+		if event.is_action_pressed(prefijo + "btn_azul"): apreto = "azul"
+		elif event.is_action_pressed(prefijo + "btn_rojo"): apreto = "rojo"
+		elif event.is_action_pressed(prefijo + "btn_amarillo"): apreto = "amarillo"
 		
 		if apreto != "":
 			# ¡NUEVA LÍNEA! Hundimos el botón en la pantalla
@@ -178,3 +185,6 @@ func _festejar() -> void:
 	await confites.festejar(self)
 	if mi_sesion == sesion:
 		hide()
+
+func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
+	IconosMando.aplicar(self)

@@ -63,3 +63,62 @@ func perder_vida() -> void:
 	var t = create_tween().set_parallel(true)
 	t.tween_property(c, "modulate", Color.WHITE, 0.25)
 	t.tween_property(c, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_sacudir()
+
+# =====================================================================
+# SACUDÓN AL EQUIVOCARSE
+# Tiembla el cartel del minijuego (con todo lo que tiene adentro) y también la cámara del juego
+# =====================================================================
+const FUERZA_SACUDON: float = 4.0   # Cuántos pixeles se mueve como máximo
+const TIEMPO_SACUDON: float = 0.28  # Cuánto dura
+const PASOS_SACUDON: int = 8        # Cuántos "golpecitos" hace en ese tiempo
+var tween_sacudon: Tween
+var posiciones_base: Dictionary = {}  # Dónde estaba cada cosa antes de sacudirse
+var camara_sacudida: Camera2D
+var offset_camara_base: Vector2
+
+func _sacudir() -> void:
+	_frenar_sacudon()
+	var cartel = get_parent() as Control
+	if cartel == null: return
+	var minijuego = cartel.get_parent() as Control
+	# Lo que se sacude: todo el minijuego menos el fondo oscuro que tapa la pantalla
+	var partes: Array = []
+	if minijuego:
+		for hijo in minijuego.get_children():
+			if hijo is Control and not (hijo is ColorRect and hijo.size.x >= minijuego.size.x * 0.9 and hijo.size.y >= minijuego.size.y * 0.9):
+				partes.append(hijo)
+	else:
+		partes.append(cartel)
+	for p in partes:
+		posiciones_base[p] = p.position
+	camara_sacudida = get_viewport().get_camera_2d()
+	# Modo 2 jugadores: el minijuego dice qué cámara sacudir (la de la mitad de ese jugador)
+	if minijuego and minijuego.has_meta("camara_sacudir"):
+		camara_sacudida = minijuego.get_meta("camara_sacudir")
+	if camara_sacudida:
+		offset_camara_base = camara_sacudida.offset
+
+	tween_sacudon = create_tween()
+	for i in PASOS_SACUDON:
+		var fuerza: float = FUERZA_SACUDON * (1.0 - float(i) / PASOS_SACUDON) # Va perdiendo fuerza
+		var desvio := Vector2(fuerza if i % 2 == 0 else -fuerza, randf_range(-fuerza, fuerza) * 0.5).round()
+		tween_sacudon.tween_callback(_mover_todo.bind(desvio))
+		tween_sacudon.tween_interval(TIEMPO_SACUDON / PASOS_SACUDON)
+	tween_sacudon.tween_callback(_frenar_sacudon)
+
+func _mover_todo(desvio: Vector2) -> void:
+	for p in posiciones_base:
+		if is_instance_valid(p): p.position = posiciones_base[p] + desvio
+	if is_instance_valid(camara_sacudida):
+		camara_sacudida.offset = offset_camara_base + desvio
+
+# Devuelve todo a su lugar exacto
+func _frenar_sacudon() -> void:
+	if tween_sacudon and tween_sacudon.is_valid(): tween_sacudon.kill()
+	for p in posiciones_base:
+		if is_instance_valid(p): p.position = posiciones_base[p]
+	posiciones_base.clear()
+	if is_instance_valid(camara_sacudida):
+		camara_sacudida.offset = offset_camara_base
+	camara_sacudida = null

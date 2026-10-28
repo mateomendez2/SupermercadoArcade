@@ -1,6 +1,9 @@
 extends Control
 
 signal qte_finished(success: bool)
+# Modo 2 jugadores: con los botones de quién se juega ("p1_" o "p2_"). Vacío = los de siempre.
+var prefijo: String = ""
+const IconosMando = preload("res://scripts/iconos_mando.gd") # Botones del mando, o teclas si no hay mando
 
 # Corazones al costado del cartel: uno por vida, se rompen con cada error
 const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
@@ -37,8 +40,12 @@ func _ready() -> void:
 	tex_azul_normal = %BotonAzul.texture
 	tex_rojo_normal = %BotonRojo.texture
 	tex_amarillo_normal = %BotonAmarillo.texture
+	# Botones del mando o teclas (y se cambian solos si se conecta o desconecta el mando)
+	IconosMando.aplicar(self)
+	Input.joy_connection_changed.connect(_cambio_de_mando)
 
 func start_qte() -> void:
+	IconosMando.aplicar(self)
 	sesion += 1
 	show()
 	intentos_restantes = 5
@@ -98,16 +105,16 @@ func animar_secuencia() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 	
-	var toco_boton = event.is_action_pressed("btn_azul") or event.is_action_pressed("btn_rojo") or event.is_action_pressed("btn_amarillo") or event.is_action_pressed("interact")
+	var toco_boton = event.is_action_pressed(prefijo + "btn_azul") or event.is_action_pressed(prefijo + "btn_rojo") or event.is_action_pressed(prefijo + "btn_amarillo") or event.is_action_pressed(prefijo + "interact")
 	
 	if toco_boton:
 		get_viewport().set_input_as_handled() 
 		if estado_juego != "JUGANDO": return
 		
 		var color_apretado = ""
-		if event.is_action_pressed("btn_azul"): color_apretado = "azul"
-		elif event.is_action_pressed("btn_rojo"): color_apretado = "rojo"
-		elif event.is_action_pressed("btn_amarillo"): color_apretado = "amarillo"
+		if event.is_action_pressed(prefijo + "btn_azul"): color_apretado = "azul"
+		elif event.is_action_pressed(prefijo + "btn_rojo"): color_apretado = "rojo"
+		elif event.is_action_pressed(prefijo + "btn_amarillo"): color_apretado = "amarillo"
 		
 		if color_apretado != "":
 			comprobar_boton(color_apretado)
@@ -209,3 +216,6 @@ func _destello_fondo(tono: Color) -> void:
 # ¿Se cerró el minijuego (te alejaste) o arrancó otro mientras esperábamos?
 func _se_cerro(mi_sesion: int) -> bool:
 	return mi_sesion != sesion or not visible
+
+func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
+	IconosMando.aplicar(self)

@@ -8,6 +8,9 @@ extends Control
 ## - Llenás la barra (6 aciertos) y ganás. Con 5 errores se cierra, como los otros minijuegos.
 
 signal qte_finished(success: bool)
+# Modo 2 jugadores: con los botones de quién se juega ("p1_" o "p2_"). Vacío = los de siempre.
+var prefijo: String = ""
+const IconosMando = preload("res://scripts/iconos_mando.gd") # Botones del mando, o teclas si no hay mando
 
 # Corazones al costado del cartel: uno por vida, se rompen con cada error
 const CorazonesQTE = preload("res://scripts/corazones_qte.gd")
@@ -77,6 +80,10 @@ func _ready() -> void:
 # =====================================================================
 # ARMADO (todo se ubica a partir de dónde están los botones)
 # =====================================================================
+	# Botones del mando o teclas (y se cambian solos si se conecta o desconecta el mando)
+	IconosMando.aplicar(self)
+	Input.joy_connection_changed.connect(_cambio_de_mando)
+
 func _armar() -> void:
 	# La capa va adentro del cartel, así las posiciones son relativas al cartel
 	capa = Control.new()
@@ -145,6 +152,7 @@ func _armar_barra() -> void:
 # ARRANQUE
 # =====================================================================
 func start_qte() -> void:
+	IconosMando.aplicar(self)
 	sesion += 1
 	for c in circulos:
 		c["nodo"].queue_free()
@@ -228,11 +236,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_active: return
 
 	var color = ""
-	if event.is_action_pressed("btn_azul"): color = "azul"
-	elif event.is_action_pressed("btn_rojo"): color = "rojo"
-	elif event.is_action_pressed("btn_amarillo"): color = "amarillo"
+	if event.is_action_pressed(prefijo + "btn_azul"): color = "azul"
+	elif event.is_action_pressed(prefijo + "btn_rojo"): color = "rojo"
+	elif event.is_action_pressed(prefijo + "btn_amarillo"): color = "amarillo"
 
-	if color == "" and not event.is_action_pressed("interact"):
+	if color == "" and not event.is_action_pressed(prefijo + "interact"):
 		return
 	get_viewport().set_input_as_handled() # Que el botón no "haga eco" en el juego
 	if color == "": return
@@ -344,3 +352,6 @@ func _destello_fondo(tono: Color) -> void:
 	fondo_oscuro.color = tono
 	tween_fondo = create_tween()
 	tween_fondo.tween_property(fondo_oscuro, "color", color_fondo_normal, 0.35)
+
+func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
+	IconosMando.aplicar(self)

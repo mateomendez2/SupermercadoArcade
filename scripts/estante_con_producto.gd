@@ -67,14 +67,15 @@ func _ready() -> void:
 	add_child(sonido_reloj)
 	_crear_marca()
 
-func interact() -> ItemData:
+# "quien" = el jugador que tocó el botón (en el modo 2 jugadores, para saber de quién es el minijuego)
+func interact(quien: Node = null) -> ItemData:
 	# NUEVO: Si está bloqueada, no hacemos nada y rechazamos la interacción
 	if is_locked:
 		print("Góndola: Espera a que termine el castigo.")
 		return null
 		
 	if not is_empty and item_content != null:
-		GameManager.request_qte(self) 
+		GameManager.request_qte(self, quien)
 	else:
 		print("Góndola: Ya te llevaste esto, está vacío.")
 		
@@ -166,6 +167,12 @@ func _on_area_exited(area: Area2D) -> void:
 	
 	# NUEVO GUARDIA: ¿El dueño de esta área es el Jugador?
 	if area.get_parent() is Player:
+		# NUEVO (modo 2 jugadores): si el que se fue estaba jugando el minijuego de esta góndola, se cierra el suyo
+		var p: String = area.get_parent().prefijo_acciones
+		if p != "":
+			if GameManager.gondolas_coop.get(p) == self:
+				GameManager.cancelar_qte_jugador(p)
+			return
 		
 		# Si era el jugador, verificamos si estábamos jugando
 		if GameManager.gondola_actual == self:
@@ -285,9 +292,13 @@ func _process(delta: float) -> void:
 	espera_chequeo -= delta
 	if espera_chequeo > 0.0: return
 	espera_chequeo = 0.15
-	var jugador = get_tree().get_first_node_in_group("Player")
+	# Se prende si CUALQUIER jugador anda cerca (en el modo 2 jugadores son dos)
 	var centro: Vector2 = marca.global_position + _centro_marca()
-	var cerca: bool = jugador != null and jugador.global_position.distance_to(centro) < DISTANCIA_BRUMA
+	var cerca: bool = false
+	for jugador in get_tree().get_nodes_in_group("Player"):
+		if jugador.global_position.distance_to(centro) < DISTANCIA_BRUMA:
+			cerca = true
+			break
 	if cerca != jugador_cerca:
 		jugador_cerca = cerca
 		_actualizar_marca()

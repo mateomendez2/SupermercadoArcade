@@ -59,6 +59,48 @@ var nivel_elegido: int = 0         # El nivel que se eligió en la pantalla de n
 var nivel_desbloqueado: int = 0    # Hasta qué nivel se puede jugar (0 = solo el NIVEL 1)
 var posicion_musica_menu: float = 0.0 # Para que la música del menú no arranque de cero al pasar de pantalla
 
+# --- MODO 1 JUGADOR (COMPRA): con quién se juega ---
+# "" = la chica de siempre (sus animaciones están adentro de jugador.tscn)
+const AVATARES: Array[String] = [
+	"",                                          # Chica
+	"res://assets/protagonista_chico/chico.tres", # Chico
+]
+var avatar_elegido: int = 0 # Lo elige la pantalla de personaje (después de tocar un nivel)
+
+# Las animaciones del personaje elegido (null = dejar las que ya tiene el jugador)
+func animaciones_avatar() -> SpriteFrames:
+	if avatar_elegido <= 0 or avatar_elegido >= AVATARES.size(): return null
+	return load(AVATARES[avatar_elegido])
+
+# --- MODO 2 JUGADORES (ROBO) ---
+# Los ladrones que se pueden elegir (en este orden aparecen en la pantalla de personajes)
+const PERSONAJES_COOP: Array[String] = [
+	"res://assets/ladrones/ladrona.tres",  # Chica, pañuelo rojo
+	"res://assets/ladrones/ladron.tres",   # Chico, pañuelo azul
+	"res://assets/ladrones/ladrona2.tres", # Chica, pañuelo amarillo
+	"res://assets/ladrones/ladron2.tres",  # Chico, pañuelo verde
+]
+var personajes_coop: Array[int] = [0, 1] # El que eligió el jugador 1 y el que eligió el jugador 2
+
+# Los niveles del modo 2 jugadores, en orden. Para agregar uno nuevo, sumalo al final.
+const RUTAS_NIVELES_COOP: Array[String] = [
+	"res://scenes/levels/nivel_coop_1.tscn", # 0 -> NIVEL 1
+]
+const LUGARES_NIVELES_COOP: int = 6 # Tarjetas que muestra la pantalla de niveles (las que todavía no existen salen con candado)
+var nivel_coop_elegido: int = 0      # El nivel que se eligió en la pantalla de niveles del modo 2 jugadores
+var nivel_coop_desbloqueado: int = 0 # Hasta qué nivel del modo 2 jugadores se puede jugar
+
+func esta_desbloqueado_coop(indice: int) -> bool:
+	if indice < 0 or indice >= RUTAS_NIVELES_COOP.size(): return false # Ese nivel todavía no existe
+	return DESBLOQUEAR_TODO or indice <= nivel_coop_desbloqueado
+
+# Para cuando se gane un nivel del modo 2 jugadores: abre el siguiente (si existe)
+func desbloquear_nivel_coop(indice: int) -> void:
+	indice = mini(indice, RUTAS_NIVELES_COOP.size() - 1)
+	if indice <= nivel_coop_desbloqueado: return
+	nivel_coop_desbloqueado = indice
+	_guardar_progreso()
+
 func _ready() -> void:
 	_cargar_progreso()
 
@@ -77,11 +119,13 @@ func _cargar_progreso() -> void:
 	var archivo = ConfigFile.new()
 	if archivo.load(ARCHIVO_PROGRESO) == OK:
 		nivel_desbloqueado = clampi(archivo.get_value("niveles", "desbloqueado", 0), 0, RUTAS_NIVELES.size() - 1)
+		nivel_coop_desbloqueado = clampi(archivo.get_value("niveles", "desbloqueado_coop", 0), 0, RUTAS_NIVELES_COOP.size() - 1)
 
 func _guardar_progreso() -> void:
 	if not GUARDAR_PROGRESO: return
 	var archivo = ConfigFile.new()
 	archivo.set_value("niveles", "desbloqueado", nivel_desbloqueado)
+	archivo.set_value("niveles", "desbloqueado_coop", nivel_coop_desbloqueado)
 	archivo.save(ARCHIVO_PROGRESO)
 
 # --- LÓGICA DE GENERACIÓN ---
@@ -89,6 +133,7 @@ func _guardar_progreso() -> void:
 func iniciar_nivel(items_necesarios: Array[ItemData], tiempo_asignado: float) -> void:
 	target_list.clear()
 	collected_items.clear()
+	gondolas_coop.clear() # (modo 2 jugadores) ningún minijuego abierto de antes
 	
 	# Usamos EXACTAMENTE la lista que nos pasó el nivel
 	# Usamos duplicate() por seguridad para no modificar el archivo original
@@ -149,7 +194,11 @@ signal start_qte_ui # Le avisa al Main que muestre el minijuego
 
 signal qte_failed # NUEVA SEÑAL: Avisará que perdimos
 
-func request_qte(gondola: Interactable) -> void:
+func request_qte(gondola: Interactable, quien: Node = null) -> void:
+	# NUEVO (modo 2 jugadores): cada jugador juega su propio minijuego
+	if quien != null and "prefijo_acciones" in quien and quien.prefijo_acciones != "":
+		_pedir_qte_jugador(gondola, quien.prefijo_acciones)
+		return
 	# NUEVO CANDADO: Si ya estamos jugando un minijuego (gondola_actual tiene algo), 
 	# rechazamos cualquier otra petición de inmediato.
 	if gondola_actual != null: 
@@ -158,22 +207,8 @@ func request_qte(gondola: Interactable) -> void:
 	# Si pasamos el candado, registramos esta góndola
 	gondola_actual = gondola
 	
-	# ¿La góndola ya tiene un minijuego guardado en su memoria?
-	if gondola_actual.minijuego_guardado == "":
-		
-		# Tiramos un dado de 5 caras (del 0 al 4)
-		var dado = randi() % 5
-		
-		if dado == 0:
-			gondola_actual.minijuego_guardado = "barrita"
-		elif dado == 1:
-			gondola_actual.minijuego_guardado = "colores"
-		elif dado == 2:
-			gondola_actual.minijuego_guardado = "mashing"
-		elif dado == 3:
-			gondola_actual.minijuego_guardado = "caida"
-		else:
-			gondola_actual.minijuego_guardado = "tinta"
+	# ¿La góndola ya tiene un minijuego guardado en su memoria? (si no, se sortea)
+	_elegir_minijuego(gondola_actual)
 			
 	# Ahora leemos la memoria y abrimos el correcto
 	if gondola_actual.minijuego_guardado == "barrita":
@@ -191,6 +226,59 @@ func request_qte(gondola: Interactable) -> void:
 	elif gondola_actual.minijuego_guardado == "tinta":
 		print("Abriendo el Truco del Color...")
 		start_qte_tinta.emit()
+
+# Tira un dado de 5 caras y la góndola se acuerda qué minijuego le tocó
+func _elegir_minijuego(gondola: Interactable) -> void:
+	if gondola.minijuego_guardado != "": return
+	var dado = randi() % 5
+	if dado == 0:
+		gondola.minijuego_guardado = "barrita"
+	elif dado == 1:
+		gondola.minijuego_guardado = "colores"
+	elif dado == 2:
+		gondola.minijuego_guardado = "mashing"
+	elif dado == 3:
+		gondola.minijuego_guardado = "caida"
+	else:
+		gondola.minijuego_guardado = "tinta"
+
+# =====================================================================
+# MINIJUEGOS EN EL MODO 2 JUGADORES
+# =====================================================================
+# Cada jugador tiene el suyo, en su mitad de la pantalla y con sus botones.
+# Mientras uno juega, el otro se puede seguir moviendo (y hasta jugar otro minijuego).
+signal start_qte_jugador(prefijo: String, tipo: String) # La interfaz abre ese minijuego en la mitad de ese jugador
+signal qte_cancelado_jugador(prefijo: String)           # La interfaz cierra el minijuego de ese jugador
+var gondolas_coop: Dictionary = {} # "p1_" / "p2_" -> la góndola que está jugando cada uno
+var quien_agarro: String = ""      # Mientras se entrega un producto: qué jugador lo agarró (para que solo ese haga la animación)
+
+func _pedir_qte_jugador(gondola: Interactable, p: String) -> void:
+	if gondolas_coop.has(p): return                # Ese jugador ya está con un minijuego
+	if gondolas_coop.values().has(gondola): return # Esa góndola la está jugando el otro
+	gondolas_coop[p] = gondola
+	_elegir_minijuego(gondola)
+	start_qte_jugador.emit(p, gondola.minijuego_guardado)
+
+func resolve_qte_jugador(p: String, success: bool) -> void:
+	var gondola: Interactable = gondolas_coop.get(p)
+	gondolas_coop.erase(p)
+	if gondola == null or not is_instance_valid(gondola): return
+	if success:
+		quien_agarro = p
+		gondola.succesful_interaction()
+		quien_agarro = ""
+	else:
+		gondola.failed_interaction()
+		qte_failed.emit()
+
+# Se fue de la góndola en medio del minijuego: se cierra y la góndola se bloquea (igual que en el de un jugador)
+func cancelar_qte_jugador(p: String) -> void:
+	if not gondolas_coop.has(p): return
+	var gondola: Interactable = gondolas_coop[p]
+	gondolas_coop.erase(p)
+	qte_cancelado_jugador.emit(p)
+	if gondola and is_instance_valid(gondola):
+		gondola.failed_interaction()
 
 func resolve_qte(success: bool) -> void:
 	# GUARDIA DE SEGURIDAD (Evita el crash rojo por si acaso)
@@ -231,6 +319,12 @@ func cancelar_qte() -> void:
 	if gondola_actual != null:
 		gondola_actual.failed_interaction()
 		
+	# NUEVO (modo 2 jugadores): también los minijuegos de cada jugador
+	for p in gondolas_coop.keys():
+		var g: Interactable = gondolas_coop[p]
+		if g and is_instance_valid(g): g.failed_interaction()
+	gondolas_coop.clear()
+
 	# Limpiamos todo
 	gondola_actual = null
 

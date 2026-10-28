@@ -2,6 +2,8 @@ extends TextureRect
 ## Este script maneja la interfaz: la franja de arriba, el cartel "NIVEL X",
 ## los minijuegos y la pantalla de resultados.
 ## (Está puesto en el nodo "Libreta" de juego.tscn; la libreta vieja ahora queda invisible)
+## Es la MISMA interfaz para los dos modos: juego_coop.tscn hereda de juego.tscn y le suma
+## la pantalla dividida (nodo "PantallaDividida"). Si ese nodo está, se juegan los niveles del modo 2 jugadores.
 
 @onready var lista_visual: GridContainer = $ListaVisual
 @onready var pantalla_resultados: ColorRect = %PantallaResultados
@@ -16,15 +18,24 @@ extends TextureRect
 const HudFranja = preload("res://scripts/hud_franja.gd")
 var hud: HudFranja
 
+# NUEVO (modo 2 jugadores): la pantalla partida al medio. Si no está, es el modo de un jugador.
+@onready var pantalla_dividida: Node = get_node_or_null("%PantallaDividida")
+var es_cooperativo: bool = false
+const RUTA_SELECCION_NIVELES_COOP: String = "res://scenes/ui/seleccion_niveles_coop.tscn"
+
 func _ready() -> void:
+	es_cooperativo = pantalla_dividida != null
 	# NUEVO: Arrancamos en el nivel que se eligió en la pantalla de niveles
-	nivel_actual = clampi(GameManager.nivel_elegido, 0, GameManager.RUTAS_NIVELES.size() - 1)
+	nivel_actual = clampi(_nivel_elegido(), 0, _rutas().size() - 1)
 	
 	# NUEVO: Los botones de la pantalla de resultados se recorren con el joystick
 	for boton in [boton_siguiente, boton_niveles, boton_menu]:
 		boton.gui_input.connect(_mover_entre_botones)
 		_pintar_boton(boton) # Amarillo con letra y borde naranja
-	boton_siguiente.get_parent().add_theme_constant_override("separation", 6)
+	boton_siguiente.get_parent().add_theme_constant_override("separation", 10)
+	_crear_titulo_dibujado() # NUEVO: el título de ganar/perder con letras de colores
+	_subir_pantalla_resultados.call_deferred() # NUEVO: más oscura y por encima de la franja de arriba (diferido: el padre todavía se está armando)
+	_crear_fundido() # NUEVO: para el fundido a negro al salir de la pantalla de resultados
 	
 	# NUEVO: La libreta y el reloj viejos se esconden: ahora todo eso está en la franja
 	libreta.texture = null
@@ -33,6 +44,7 @@ func _ready() -> void:
 	
 	# NUEVO: Armamos la franja de arriba
 	hud = HudFranja.new()
+	hud.ticket_al_medio = es_cooperativo # En el modo 2 jugadores, el ticket va en el medio
 	add_child(hud)
 	
 	# NUEVO: Armamos la pantalla negra con el cartel "NIVEL X"
@@ -81,6 +93,10 @@ func _ready() -> void:
 	# y eso dispara _on_lista_generada (cartel "NIVEL X", ticket, etc.)
 	_cargar_nivel()
 
+	# NUEVO (modo 2 jugadores): un juego de minijuegos para cada mitad de la pantalla
+	if es_cooperativo:
+		_armar_minijuegos_por_jugador.call_deferred() # (diferido: la interfaz todavía se está armando)
+
 # --- CADA VEZ QUE EMPIEZA UN NIVEL ---
 # (La franja se encarga sola de dibujar la lista en el ticket)
 func _on_lista_generada(_target_list: Array[ItemData]) -> void:
@@ -120,13 +136,22 @@ func mostrar_resultados(mensaje: String, gano: bool) -> void:
 
 	# BUGFIX: Recordamos si ganó o perdió, y el botón cambia de texto según eso
 	ultimo_resultado_gano = gano
+	# NUEVO: el título en letras de colores (verde si ganaste, rojo si perdiste)
+	var ruta_titulo: String = RUTA_TITULO_GANASTE if gano else RUTA_TITULO_PERDISTE
+	if ResourceLoader.exists(ruta_titulo):
+		titulo_dibujado.texture = load(ruta_titulo)
+		titulo_dibujado.show()
+		titulo_resultado.hide()
+	else:
+		titulo_dibujado.hide()
+		titulo_resultado.show()
 	if gano:
 		boton_siguiente.text = "SIGUIENTE NIVEL"
 	else:
 		boton_siguiente.text = "REINTENTAR"
 
 	# NUEVO: Si ganó el último nivel, no hay "siguiente": queda elegir otro nivel o volver al menú
-	var era_el_ultimo = gano and nivel_actual >= GameManager.RUTAS_NIVELES.size() - 1
+	var era_el_ultimo = gano and nivel_actual >= _rutas().size() - 1
 	boton_siguiente.visible = not era_el_ultimo
 
 	pantalla_resultados.show()
@@ -142,21 +167,33 @@ const BOTON_BORDE: Color = Color8(232, 96, 8)
 const BOTON_LETRA: Color = Color8(214, 78, 6)
 const BOTON_ILUMINADO: Color = Color(1.18, 1.18, 1.18) # Cuánto se ilumina el botón elegido
 
+const BOTON_ANCHO: float = 280.0  # Tamaño de los botones (como las tarjetas de la pantalla de niveles)
+const BOTON_ALTO: float = 40.0
+const BOTON_TAMANO_LETRA: int = 32
+const BOTON_BOTE: float = 2.0     # Cuántos pixeles sube y baja el botón elegido
+const BOTON_REDONDEO: int = 10    # Qué tan redondeadas son las esquinas (más grande = más redondo)
+
 func _pintar_boton(boton: Button) -> void:
+	# Mismo estilo que las tarjetas de la pantalla de niveles: esquinas redondeadas
+	# y una "base" más gruesa abajo, para que parezca un botón de verdad
 	var normal = StyleBoxFlat.new()
 	normal.bg_color = BOTON_AMARILLO
 	normal.set_border_width_all(2)
-	normal.border_width_bottom = 4
+	normal.border_width_bottom = 5
 	normal.border_color = BOTON_BORDE
-	normal.set_corner_radius_all(3)
+	normal.set_corner_radius_all(BOTON_REDONDEO)
 	normal.anti_aliasing = false
 	normal.content_margin_left = 12
 	normal.content_margin_right = 12
-	normal.content_margin_top = 3
-	normal.content_margin_bottom = 5
+	normal.content_margin_top = 0
+	normal.content_margin_bottom = 4
+	# Apretado: se hunde (la base se achica y la letra baja un poquito)
 	var apretado = normal.duplicate()
 	apretado.bg_color = BOTON_AMARILLO_APRETADO
-	# El elegido no lleva borde extra: se ilumina un poco todo el botón (ver abajo)
+	apretado.border_width_bottom = 3
+	apretado.content_margin_top = 2
+	apretado.content_margin_bottom = 2
+	# El elegido no lleva borde extra: se ilumina y flota un poquito (ver abajo)
 	var foco = StyleBoxEmpty.new()
 	boton.add_theme_stylebox_override("normal", normal)
 	boton.add_theme_stylebox_override("hover", normal)
@@ -165,10 +202,99 @@ func _pintar_boton(boton: Button) -> void:
 	boton.add_theme_stylebox_override("focus", foco)
 	for clave in ["font_color", "font_hover_color", "font_focus_color", "font_pressed_color", "font_hover_pressed_color"]:
 		boton.add_theme_color_override(clave, BOTON_LETRA)
-	boton.add_theme_font_size_override("font_size", 16)
-	# Al quedar elegido se ilumina (el amarillo y el naranja se aclaran un toque)
-	boton.focus_entered.connect(func(): boton.modulate = BOTON_ILUMINADO)
-	boton.focus_exited.connect(func(): boton.modulate = Color.WHITE)
+	boton.add_theme_font_size_override("font_size", BOTON_TAMANO_LETRA)
+	boton.custom_minimum_size = Vector2(BOTON_ANCHO, BOTON_ALTO)
+	boton.focus_entered.connect(_boton_elegido.bind(boton))
+	boton.focus_exited.connect(_boton_soltado.bind(boton))
+
+# Al quedar elegido se ilumina y sube y baja de a un pixel (como las tarjetas de niveles)
+func _boton_elegido(boton: Button) -> void:
+	boton.modulate = BOTON_ILUMINADO
+	_frenar_bote(boton)
+	# Esperamos a que la caja de botones los acomode (si no, tomaríamos una altura vieja)
+	await get_tree().process_frame
+	if not boton.has_focus(): return
+	_frenar_bote(boton)
+	var y_base: float = boton.position.y
+	boton.set_meta("y_base", y_base)
+	var bote = boton.create_tween().set_loops()
+	bote.tween_method(func(v: float): boton.position.y = y_base - round(v), 0.0, BOTON_BOTE, 0.35)
+	bote.tween_method(func(v: float): boton.position.y = y_base - round(v), BOTON_BOTE, 0.0, 0.35)
+	boton.set_meta("bote", bote)
+
+func _boton_soltado(boton: Button) -> void:
+	boton.modulate = Color.WHITE
+	_frenar_bote(boton)
+
+func _frenar_bote(boton: Button) -> void:
+	if boton.has_meta("bote"):
+		var bote: Tween = boton.get_meta("bote")
+		if bote and bote.is_valid(): bote.kill()
+		boton.remove_meta("bote")
+	if boton.has_meta("y_base"):
+		boton.position.y = boton.get_meta("y_base")
+
+# --- FONDO DE LA PANTALLA DE GANAR / PERDER ---
+# Más oscuro que el de los minijuegos, y tapa también la franja de arriba (la franja está en la capa 5)
+const COLOR_FONDO_RESULTADOS: Color = Color(0.02, 0.0, 0.04, 0.88)
+const CAPA_RESULTADOS: int = 6 # Arriba de la franja (5), abajo del cartel "NIVEL X" (10) y del fundido (11)
+
+func _subir_pantalla_resultados() -> void:
+	var capa = CanvasLayer.new()
+	capa.layer = CAPA_RESULTADOS
+	add_child(capa)
+	pantalla_resultados.reparent(capa, false)
+	pantalla_resultados.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	pantalla_resultados.color = COLOR_FONDO_RESULTADOS
+
+# --- TÍTULO DE GANAR / PERDER (dibujado, como los carteles "NIVEL X") ---
+const RUTA_TITULO_GANASTE: String = "res://assets/ui/titulo_ganaste.png"
+const RUTA_TITULO_PERDISTE: String = "res://assets/ui/titulo_perdiste.png"
+var titulo_dibujado: TextureRect
+
+func _crear_titulo_dibujado() -> void:
+	titulo_dibujado = TextureRect.new()
+	titulo_dibujado.stretch_mode = TextureRect.STRETCH_KEEP_CENTERED
+	titulo_dibujado.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	titulo_dibujado.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var caja: Control = titulo_resultado.get_parent()
+	caja.add_child(titulo_dibujado)
+	caja.move_child(titulo_dibujado, titulo_resultado.get_index())
+	# El texto viejo queda centrado por si falta el dibujo
+	titulo_resultado.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# Los botones no se estiran si el título es más ancho: quedan centrados
+	for boton in [boton_siguiente, boton_niveles, boton_menu]:
+		boton.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+
+# --- FUNDIDO A NEGRO al salir de la pantalla de resultados ---
+const TIEMPO_FUNDIDO: float = 0.35
+var fundido: ColorRect
+var fundiendo: bool = false
+
+func _crear_fundido() -> void:
+	var capa = CanvasLayer.new()
+	capa.layer = 11 # Por encima de todo, hasta del cartel "NIVEL X"
+	capa.process_mode = Node.PROCESS_MODE_ALWAYS # Anda aunque el juego esté en pausa
+	add_child(capa)
+	fundido = ColorRect.new()
+	fundido.color = Color(0, 0, 0, 0)
+	fundido.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	capa.add_child(fundido)
+	fundido.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+
+# Oscurece la pantalla, hace lo que se pidió y (si seguimos en el juego) vuelve a aclarar
+func _fundir_y(accion: Callable) -> void:
+	if fundiendo: return
+	fundiendo = true
+	var t = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	t.tween_property(fundido, "color:a", 1.0, TIEMPO_FUNDIDO)
+	await t.finished
+	accion.call()
+	if not is_inside_tree(): return # Se cambió de escena
+	# El nivel nuevo arranca con su cartel "NIVEL X" en negro, así que sacamos el fundido de golpe
+	await get_tree().process_frame
+	fundido.color.a = 0.0
+	fundiendo = false
 
 # NUEVO: Arriba/abajo con el joystick (o WASD) para pasar de un botón a otro
 func _mover_entre_botones(event: InputEvent) -> void:
@@ -190,6 +316,9 @@ var ultimo_resultado_gano: bool = false
 const RUTA_SELECCION_NIVELES: String = "res://scenes/ui/seleccion_niveles.tscn"
 
 func _on_boton_siguiente_pressed() -> void:
+	_fundir_y(_siguiente_nivel)
+
+func _siguiente_nivel() -> void:
 	get_tree().paused = false
 	pantalla_resultados.hide()
 
@@ -197,14 +326,14 @@ func _on_boton_siguiente_pressed() -> void:
 	if ultimo_resultado_gano:
 		nivel_actual += 1 # Suma 1. Así que del 0 pasará al 1.
 
-	if nivel_actual < GameManager.RUTAS_NIVELES.size():
-		GameManager.nivel_elegido = nivel_actual
+	if nivel_actual < _rutas().size():
+		_guardar_nivel_elegido(nivel_actual)
 		# Si es un reintento, lo ponemos exactamente donde estaba el anterior
 		_cargar_nivel(not ultimo_resultado_gano)
 		_musica_del_nivel() # Cada nivel con su canción
 	else:
 		print("¡JUEGO COMPLETADO!")
-		get_tree().change_scene_to_file(RUTA_SELECCION_NIVELES)
+		get_tree().change_scene_to_file(_pantalla_de_niveles())
 
 # NUEVO: Saca el nivel que esté puesto y pone el de nivel_actual
 func _cargar_nivel(misma_posicion: bool = false) -> void:
@@ -215,31 +344,119 @@ func _cargar_nivel(misma_posicion: bool = false) -> void:
 		if hijo is Node2D:
 			posicion_nivel_anterior = hijo.position
 		hijo.queue_free()
-	var ruta = GameManager.RUTAS_NIVELES[nivel_actual]
+	var ruta = _rutas()[nivel_actual]
 	if not ResourceLoader.exists(ruta):
 		push_error("No existe el nivel: " + ruta)
 		return
 	var nuevo_nivel = load(ruta).instantiate()
+	if es_cooperativo:
+		# Modo 2 jugadores: el nivel va adentro de la pantalla partida (ella saca el anterior)
+		pantalla_dividida.poner_nivel(nuevo_nivel, misma_posicion)
+		return
 	if misma_posicion:
 		nuevo_nivel.position = posicion_nivel_anterior
 	contenedor.add_child(nuevo_nivel)
 
 # NUEVO: Botón "SELECCIÓN DE NIVELES" de la pantalla de resultados
 func _on_boton_niveles_pressed() -> void:
+	_fundir_y(_ir_a_niveles)
+
+func _ir_a_niveles() -> void:
 	get_tree().paused = false
 	# La pantalla de niveles arranca parada en el que sigue (si ganó) o en este (si perdió)
-	if ultimo_resultado_gano and nivel_actual + 1 < GameManager.RUTAS_NIVELES.size():
-		GameManager.nivel_elegido = nivel_actual + 1
+	if ultimo_resultado_gano and nivel_actual + 1 < _rutas().size():
+		_guardar_nivel_elegido(nivel_actual + 1)
 	else:
-		GameManager.nivel_elegido = nivel_actual
-	get_tree().change_scene_to_file(RUTA_SELECCION_NIVELES)
+		_guardar_nivel_elegido(nivel_actual)
+	get_tree().change_scene_to_file(_pantalla_de_niveles())
+
+# --- MINIJUEGOS EN EL MODO 2 JUGADORES ---
+# Cada jugador tiene sus propios minijuegos, que se abren solo en su mitad de la pantalla
+# (los mismos de siempre, con sus botones). Mientras tanto el otro se puede seguir moviendo.
+const ESCENAS_MINIJUEGOS: Dictionary = {
+	"barrita": "res://scenes/ui/qte_barrita.tscn",
+	"colores": "res://scenes/ui/qte_colores.tscn",
+	"mashing": "res://scenes/ui/qte_machaque.tscn",
+	"caida": "res://scenes/ui/qte_caida.tscn",
+	"tinta": "res://scenes/ui/qte_tinta.tscn",
+}
+const ANCHO_RAYITA_MEDIO: int = 2 # La rayita negra que separa las dos mitades
+var minijuegos_coop: Dictionary = {} # "p1_" / "p2_" -> { "barrita": nodo, "colores": nodo, ... }
+
+func _armar_minijuegos_por_jugador() -> void:
+	var pantalla: Vector2 = get_viewport().get_visible_rect().size
+	var ancho_mitad: float = floor((pantalla.x - ANCHO_RAYITA_MEDIO) / 2.0)
+	var capa: Control = %QTE_Minigame.get_parent() # InterfazFlotante (donde están los minijuegos de siempre)
+	for p in ["p1_", "p2_"]:
+		var mitad = Control.new()
+		mitad.name = "Minijuegos" + p.to_upper().trim_suffix("_")
+		mitad.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		mitad.position = Vector2(0 if p == "p1_" else ancho_mitad + ANCHO_RAYITA_MEDIO, 0)
+		mitad.size = Vector2(ancho_mitad, pantalla.y)
+		capa.add_child(mitad)
+		minijuegos_coop[p] = {}
+		for tipo in ESCENAS_MINIJUEGOS:
+			var mini: Control = load(ESCENAS_MINIJUEGOS[tipo]).instantiate()
+			mini.prefijo = p
+			mini.visible = false
+			mini.set_meta("camara_sacudir", pantalla_dividida.camara_de(p))
+			mitad.add_child(mini)
+			mini.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			# Lo que está puesto a mano (sin anclas, ej. el texto de ayuda) se corre para quedar
+			# en el mismo lugar respecto del cartel, ahora que la pantalla es la mitad de ancha
+			for parte in mini.get_children():
+				if parte is Control and parte.anchor_left == 0.0 and parte.anchor_right == 0.0:
+					parte.position.x += round((ancho_mitad - pantalla.x) / 2.0)
+			mini.qte_finished.connect(_minijuego_coop_terminado.bind(p))
+			minijuegos_coop[p][tipo] = mini
+	GameManager.start_qte_jugador.connect(_abrir_minijuego_coop)
+	GameManager.qte_cancelado_jugador.connect(_cerrar_minijuegos_coop)
+	GameManager.qte_cancelled.connect(_cerrar_todos_los_minijuegos_coop)
+
+func _abrir_minijuego_coop(p: String, tipo: String) -> void:
+	if minijuegos_coop.has(p) and minijuegos_coop[p].has(tipo):
+		minijuegos_coop[p][tipo].start_qte()
+
+func _minijuego_coop_terminado(success: bool, p: String) -> void:
+	GameManager.resolve_qte_jugador(p, success)
+
+func _cerrar_todos_los_minijuegos_coop() -> void:
+	for p in minijuegos_coop:
+		_cerrar_minijuegos_coop(p)
+
+func _cerrar_minijuegos_coop(p: String) -> void:
+	if not minijuegos_coop.has(p): return
+	for mini in minijuegos_coop[p].values():
+		mini.hide()
+		mini.is_active = false
+
+# --- LO QUE CAMBIA ENTRE EL MODO DE 1 JUGADOR Y EL DE 2 ---
+func _rutas() -> Array[String]:
+	return GameManager.RUTAS_NIVELES_COOP if es_cooperativo else GameManager.RUTAS_NIVELES
+
+func _nivel_elegido() -> int:
+	return GameManager.nivel_coop_elegido if es_cooperativo else GameManager.nivel_elegido
+
+func _guardar_nivel_elegido(indice: int) -> void:
+	if es_cooperativo: GameManager.nivel_coop_elegido = indice
+	else: GameManager.nivel_elegido = indice
+
+func _pantalla_de_niveles() -> String:
+	return RUTA_SELECCION_NIVELES_COOP if es_cooperativo else RUTA_SELECCION_NIVELES
 
 func _on_boton_menu_pressed() -> void:
-	get_tree().paused = false 
+	_fundir_y(_ir_al_menu)
+
+func _ir_al_menu() -> void:
+	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/ui/menu_principal.tscn")
 
 func _on_victoria() -> void:
-	GameManager.desbloquear_nivel(nivel_actual + 1) # NUEVO: Se abre el nivel que sigue
+	# NUEVO: Se abre el nivel que sigue
+	if es_cooperativo:
+		GameManager.desbloquear_nivel_coop(nivel_actual + 1)
+	else:
+		GameManager.desbloquear_nivel(nivel_actual + 1)
 	mostrar_resultados("¡NIVEL COMPLETADO!", true)
 
 func _on_game_over() -> void:

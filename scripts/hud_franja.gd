@@ -47,6 +47,9 @@ var tween_sello: Tween
 var material_gris: ShaderMaterial
 var tiempo_mostrado: int = -1
 var tween_alerta: Tween
+# Modo 2 jugadores: el ticket cuelga en el medio de la pantalla (así no le tapa más a uno que al otro).
+# El rótulo "LISTA" queda donde siempre. Lo prende gestor_interfaz.gd.
+var ticket_al_medio: bool = false
 
 func _ready() -> void:
 	layer = 5 # Por encima del juego y la interfaz, por debajo del cartel "NIVEL X" (capa 10)
@@ -137,6 +140,8 @@ func _armar_ticket(lista: Array[ItemData]) -> void:
 	ancho_ticket = maxi(ancho_productos, _ancho_minimo_ticket())
 	var primer_icono_x: int = (int(ancho_ticket) - ancho_productos) / 2 + 8 # Productos centrados
 	var x = ancho_pantalla - MARGEN - ancho_ticket
+	if ticket_al_medio:
+		x = round((ancho_pantalla - ancho_ticket) / 2.0)
 	ventana_ticket.position = Vector2(x, ALTO_FRANJA + 2)
 	ventana_ticket.size = Vector2(ancho_ticket, ALTO_TICKET + 2)
 	ticket.size = Vector2(ancho_ticket, ALTO_TICKET)

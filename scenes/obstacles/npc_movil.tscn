@@ -13,14 +13,13 @@ tiempo_espera = 0.5
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1116084462]
 unique_name_in_owner = true
-position = Vector2(0, -8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1028322893]
-position = Vector2(0, 18.5)
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_d47hv")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Hitbox" unique_id=1225584199]
-position = Vector2(0, 8)
+position = Vector2(0, -12)
 sprite_frames = ExtResource("90_empleado")
 animation = &"idle_down"
 autoplay = "idle_down"

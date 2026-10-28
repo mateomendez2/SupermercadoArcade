@@ -30,6 +30,8 @@ const RADIO_GLOBO: float = 14.0
 # En el borde de la pantalla el globito va SIN piquito (si no, parece que te apunta a vos)
 const GLOBO_BORDE: Texture2D = preload("res://assets/ui/globo_pagar_borde.png")
 var globo_con_piquito: Texture2D
+# El globo blanco con borde negro de atrás de la billetera. false = solo se ve la billetera
+const MOSTRAR_GLOBO: bool = false
 # El "vaivén" de la flecha hacia adelante y atrás para que llame la atención
 @export var distancia_vaiven: float = 2.5
 @export var velocidad_flote: float = 8.0
@@ -83,8 +85,8 @@ func _process(delta: float) -> void:
 		# ¡Llegó! Escondemos el globito (la zona ya está prendida desde que completó la lista)
 		sprite.hide(); billetera.hide()
 	else:
-		# Todavía lejos: mostramos el globito
-		sprite.show(); billetera.show()
+		# Todavía lejos: mostramos la billetera (el globo blanco de atrás está apagado, ver MOSTRAR_GLOBO)
+		sprite.visible = MOSTRAR_GLOBO; billetera.show()
 		_ubicar_flecha(destino, delta)
 
 # --- INDICADOR EN EL BORDE DE LA PANTALLA ---

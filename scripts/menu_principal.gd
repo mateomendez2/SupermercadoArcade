@@ -31,10 +31,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Si apretó la "E" o cualquiera de los botones de Acción del Joystick
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
 		
-		# Consumimos el botón para que no haga "eco" en la pantalla de niveles
+		# Consumimos el botón para que no haga "eco" en la pantalla siguiente
 		get_viewport().set_input_as_handled()
 		
-		# Pasamos a la pantalla de niveles (la música sigue desde donde iba)
+		# Pasamos a la pantalla de elegir modo (1 o 2 jugadores). La música sigue desde donde iba
 		if musica:
 			GameManager.posicion_musica_menu = musica.get_playback_position()
-		get_tree().change_scene_to_file("res://scenes/ui/seleccion_niveles.tscn")
+		get_tree().change_scene_to_file("res://scenes/ui/seleccion_modo.tscn")
