@@ -3,9 +3,13 @@ extends Control
 @onready var texto_comenzar: Label = $TextoComenzar
 
 # --- MÚSICA DEL MENÚ ---
-const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
-const VOLUMEN_MUSICA_MENU: float = -8.0
 var musica: AudioStreamPlayer
+# --- AL APRETAR: sonido de "elegir" y fundido a negro (como en las otras pantallas) ---
+var SONIDO_ELEGIR: AudioStream = load("res://assets/audio/MenuElegir.wav")
+const TIEMPO_FUNDIDO: float = 0.3
+var empezando: bool = false
+var sonido: AudioStreamPlayer
+var fundido: ColorRect
 
 func _ready() -> void:
 	# --- EFECTO VISUAL: TEXTO PARPADEANTE (Blinking) ---
@@ -15,16 +19,17 @@ func _ready() -> void:
 	parpadeo.tween_property(texto_comenzar, "modulate:a", 0.0, 0.5)
 	parpadeo.tween_property(texto_comenzar, "modulate:a", 1.0, 0.5)
 
-	# Música del menú en loop (se corta sola al entrar al juego, porque se cambia de escena)
-	if ResourceLoader.exists(RUTA_MUSICA_MENU):
-		musica = AudioStreamPlayer.new()
-		var cancion: AudioStream = load(RUTA_MUSICA_MENU)
-		cancion.loop = true
-		musica.stream = cancion
-		musica.volume_db = VOLUMEN_MUSICA_MENU
-		add_child(musica)
-		musica.play(GameManager.posicion_musica_menu) # Sigue desde donde iba (si volvemos de la pantalla de niveles)
-		GameManager.posicion_musica_menu = 0.0
+	# Música del menú en loop: es una sola para todas las pantallas del menú (vive en GameManager),
+	# así sigue de corrido al pasar a las otras pantallas. Se apaga sola cuando arranca un nivel.
+	musica = GameManager.musica_menu()
+
+	sonido = AudioStreamPlayer.new()
+	add_child(sonido)
+	fundido = ColorRect.new()
+	fundido.color = Color(0, 0, 0, 0)
+	fundido.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(fundido)
+	fundido.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 # --- ESCUCHAMOS EL TABLERO ARCADE ---
 func _unhandled_input(event: InputEvent) -> void:
@@ -33,8 +38,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		# Consumimos el botón para que no haga "eco" en la pantalla siguiente
 		get_viewport().set_input_as_handled()
-		
-		# Pasamos a la pantalla de elegir modo (1 o 2 jugadores). La música sigue desde donde iba
-		if musica:
-			GameManager.posicion_musica_menu = musica.get_playback_position()
+		if empezando: return
+		empezando = true
+		sonido.stream = SONIDO_ELEGIR
+		sonido.play()
+		# Fundido a negro y pasamos a la pantalla de elegir modo (1 o 2 jugadores). La música sigue de corrido
+		var t = create_tween()
+		t.tween_property(fundido, "color:a", 1.0, TIEMPO_FUNDIDO)
+		await t.finished
 		get_tree().change_scene_to_file("res://scenes/ui/seleccion_modo.tscn")

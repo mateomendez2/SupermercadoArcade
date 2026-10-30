@@ -23,6 +23,9 @@ const RUTAS_VARIANTES: Array[String] = [
 @onready var posicion_inicial: Vector2 = hitbox.position
 var ultima_posicion: Vector2
 var last_direction: Vector2 = Vector2(1, 0) # Memoria de hacia dónde mira
+var patrulla_tween: Tween
+var t_esperando_guardia: float = 0.0 # Modo 2 jugadores: si tiene al guardia adelante, lo deja pasar
+const ESPERA_MAXIMA_GUARDIA: float = 2.0
 
 func _ready() -> void:
 	_aplicar_variante()
@@ -32,7 +35,7 @@ func _ready() -> void:
 	hitbox.body_entered.connect(_on_hitbox_body_entered)
 
 func iniciar_patrullaje() -> void:
-	var patrulla_tween = create_tween().set_loops()
+	patrulla_tween = create_tween().set_loops()
 	var marcadores = ruta.get_children() 
 	
 	if marcadores.size() == 0:
@@ -70,6 +73,7 @@ func iniciar_patrullaje() -> void:
 # --- NUEVO: CEREBRO DE ANIMACIÓN ---
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	_dar_paso_al_guardia(delta)
 	# Medimos cuánto se movió en este microsegundo
 	var movimiento = hitbox.position - ultima_posicion
 	ultima_posicion = hitbox.position # Guardamos la posición para el siguiente cálculo
@@ -79,6 +83,22 @@ func _physics_process(delta: float) -> void:
 		update_animation(true)
 	else: # Si el Tween está en "tiempo_espera" (quieto)
 		update_animation(false)
+
+# Modo 2 jugadores: si el guardia está justo adelante, se queda quieto hasta que pase
+# (si tarda mucho, sigue igual, así nunca se quedan los dos esperándose)
+func _dar_paso_al_guardia(delta: float) -> void:
+	if patrulla_tween == null or not patrulla_tween.is_valid(): return
+	var guardia = get_tree().get_first_node_in_group("Guardia")
+	var bloquea: bool = false
+	if guardia:
+		var rel: Vector2 = guardia.global_position - hitbox.global_position
+		bloquea = rel.length() < 18.0 and rel.normalized().dot(last_direction.normalized()) > 0.5
+	if bloquea and t_esperando_guardia < ESPERA_MAXIMA_GUARDIA:
+		t_esperando_guardia += delta
+		if patrulla_tween.is_running(): patrulla_tween.pause()
+	else:
+		if not bloquea: t_esperando_guardia = 0.0
+		if not patrulla_tween.is_running(): patrulla_tween.play()
 
 func update_animation(is_moving: bool) -> void:
 	# Comprobamos si se mueve más en horizontal o en vertical
@@ -104,10 +124,10 @@ func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body is Player:
 		# BUGFIX: Si el jugador todavía está parpadeando (castigado), es invulnerable.
 		# Antes igual le sacábamos otro ítem en cada choque.
-		if body.is_penalized:
+		if body.is_penalized or body.atrapado: # (atrapado: el guardia lo lleva a la puerta)
 			return
 
 		# ¡EL CAMBIO MÁGICO! Le mandamos hitbox.global_position
 		body.apply_penalty(5.0, hitbox.global_position)
 		
-		GameManager.perder_ultimo_item()
+		GameManager.perder_ultimo_item(body.prefijo_acciones)

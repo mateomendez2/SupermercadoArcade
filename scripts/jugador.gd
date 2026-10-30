@@ -15,6 +15,8 @@ class_name Player
 @onready var default_acceleration: float = acceleration
 
 var is_frozen: bool = false 
+# Modo 2 jugadores: el guardia te agarró y te lleva a la puerta (no te podés mover ni agarrar nada)
+var atrapado: bool = false
 
 # --- SISTEMA DE INTERACCIÓN ---
 var current_interactable: Interactable = null 
@@ -48,7 +50,7 @@ func _ready() -> void:
 			if avatar.has_animation(animacion): anim_sprite.play(animacion)
 
 func _physics_process(delta: float) -> void:
-	if is_frozen:
+	if is_frozen or atrapado:
 		return 
 		
 	move_state(delta)
@@ -113,8 +115,11 @@ func update_animation(is_moving: bool) -> void:
 
 # --- INPUT DE INTERACCIÓN ---
 func _unhandled_input(event: InputEvent) -> void:
-	if is_frozen: return 
+	if is_frozen or atrapado: return 
 	
+	# Modo 2 jugadores: mientras juega su minijuego, sus botones son para el minijuego (no para agarrar otra vez).
+	# Si no, el personaje (que está en su mitad de la pantalla) se "come" la tecla antes que el minijuego.
+	if prefijo_acciones != "" and GameManager.gondolas_coop.has(prefijo_acciones): return
 	if event.is_action_pressed(prefijo_acciones + "interact") and current_interactable != null:
 		get_viewport().set_input_as_handled() 
 		velocity = Vector2.ZERO 
@@ -150,7 +155,7 @@ func set_slippery(is_slippery: bool) -> void:
 func _on_item_recolectado(_item: ItemData) -> void:
 	# Modo 2 jugadores: solo hace la animación el que lo agarró
 	if GameManager.quien_agarro != "" and GameManager.quien_agarro != prefijo_acciones: return
-	sonido_recoger.play()
+	# (El sonido viejo de recoger ya no suena: al ganar el minijuego ya suena su fanfarria)
 	is_frozen = true 
 	
 	if last_direction.x > 0:
@@ -197,16 +202,27 @@ func apply_penalty(duracion: float, pos_enemigo: Vector2 = Vector2.ZERO) -> void
 	anim_sprite.modulate.a = 1.0 
 	is_penalized = false
 
+var perdidos_seguidos: int = 0 # Si se le caen varios juntos, salen para lados distintos
+var ultima_perdida_ms: int = 0
+
 func _animar_perdida_item(item: ItemData) -> void:
+	# Modo 2 jugadores: la animación la hace solo el que lo perdió
+	if GameManager.quien_perdio != prefijo_acciones: return
+	if Time.get_ticks_msec() - ultima_perdida_ms > 500: perdidos_seguidos = 0
+	ultima_perdida_ms = Time.get_ticks_msec()
+	var desvio: float = [-10.0, 12.0, 0.0, -20.0, 22.0][perdidos_seguidos % 5]
+	perdidos_seguidos += 1
 	var sprite_caido = Sprite2D.new()
 	sprite_caido.texture = item.icon
-	
+	sprite_caido.z_index = 20
+	# Va en el nivel (no en la pantalla): así se ve en su lugar también con la pantalla partida
+	get_parent().add_child(sprite_caido)
 	sprite_caido.global_position = global_position
-	get_tree().current_scene.add_child(sprite_caido)
 	
 	var caida_tween = create_tween()
-	caida_tween.tween_property(sprite_caido, "position:y", global_position.y - 40.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	caida_tween.tween_property(sprite_caido, "position:y", global_position.y + 300.0, 0.6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	caida_tween.tween_property(sprite_caido, "global_position:y", global_position.y - 40.0, 0.3).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	caida_tween.parallel().tween_property(sprite_caido, "global_position:x", global_position.x + desvio, 0.9)
+	caida_tween.tween_property(sprite_caido, "global_position:y", global_position.y + 300.0, 0.6).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	
 	await caida_tween.finished
 	sprite_caido.queue_free()

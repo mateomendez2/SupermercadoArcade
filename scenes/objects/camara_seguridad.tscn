@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/camara_seguridad.gd" id="1_cam"]
+[ext_resource type="Texture2D" path="res://assets/camara/parante.png" id="2_poste"]
+[ext_resource type="Texture2D" path="res://assets/camara/camara_prendida.png" id="3_cabeza"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(12, 6)
+
+[node name="CamaraSeguridad" type="Node2D"]
+script = ExtResource("1_cam")
+
+[node name="Parante" type="Sprite2D" parent="."]
+texture = ExtResource("2_poste")
+centered = false
+offset = Vector2(-6, -43)
+
+[node name="Cabeza" type="Sprite2D" parent="."]
+position = Vector2(-8, -51)
+texture = ExtResource("3_cabeza")
+centered = false
+
+[node name="Cuerpo" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cuerpo"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_base")
+
+[node name="Zona1" type="Marker2D" parent="."]
+position = Vector2(-48, 32)
+
+[node name="Zona2" type="Marker2D" parent="."]
+position = Vector2(48, 32)

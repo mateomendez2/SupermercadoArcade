@@ -216,13 +216,20 @@ func _aparecer_caja_cuando_se_pueda(caja: Node2D, cartel: Sprite2D) -> void:
 	if not caja in cajas_viejas or not GameManager.juego_activo:
 		_sacar_cartel(cartel) # Mientras esperaba ya hubo otro cambio: esta caja no va más
 		return
-	if jugador != null and jugador.global_position.distance_to(caja.global_position) < DISTANCIA_LIBRE_CAJA:
+	if _hay_alguien_cerca(caja.global_position):
 		var otra_vez = cartel.create_tween()
 		otra_vez.tween_interval(0.2)
 		otra_vez.tween_callback(_aparecer_caja_cuando_se_pueda.bind(caja, cartel))
 		return
 	_sacar_cartel(cartel)
 	_encender_caja(caja, true)
+
+# ¿Hay algún jugador (o el guardia del modo 2 jugadores) parado donde va la caja?
+func _hay_alguien_cerca(lugar: Vector2) -> bool:
+	for quien in get_tree().get_nodes_in_group("Player") + get_tree().get_nodes_in_group("Guardia"):
+		if is_ancestor_of(quien) and quien.global_position.distance_to(lugar) < DISTANCIA_LIBRE_CAJA:
+			return true
+	return false
 
 # --- LOS GATILLOS (lo que provoca un cambio) ---
 

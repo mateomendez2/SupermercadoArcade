@@ -8,13 +8,14 @@ extends Control
 
 const RUTA_NIVELES: String = "res://scenes/ui/seleccion_niveles.tscn"
 const RUTA_NIVELES_COOP: String = "res://scenes/ui/seleccion_niveles_coop.tscn"
-const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
-const VOLUMEN_MUSICA_MENU: float = -8.0
 const CARPETA_LETRAS: String = "res://assets/ui/modo/"
+const TituloDibujado = preload("res://scripts/titulo_dibujado.gd") # Títulos con letras dibujadas
+
 
 # --- TAMAÑOS (se pueden cambiar desde el Inspector) ---
 @export var tamano_tarjeta: Vector2 = Vector2(236, 168)
 @export var escala_personajes: int = 3 # Qué tan grandes se ven los muñequitos adentro de la tarjeta
+@export var margen_abajo_letras: float = 8.0 # Cuánto separa "COMPRA" / "ROBO" del borde de abajo de la tarjeta
 
 # --- COLORES DE CADA TARJETA ---
 const COLOR_COMPRA: Color = Color8(247, 122, 18)        # Naranja (como las de los niveles)
@@ -54,6 +55,7 @@ func _ready() -> void:
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	_poner_musica()
+	TituloDibujado.poner($Titulo, "res://assets/ui/titulos/elegi_el_modo.png")
 
 	for i in OPCIONES.size():
 		var tarjeta = _crear_tarjeta(i)
@@ -84,7 +86,7 @@ func _crear_tarjeta(indice: int) -> Panel:
 	arriba.position = Vector2(round((tamano_tarjeta.x - arriba.size.x) / 2.0), 10)
 	tarjeta.add_child(arriba)
 	var abajo = _letras(datos["abajo"])
-	abajo.position = Vector2(round((tamano_tarjeta.x - abajo.size.x) / 2.0), tamano_tarjeta.y - abajo.size.y - 12)
+	abajo.position = Vector2(round((tamano_tarjeta.x - abajo.size.x) / 2.0), tamano_tarjeta.y - abajo.size.y - margen_abajo_letras)
 	tarjeta.add_child(abajo)
 
 	# Los muñequitos en el medio
@@ -170,8 +172,6 @@ func _tocado_con_mouse(event: InputEvent, indice: int) -> void:
 func _elegir() -> void:
 	eligiendo = true
 	_tocar(SONIDO_ELEGIR)
-	if musica:
-		GameManager.posicion_musica_menu = musica.get_playback_position() # La música sigue en la pantalla que viene
 	var tarjeta = tarjetas[seleccion]
 	var t = create_tween()
 	t.tween_property(tarjeta, "modulate", Color(1.8, 1.8, 1.8), 0.06)
@@ -208,13 +208,6 @@ func _tocar(sonido_nuevo: AudioStream) -> void:
 	sonido.stream = sonido_nuevo
 	sonido.play()
 
+# La música del menú es una sola para todas las pantallas (vive en GameManager), así no se corta ni se atrasa
 func _poner_musica() -> void:
-	if not ResourceLoader.exists(RUTA_MUSICA_MENU): return
-	musica = AudioStreamPlayer.new()
-	var cancion: AudioStream = load(RUTA_MUSICA_MENU)
-	cancion.loop = true
-	musica.stream = cancion
-	musica.volume_db = VOLUMEN_MUSICA_MENU
-	add_child(musica)
-	musica.play(GameManager.posicion_musica_menu)
-	GameManager.posicion_musica_menu = 0.0
+	musica = GameManager.musica_menu()

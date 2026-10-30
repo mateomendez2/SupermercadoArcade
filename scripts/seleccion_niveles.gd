@@ -11,9 +11,8 @@ extends Control
 const RUTA_JUEGO: String = "res://scenes/ui/juego.tscn"
 const RUTA_PERSONAJE: String = "res://scenes/ui/seleccion_avatar.tscn" # Después de elegir el nivel, se elige con quién jugar
 const RUTA_LADRONES: String = "res://scenes/ui/seleccion_personajes.tscn" # (en el modo 2 jugadores, se eligen los ladrones)
+const RUTA_MODO: String = "res://scenes/ui/seleccion_modo.tscn" # El botón "VOLVER" lleva a elegir el modo
 const RUTA_MENU: String = "res://scenes/ui/menu_principal.tscn"
-const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
-const VOLUMEN_MUSICA_MENU: float = -8.0
 
 @export var cooperativo: bool = false # true = niveles del modo 2 JUGADORES (ROBO)
 
@@ -33,6 +32,8 @@ const BRILLO_TARJETA: Color = Color(1.12, 1.12, 1.12)    # Cuánto se ilumina la
 
 # Las letras de "NIVEL" y los números son dibujitos (misma letra que los carteles "NIVEL X", en chiquito)
 const CARPETA_LETRAS: String = "res://assets/ui/seleccion/"
+const TituloDibujado = preload("res://scripts/titulo_dibujado.gd") # Títulos con letras dibujadas
+
 
 # (Se cargan al abrir la pantalla)
 var TEX_CANDADO: Texture2D = load("res://assets/ui/candado.png")
@@ -51,10 +52,22 @@ var sonido: AudioStreamPlayer
 var musica: AudioStreamPlayer
 var tween_bote: Tween
 
+# --- BOTÓN "VOLVER" (debajo de las tarjetas; vuelve a la pantalla de elegir modo) ---
+# Mismo estilo que los botones de ganaste/perdiste: amarillo con letra y borde naranja.
+# Se llega bajando desde la última fila de tarjetas. Si en la escena hay un nodo "BotonVolver"
+# (un Button), se usa ese (así se puede mover desde el editor); si no, se arma solo.
+@export var boton_volver_y: float = 330.0 # Altura en la pantalla (si se arma solo)
+const VOLVER_ILUMINADO: Color = preload("res://scripts/boton_volver.gd").ILUMINADO
+var boton_volver: Button
+var en_volver: bool = false # true = está elegido el botón "VOLVER" (no una tarjeta)
+var y_volver: float = 0.0
+
 func _ready() -> void:
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	_poner_musica()
+	TituloDibujado.poner($Titulo, "res://assets/ui/titulos/elegi_un_nivel.png")
+	if cooperativo: preload("res://scripts/controles_coop.gd").armar() # Las teclas de cada jugador (el J1 elige con C/V/B)
 
 	# Una tarjeta por nivel
 	for i in _cantidad():
@@ -66,7 +79,9 @@ func _ready() -> void:
 	seleccion = clampi(_nivel_elegido(), 0, _cantidad() - 1)
 	if not _abierto(seleccion):
 		seleccion = 0
+	_armar_boton_volver()
 	await get_tree().process_frame # Los contenedores acomodan las tarjetas
+	y_volver = boton_volver.position.y
 	_marcar_seleccion(false)
 
 	# Entrada con fundido desde negro
@@ -173,6 +188,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	var cantidad = tarjetas.size()
 	var nueva = seleccion
 
+	# Parado en "VOLVER": para arriba vuelve a las tarjetas; con un botón, vuelve a elegir modo
+	if en_volver:
+		if _apreto(event, "move_up", "ui_up"):
+			get_viewport().set_input_as_handled()
+			en_volver = false
+			_marcar_seleccion()
+		elif _acepto(event):
+			get_viewport().set_input_as_handled()
+			_volver()
+		return
+
 	if _apreto(event, "move_up", "ui_up"):
 		if seleccion >= 2:
 			nueva = seleccion - 2
@@ -180,13 +206,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		# Baja una fila (si la última fila tiene una sola tarjeta, va a esa)
 		if (cantidad - 1) / 2 > seleccion / 2:
 			nueva = mini(seleccion + 2, cantidad - 1)
+		else:
+			# Ya está en la última fila: baja al botón "VOLVER"
+			get_viewport().set_input_as_handled()
+			en_volver = true
+			_marcar_seleccion()
+			return
 	elif _apreto(event, "move_left", "ui_left"):
 		if seleccion % 2 == 1:
 			nueva = seleccion - 1
 	elif _apreto(event, "move_right", "ui_right"):
 		if seleccion % 2 == 0 and seleccion + 1 < cantidad:
 			nueva = seleccion + 1
-	elif event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
+	elif _acepto(event):
 		get_viewport().set_input_as_handled()
 		_elegir()
 		return
@@ -199,17 +231,32 @@ func _unhandled_input(event: InputEvent) -> void:
 		_marcar_seleccion()
 
 func _apreto(event: InputEvent, accion: String, accion_ui: String) -> bool:
-	return event.is_action_pressed(accion) or event.is_action_pressed(accion_ui)
+	if event.is_action_pressed(accion) or event.is_action_pressed(accion_ui): return true
+	# Modo 2 jugadores: también con la palanca de cada uno
+	if cooperativo:
+		for p in ["p1_", "p2_"]:
+			if InputMap.has_action(p + accion) and event.is_action_pressed(p + accion): return true
+	return false
+
+# Elegir: los botones de siempre y, en el modo 2 jugadores, también los de cada jugador (C/V/B, J/K/L o su mando)
+func _acepto(event: InputEvent) -> bool:
+	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"): return true
+	if cooperativo:
+		for p in ["p1_", "p2_"]:
+			if InputMap.has_action(p + "interact") and event.is_action_pressed(p + "interact"): return true
+	return false
 
 func _mouse_encima(indice: int) -> void:
-	if eligiendo or indice == seleccion: return
+	if eligiendo or (indice == seleccion and not en_volver): return
 	seleccion = indice
+	en_volver = false
 	_marcar_seleccion()
 
 func _tocado_con_mouse(event: InputEvent, indice: int) -> void:
 	if eligiendo or not listo_para_tocar: return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		seleccion = indice
+		en_volver = false
 		_elegir()
 
 func _elegir() -> void:
@@ -229,17 +276,15 @@ func _elegir() -> void:
 
 func _irse_a(ruta: String) -> void:
 	eligiendo = true
-	var sigue_la_musica: bool = ruta == RUTA_MENU or ruta == RUTA_PERSONAJE or ruta == RUTA_LADRONES
-	if sigue_la_musica and musica:
-		GameManager.posicion_musica_menu = musica.get_playback_position()
-	# Destello de la tarjeta elegida y fundido a negro
-	var tarjeta = tarjetas[seleccion]
+	var sigue_la_musica: bool = ruta in [RUTA_MENU, RUTA_PERSONAJE, RUTA_LADRONES, RUTA_MODO]
+	# Destello de la tarjeta (o del botón) elegido y fundido a negro
+	var tarjeta: Control = boton_volver if en_volver else tarjetas[seleccion]
 	var t = create_tween()
 	t.tween_property(tarjeta, "modulate", Color(1.8, 1.8, 1.8), 0.06)
 	t.tween_property(tarjeta, "modulate", tarjeta.modulate, 0.12)
 	t.tween_property(fundido, "color:a", 1.0, 0.3)
-	if musica and not sigue_la_musica:
-		t.parallel().tween_property(musica, "volume_db", -40.0, 0.3)
+	if not sigue_la_musica:
+		GameManager.apagar_musica_menu(0.3)
 	await t.finished
 	get_tree().change_scene_to_file(ruta)
 
@@ -253,20 +298,41 @@ var posiciones_originales: Dictionary = {}
 func _marcar_seleccion(con_sonido: bool = true) -> void:
 	if con_sonido: _tocar(SONIDO_MOVER)
 	if tween_bote: tween_bote.kill()
+	# El botón "VOLVER": se ilumina y flota cuando está elegido
+	boton_volver.position.y = y_volver
+	boton_volver.modulate = VOLVER_ILUMINADO if en_volver else Color.WHITE
 	for i in tarjetas.size():
 		var tarjeta = tarjetas[i]
 		if not posiciones_originales.has(tarjeta):
 			posiciones_originales[tarjeta] = tarjeta.position
 		tarjeta.position = posiciones_originales[tarjeta] # Las demás vuelven a su lugar
 		var estilo: StyleBoxFlat = tarjeta.get_theme_stylebox("panel")
-		var elegida = i == seleccion
+		var elegida = i == seleccion and not en_volver
 		estilo.border_color = COLOR_SELECCION if elegida else tarjeta.get_meta("borde")
 		tarjeta.modulate = BRILLO_TARJETA if elegida else Color.WHITE
-	var actual = tarjetas[seleccion]
-	var y_original: float = posiciones_originales[actual].y
+	var actual: Control = boton_volver if en_volver else tarjetas[seleccion]
+	var y_original: float = y_volver if en_volver else posiciones_originales[actual].y
 	tween_bote = create_tween().set_loops()
 	tween_bote.tween_method(func(v: float): actual.position.y = y_original - round(v), 0.0, ALTURA_BOTE, 0.35)
 	tween_bote.tween_method(func(v: float): actual.position.y = y_original - round(v), float(ALTURA_BOTE), 0.0, 0.35)
+
+# =====================================================================
+# BOTÓN "VOLVER"
+# =====================================================================
+func _armar_boton_volver() -> void:
+	boton_volver = preload("res://scripts/boton_volver.gd").armar(self, fundido, boton_volver_y)
+	boton_volver.mouse_entered.connect(func():
+		if eligiendo or en_volver: return
+		en_volver = true
+		_marcar_seleccion())
+	boton_volver.pressed.connect(func():
+		if eligiendo or not listo_para_tocar: return
+		en_volver = true
+		_volver())
+
+func _volver() -> void:
+	_tocar(SONIDO_ELEGIR)
+	_irse_a(RUTA_MODO)
 
 func _sacudir(tarjeta: Control) -> void:
 	var candado = tarjeta.get_node_or_null("Candado")
@@ -280,14 +346,6 @@ func _tocar(sonido_nuevo: AudioStream) -> void:
 	sonido.stream = sonido_nuevo
 	sonido.play()
 
-# Sigue la música del menú desde donde iba (si venimos del menú) o desde el principio
+# La música del menú es una sola para todas las pantallas (vive en GameManager), así no se corta ni se atrasa
 func _poner_musica() -> void:
-	if not ResourceLoader.exists(RUTA_MUSICA_MENU): return
-	musica = AudioStreamPlayer.new()
-	var cancion: AudioStream = load(RUTA_MUSICA_MENU)
-	cancion.loop = true
-	musica.stream = cancion
-	musica.volume_db = VOLUMEN_MUSICA_MENU
-	add_child(musica)
-	musica.play(GameManager.posicion_musica_menu)
-	GameManager.posicion_musica_menu = 0.0
+	musica = GameManager.musica_menu()

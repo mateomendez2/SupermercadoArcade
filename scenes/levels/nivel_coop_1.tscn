@@ -26,18 +26,19 @@
 [ext_resource type="PackedScene" uid="uid://sxsmadmsrea2" path="res://scenes/objects/estante_lata_verde.tscn" id="24_vmki8"]
 [ext_resource type="PackedScene" uid="uid://bhbij2273juqy" path="res://scenes/objects/heladera_yogur.tscn" id="26_jgllc"]
 [ext_resource type="PackedScene" uid="uid://c6ecul22o8yyi" path="res://scenes/objects/estante_gaseosa_verde.tscn" id="28_htm13"]
+[ext_resource type="PackedScene" path="res://scenes/objects/camara_seguridad.tscn" id="39_3qnna"]
 [ext_resource type="Texture2D" uid="uid://d4d7qfllhdkyf" path="res://assets/guias/plano_coop_1.png" id="90_guia"]
 [ext_resource type="Script" uid="uid://b3s6g6qplfm4a" path="res://scripts/guia_plano.gd" id="91_guia"]
 [ext_resource type="Script" uid="uid://bt8txj521o54" path="res://scripts/exterior.gd" id="95_exterior"]
-[ext_resource type="Script" path="res://scripts/datos_producto.gd" id="c1_datos"]
-[ext_resource type="Resource" path="res://resources/items/frasco_violeta.tres" id="c1_frasco_violeta"]
-[ext_resource type="Resource" path="res://resources/items/lata_grande_roja.tres" id="c1_lata_grande_roja"]
-[ext_resource type="Resource" path="res://resources/items/banana.tres" id="c1_banana"]
-[ext_resource type="Resource" path="res://resources/items/frasco_azul.tres" id="c1_frasco_azul"]
-[ext_resource type="Resource" path="res://resources/items/lata_verde.tres" id="c1_lata_verde"]
-[ext_resource type="Resource" path="res://resources/items/yogur.tres" id="c1_yogur"]
-[ext_resource type="Resource" path="res://resources/items/limpiavidrios.tres" id="c1_limpiavidrios"]
-[ext_resource type="Resource" path="res://resources/items/gaseosa_verde.tres" id="c1_gaseosa_verde"]
+[ext_resource type="Resource" uid="uid://dgaabpsalhngs" path="res://resources/items/banana.tres" id="c1_banana"]
+[ext_resource type="Script" uid="uid://b18c0et7xn0i5" path="res://scripts/datos_producto.gd" id="c1_datos"]
+[ext_resource type="Resource" uid="uid://1gcnulwdj1n" path="res://resources/items/frasco_azul.tres" id="c1_frasco_azul"]
+[ext_resource type="Resource" uid="uid://c4sbaifbsfpyp" path="res://resources/items/frasco_violeta.tres" id="c1_frasco_violeta"]
+[ext_resource type="Resource" uid="uid://c2sfq35isvtaa" path="res://resources/items/gaseosa_verde.tres" id="c1_gaseosa_verde"]
+[ext_resource type="Resource" uid="uid://dxd1avkx2o2mr" path="res://resources/items/lata_grande_roja.tres" id="c1_lata_grande_roja"]
+[ext_resource type="Resource" uid="uid://hnfa4ecf8jwv" path="res://resources/items/lata_verde.tres" id="c1_lata_verde"]
+[ext_resource type="Resource" uid="uid://6i6ijp6sl16a" path="res://resources/items/limpiavidrios.tres" id="c1_limpiavidrios"]
+[ext_resource type="Resource" uid="uid://bn788x7cy3klw" path="res://resources/items/yogur.tres" id="c1_yogur"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_l3e3j")
@@ -1122,8 +1123,7 @@ y_sort_enabled = true
 script = ExtResource("1_y1ars")
 frutas_del_nivel = Array[ExtResource("c1_datos")]([ExtResource("c1_frasco_violeta"), ExtResource("c1_lata_grande_roja"), ExtResource("c1_banana"), ExtResource("c1_frasco_azul"), ExtResource("c1_lata_verde"), ExtResource("c1_yogur"), ExtResource("c1_limpiavidrios"), ExtResource("c1_gaseosa_verde")])
 tiempo_del_nivel = 180.0
-cajas_activas = 3
-charcos_activos = 3
+cajas_activas = 1
 cam_limite_arriba = -80
 cam_limite_abajo = 544
 cam_limite_izquierdo = -64
@@ -1158,6 +1158,7 @@ position = Vector2(352, -32)
 position = Vector2(352, -25)
 
 [node name="GuiaDelPlano" type="Sprite2D" parent="." unique_id=667826124]
+visible = false
 modulate = Color(1, 1, 1, 0.6)
 z_index = 100
 texture_filter = 1
@@ -1694,7 +1695,7 @@ position = Vector2(448, 360)
 position = Vector2(496, 208)
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.027455855
+frame_progress = 0.7703895
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1709,7 +1710,7 @@ position = Vector2(32, -128)
 position = Vector2(240, 368)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(128447766, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.61966133
+frame_progress = 0.36259428
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(128447766, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1719,6 +1720,51 @@ position = Vector2(64, 64)
 
 [node name="Punto3" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(128447766, 608753318) index="2" unique_id=1495986653]
 position = Vector2(64, 96)
+
+[node name="CamaraSeguridad3" parent="." unique_id=767876585 instance=ExtResource("39_3qnna")]
+position = Vector2(535, 396)
+
+[node name="Cabeza" parent="CamaraSeguridad3" index="1"]
+position = Vector2(-12, -51)
+flip_h = true
+
+[node name="Zona1" parent="CamaraSeguridad3" index="3"]
+position = Vector2(-39, 7)
+
+[node name="Zona2" parent="CamaraSeguridad3" index="4"]
+position = Vector2(25, 5)
+
+[node name="CamaraSeguridad4" parent="." unique_id=1654922898 instance=ExtResource("39_3qnna")]
+position = Vector2(631, 204)
+
+[node name="Cabeza" parent="CamaraSeguridad4" index="1"]
+position = Vector2(-12, -51)
+flip_h = true
+
+[node name="Zona1" parent="CamaraSeguridad4" index="3"]
+position = Vector2(-71, -28)
+
+[node name="Zona2" parent="CamaraSeguridad4" index="4"]
+position = Vector2(25, 3)
+
+[node name="CamaraSeguridad2" parent="." unique_id=1162005102 instance=ExtResource("39_3qnna")]
+position = Vector2(9, 262)
+
+[node name="Zona1" parent="CamaraSeguridad2" index="3"]
+position = Vector2(32, -17)
+
+[node name="Zona2" parent="CamaraSeguridad2" index="4"]
+position = Vector2(12, -82)
+
+[node name="CamaraSeguridad" parent="." unique_id=283360233 instance=ExtResource("39_3qnna")]
+position = Vector2(166, 7)
+
+[node name="Cabeza" parent="CamaraSeguridad" index="1"]
+position = Vector2(-12, -51)
+flip_h = true
+
+[node name="Zona2" parent="CamaraSeguridad" index="4"]
+position = Vector2(18, 65)
 
 [editable path="MuebleDecorativo4"]
 [editable path="MuebleDecorativo5"]
@@ -1768,3 +1814,7 @@ position = Vector2(64, 96)
 [editable path="CartelOfertas2"]
 [editable path="MovingNPC2"]
 [editable path="MovingNPC"]
+[editable path="CamaraSeguridad3"]
+[editable path="CamaraSeguridad4"]
+[editable path="CamaraSeguridad2"]
+[editable path="CamaraSeguridad"]

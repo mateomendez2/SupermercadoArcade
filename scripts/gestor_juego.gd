@@ -57,7 +57,40 @@ const ARCHIVO_PROGRESO: String = "user://progreso.cfg"
 
 var nivel_elegido: int = 0         # El nivel que se eligió en la pantalla de niveles (0 = NIVEL 1)
 var nivel_desbloqueado: int = 0    # Hasta qué nivel se puede jugar (0 = solo el NIVEL 1)
-var posicion_musica_menu: float = 0.0 # Para que la música del menú no arranque de cero al pasar de pantalla
+
+# --- MÚSICA DEL MENÚ ---
+# Una sola para todas las pantallas del menú (principal, modo, niveles, personajes):
+# vive acá, así sigue sonando de corrido al pasar de una pantalla a otra (sin cortarse ni atrasarse).
+# Se apaga con un fundido cuando arranca un nivel, y vuelve a empezar al volver al menú.
+const RUTA_MUSICA_MENU: String = "res://assets/audio/MusicaMenu.ogg"
+const VOLUMEN_MUSICA_MENU: float = -8.0
+var reproductor_menu: AudioStreamPlayer
+var tween_musica_menu: Tween
+
+# La prende si no estaba sonando (y la devuelve)
+func musica_menu() -> AudioStreamPlayer:
+	if reproductor_menu == null:
+		reproductor_menu = AudioStreamPlayer.new()
+		reproductor_menu.process_mode = Node.PROCESS_MODE_ALWAYS
+		add_child(reproductor_menu)
+		if ResourceLoader.exists(RUTA_MUSICA_MENU):
+			var cancion: AudioStream = load(RUTA_MUSICA_MENU)
+			cancion.loop = true
+			reproductor_menu.stream = cancion
+	if tween_musica_menu and tween_musica_menu.is_valid():
+		tween_musica_menu.kill() # Si se estaba apagando, se arrepiente
+	reproductor_menu.volume_db = VOLUMEN_MUSICA_MENU
+	if reproductor_menu.stream and not reproductor_menu.playing:
+		reproductor_menu.play()
+	return reproductor_menu
+
+# La baja de a poco y la corta (al entrar a un nivel)
+func apagar_musica_menu(tiempo: float = 0.35) -> void:
+	if reproductor_menu == null or not reproductor_menu.playing: return
+	if tween_musica_menu and tween_musica_menu.is_valid(): return # Ya se está apagando
+	tween_musica_menu = create_tween()
+	tween_musica_menu.tween_property(reproductor_menu, "volume_db", -40.0, tiempo)
+	tween_musica_menu.tween_callback(reproductor_menu.stop)
 
 # --- MODO 1 JUGADOR (COMPRA): con quién se juega ---
 # "" = la chica de siempre (sus animaciones están adentro de jugador.tscn)
@@ -329,11 +362,27 @@ func cancelar_qte() -> void:
 	gondola_actual = null
 
 # --- SISTEMA DE CASTIGO ---
-func perder_ultimo_item() -> ItemData:
+# Modo 2 jugadores: el guardia te agarró y se te caen productos al azar (los que ya tenían en la lista)
+func perder_items_al_azar(cantidad: int, quien: String) -> void:
+	for i in cantidad:
+		if collected_items.is_empty(): break
+		var item_perdido = collected_items.pop_at(randi() % collected_items.size())
+		quien_perdio = quien
+		item_dropped.emit(item_perdido)
+		quien_perdio = ""
+	lista_incompleta.emit()
+
+# quien: el jugador que lo pierde ("" en el modo de un jugador; "p1_" o "p2_" en el de dos),
+# así la animación de que se le cae la hace solo ese
+var quien_perdio: String = ""
+
+func perder_ultimo_item(quien: String = "") -> ItemData:
 	if collected_items.size() == 0: return null
 	
 	var item_perdido = collected_items.pop_back()
+	quien_perdio = quien
 	item_dropped.emit(item_perdido)
+	quien_perdio = ""
 	
 	# ¡NUEVA LÍNEA! Como perdimos algo, la lista ya no está completa
 	lista_incompleta.emit() 

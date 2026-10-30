@@ -24,9 +24,10 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
+		if body.atrapado: return # (modo 2 jugadores: el guardia lo está llevando a la puerta)
 		body.set_slippery(true)
 		# ¡NUEVA LÍNEA! Te hace perder una fruta al pisarlo
-		GameManager.perder_ultimo_item()
+		GameManager.perder_ultimo_item(body.prefijo_acciones)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body is Player:

@@ -7,11 +7,13 @@ extends RefCounted
 ##   - Tablero arcade u otro mando: los botones de colores lisos (los de siempre).
 ## Si se conecta o se desconecta un mando, cambian solos.
 ##   Modo de un jugador:       J (azul)  K (rojo)  L (amarillo)
-##   Modo 2 jugadores, el J1:  Z (azul)  X (rojo)  C (amarillo)   (su mando es el 1er joystick del tablero)
-##   Modo 2 jugadores, el J2:  J (azul)  K (rojo)  L (amarillo)   (su mando es el 2do joystick del tablero)
+##   Modo 2 jugadores, el J1:  C (azul)  V (rojo)  B (amarillo)   (qué mando es de cada uno: ver controles_coop.gd)
+##   Modo 2 jugadores, el J2:  J (azul)  K (rojo)  L (amarillo)
 ## Lo usan los minijuegos:  preload("res://scripts/iconos_mando.gd").aplicar(self)
 ## Los dibujos están en assets/ (TeclaJ.png..., BotonAzul_xbox.png, BotonAzul_ps.png...), con el mismo
 ## formato que los botones: a la izquierda normal y a la derecha hundido.
+
+const ControlesCoop = preload("res://scripts/controles_coop.gd")
 
 const BOTONES: Dictionary = {
 	"res://assets/BotonAzul.png": "azul",
@@ -20,7 +22,7 @@ const BOTONES: Dictionary = {
 }
 const TECLAS: Dictionary = {
 	"": {"azul": "res://assets/TeclaJ.png", "rojo": "res://assets/TeclaK.png", "amarillo": "res://assets/TeclaL.png"},
-	"p1_": {"azul": "res://assets/TeclaZ.png", "rojo": "res://assets/TeclaX.png", "amarillo": "res://assets/TeclaC.png"},
+	"p1_": {"azul": "res://assets/TeclaC.png", "rojo": "res://assets/TeclaV.png", "amarillo": "res://assets/TeclaB.png"},
 	"p2_": {"azul": "res://assets/TeclaJ.png", "rojo": "res://assets/TeclaK.png", "amarillo": "res://assets/TeclaL.png"},
 }
 
@@ -31,11 +33,11 @@ const MANDOS: Dictionary = {
 }
 
 # El mando de ese jugador (-1 = no tiene mando conectado).
-# Modo de un jugador: el primero que esté conectado. Modo 2 jugadores: el 1er joystick es del J1 y el 2do del J2.
+# Modo de un jugador: el primero que esté conectado. Modo 2 jugadores: el que le tocó a cada uno (controles_coop.gd).
 static func mando_de(prefijo: String = "") -> int:
+	if prefijo == "p1_" or prefijo == "p2_":
+		return ControlesCoop.mando_de(prefijo)
 	var mandos: Array[int] = Input.get_connected_joypads()
-	if prefijo == "p1_": return 0 if mandos.has(0) else -1
-	if prefijo == "p2_": return 1 if mandos.has(1) else -1
 	return mandos[0] if mandos.size() > 0 else -1
 
 static func hay_mando(prefijo: String = "") -> bool:

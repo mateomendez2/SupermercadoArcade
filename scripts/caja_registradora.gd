@@ -2,6 +2,8 @@
 extends Area2D
 
 var player_in_range: bool = false
+var de_adorno: bool = false # Modo 2 jugadores: no se paga acá
+var jugadores_cerca: Array[Node] = [] # Los que están frente al mostrador (en el modo 2 jugadores pueden ser los dos)
 
 # --- QUÉ CAJERO ES (se elige en el Inspector y se ve en el editor) ---
 const RUTAS_VARIANTES: Array[String] = [
@@ -26,6 +28,15 @@ var tween_rebote: Tween
 func _ready() -> void:
 	_aplicar_variante()
 	if Engine.is_editor_hint(): return # En el editor solo mostramos el dibujo del cajero
+
+	# Modo 2 jugadores (ROBO): la caja es de adorno; para ganar hay que escaparse por la puerta (salida_coop.gd)
+	if get_tree().get_first_node_in_group("PantallaDividida") != null:
+		de_adorno = true
+		var flecha = get_node_or_null("%FlechaGuia")
+		if flecha: flecha.queue_free()
+		var zona = get_node_or_null("%ZonaVisual")
+		if zona: zona.hide()
+		return
 
 	# Nos avisa cuando el jugador está frente a la caja
 	body_entered.connect(_on_body_entered)
@@ -120,19 +131,23 @@ func _frenar_animaciones_aviso() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
+		if not jugadores_cerca.has(body): jugadores_cerca.append(body)
 		player_in_range = true
-		print("Presiona E para pagar.")
 
 func _on_body_exited(body: Node2D) -> void:
 	if body is Player:
-		player_in_range = false
+		jugadores_cerca.erase(body)
+		player_in_range = not jugadores_cerca.is_empty()
 
 func _unhandled_input(event: InputEvent) -> void:
-	if Engine.is_editor_hint(): return
-	# Si el jugador aprieta "E" y está frente al mostrador...
-	if player_in_range and event.is_action_pressed("interact"):
-		# Le decimos al GameManager que evalúe la lista
-		GameManager.intentar_pagar()
+	if Engine.is_editor_hint() or de_adorno: return
+	# Si un jugador que está frente al mostrador aprieta SU botón de agarrar
+	# (modo de un jugador: "interact"; modo 2 jugadores: "p1_interact" o "p2_interact")
+	for jugador in jugadores_cerca:
+		if is_instance_valid(jugador) and event.is_action_pressed(str(jugador.get("prefijo_acciones")) + "interact"):
+			# Le decimos al GameManager que evalúe la lista
+			GameManager.intentar_pagar()
+			return
 
 # Pone el dibujo del cajero elegido (quieto, mirando para adelante)
 func _aplicar_variante() -> void:

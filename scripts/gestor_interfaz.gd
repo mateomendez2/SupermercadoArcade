@@ -36,6 +36,7 @@ func _ready() -> void:
 	_crear_titulo_dibujado() # NUEVO: el título de ganar/perder con letras de colores
 	_subir_pantalla_resultados.call_deferred() # NUEVO: más oscura y por encima de la franja de arriba (diferido: el padre todavía se está armando)
 	_crear_fundido() # NUEVO: para el fundido a negro al salir de la pantalla de resultados
+	_crear_sonidos_botones() # NUEVO: los mismos sonidos que en las pantallas de niveles y personajes
 	
 	# NUEVO: La libreta y el reloj viejos se esconden: ahora todo eso está en la franja
 	libreta.texture = null
@@ -146,9 +147,9 @@ func mostrar_resultados(mensaje: String, gano: bool) -> void:
 		titulo_dibujado.hide()
 		titulo_resultado.show()
 	if gano:
-		boton_siguiente.text = "SIGUIENTE NIVEL"
+		_poner_letras(boton_siguiente, "SIGUIENTE NIVEL")
 	else:
-		boton_siguiente.text = "REINTENTAR"
+		_poner_letras(boton_siguiente, "REINTENTAR")
 
 	# NUEVO: Si ganó el último nivel, no hay "siguiente": queda elegir otro nivel o volver al menú
 	var era_el_ultimo = gano and nivel_actual >= _rutas().size() - 1
@@ -167,7 +168,7 @@ const BOTON_BORDE: Color = Color8(232, 96, 8)
 const BOTON_LETRA: Color = Color8(214, 78, 6)
 const BOTON_ILUMINADO: Color = Color(1.18, 1.18, 1.18) # Cuánto se ilumina el botón elegido
 
-const BOTON_ANCHO: float = 280.0  # Tamaño de los botones (como las tarjetas de la pantalla de niveles)
+const BOTON_ANCHO: float = 330.0  # Tamaño de los botones (como las tarjetas de la pantalla de niveles)
 const BOTON_ALTO: float = 40.0
 const BOTON_TAMANO_LETRA: int = 32
 const BOTON_BOTE: float = 2.0     # Cuántos pixeles sube y baja el botón elegido
@@ -204,8 +205,38 @@ func _pintar_boton(boton: Button) -> void:
 		boton.add_theme_color_override(clave, BOTON_LETRA)
 	boton.add_theme_font_size_override("font_size", BOTON_TAMANO_LETRA)
 	boton.custom_minimum_size = Vector2(BOTON_ANCHO, BOTON_ALTO)
+	_poner_letras(boton, boton.text) # Letras dibujadas (las mismas del botón "VOLVER" de las pantallas del menú)
 	boton.focus_entered.connect(_boton_elegido.bind(boton))
 	boton.focus_exited.connect(_boton_soltado.bind(boton))
+
+# NUEVO: el texto de cada botón es un dibujo (letras naranjas gruesas, como "VOLVER").
+# Si un texto no tiene dibujo, se deja el texto común.
+const LETRAS_BOTONES: Dictionary = {
+	"SIGUIENTE NIVEL": "res://assets/ui/titulos/siguiente_nivel.png",
+	"REINTENTAR": "res://assets/ui/titulos/reintentar.png",
+	"SELECCIÓN DE NIVELES": "res://assets/ui/titulos/seleccion_de_niveles.png",
+	"VOLVER AL MENÚ": "res://assets/ui/titulos/volver_al_menu.png",
+}
+func _poner_letras(boton: Button, texto: String) -> void:
+	var letras: TextureRect = boton.get_node_or_null("Letras")
+	if not LETRAS_BOTONES.has(texto) or not ResourceLoader.exists(LETRAS_BOTONES[texto]):
+		boton.text = texto
+		if letras: letras.hide()
+		return
+	boton.text = ""
+	if letras == null:
+		letras = TextureRect.new()
+		letras.name = "Letras"
+		letras.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		boton.add_child(letras)
+	letras.texture = load(LETRAS_BOTONES[texto])
+	letras.show()
+	var tam: Vector2 = letras.texture.get_size()
+	letras.set_anchors_preset(Control.PRESET_CENTER)
+	letras.offset_left = -floor(tam.x / 2.0)
+	letras.offset_top = -floor(tam.y / 2.0) - 1 # Centrado en la parte amarilla (la base de abajo es más gruesa que el borde de arriba)
+	letras.offset_right = letras.offset_left + tam.x
+	letras.offset_bottom = letras.offset_top + tam.y
 
 # Al quedar elegido se ilumina y sube y baja de a un pixel (como las tarjetas de niveles)
 func _boton_elegido(boton: Button) -> void:
@@ -286,6 +317,7 @@ func _crear_fundido() -> void:
 func _fundir_y(accion: Callable) -> void:
 	if fundiendo: return
 	fundiendo = true
+	_tocar_sonido_boton(SONIDO_ELEGIR) # Se eligió un botón
 	var t = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	t.tween_property(fundido, "color:a", 1.0, TIEMPO_FUNDIDO)
 	await t.finished
@@ -298,6 +330,16 @@ func _fundir_y(accion: Callable) -> void:
 
 # NUEVO: Arriba/abajo con el joystick (o WASD) para pasar de un botón a otro
 func _mover_entre_botones(event: InputEvent) -> void:
+	# Modo 2 jugadores: cada uno también aprieta el botón elegido con sus teclas (el J1 con C/V/B)
+	# (las que ya son de "aceptar", como J/K/L o los botones del mando, las maneja el botón solo)
+	if es_cooperativo and not event.is_action_pressed("ui_accept"):
+		for p in ["p1_", "p2_"]:
+			if InputMap.has_action(p + "interact") and event.is_action_pressed(p + "interact"):
+				var elegido = get_viewport().gui_get_focus_owner()
+				if elegido is Button and elegido.visible:
+					get_viewport().set_input_as_handled()
+					elegido.pressed.emit()
+				return
 	var paso = 0
 	if event.is_action_pressed("move_up") or event.is_action_pressed("ui_up"): paso = -1
 	elif event.is_action_pressed("move_down") or event.is_action_pressed("ui_down"): paso = 1
@@ -305,7 +347,23 @@ func _mover_entre_botones(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 	var botones = [boton_siguiente, boton_niveles, boton_menu].filter(func(b): return b.visible)
 	var actual = botones.find(get_viewport().gui_get_focus_owner())
-	botones[clampi(actual + paso, 0, botones.size() - 1)].grab_focus()
+	var nuevo: int = clampi(actual + paso, 0, botones.size() - 1)
+	if nuevo != actual: _tocar_sonido_boton(SONIDO_MOVER) # Mismo sonido que en las pantallas de niveles y personajes
+	botones[nuevo].grab_focus()
+
+# --- SONIDOS DE LOS BOTONES DE GANASTE / PERDISTE ---
+var SONIDO_MOVER: AudioStream = load("res://assets/audio/MenuMover.wav")
+var SONIDO_ELEGIR: AudioStream = load("res://assets/audio/MenuElegir.wav")
+var sonido_botones: AudioStreamPlayer
+
+func _crear_sonidos_botones() -> void:
+	sonido_botones = AudioStreamPlayer.new()
+	sonido_botones.process_mode = Node.PROCESS_MODE_ALWAYS # El juego está en pausa en esa pantalla
+	add_child(sonido_botones)
+
+func _tocar_sonido_boton(sonido: AudioStream) -> void:
+	sonido_botones.stream = sonido
+	sonido_botones.play()
 
 # Arranca en 0, que es el primer nivel de la lista
 var nivel_actual: int = 0
@@ -470,12 +528,20 @@ const RUTAS_MUSICA: Array[String] = [
 	"res://assets/audio/MusicaSuper2.ogg", # Nivel 2
 	"res://assets/audio/MusicaSuper3.ogg", # Nivel 3
 ]
+# NUEVO: el modo 2 jugadores (ROBO) tiene sus propias canciones, más tensas, de persecución
+# (se turnan igual: nivel 1 la primera, nivel 2 la segunda, nivel 3 la tercera, y vuelve a empezar)
+const RUTAS_MUSICA_COOP: Array[String] = [
+	"res://assets/audio/MusicaCoop1.ogg", # "Persecución" (La menor, rápida)
+	"res://assets/audio/MusicaCoop2.ogg", # "Sigilo" (Re menor, tensa)
+	"res://assets/audio/MusicaCoop3.ogg", # "Huida" (Mi menor, a todo galope)
+]
 const VOLUMEN_MUSICA: float = -8.0 # En decibeles: más negativo = más bajito
 const FUNDIDO_MUSICA: float = 0.5  # Segundos que tarda en bajar la canción vieja al cambiar de nivel
 var musica: AudioStreamPlayer
 var ruta_sonando: String = ""
 
 func _poner_musica() -> void:
+	GameManager.apagar_musica_menu() # Por si venía sonando la del menú
 	musica = AudioStreamPlayer.new()
 	musica.volume_db = VOLUMEN_MUSICA
 	# Sigue sonando aunque el juego esté en pausa (pantalla de resultados)
@@ -486,7 +552,8 @@ func _poner_musica() -> void:
 # Pone la canción que le toca al nivel actual. Si ya está sonando esa
 # (por ejemplo, al reintentar el mismo nivel), la deja seguir sin cortarla.
 func _musica_del_nivel(con_fundido: bool = true) -> void:
-	var ruta: String = RUTAS_MUSICA[nivel_actual % RUTAS_MUSICA.size()]
+	var lista: Array[String] = RUTAS_MUSICA_COOP if es_cooperativo else RUTAS_MUSICA
+	var ruta: String = lista[nivel_actual % lista.size()]
 	if ruta == ruta_sonando or not ResourceLoader.exists(ruta): return
 	ruta_sonando = ruta
 	if con_fundido and musica.playing:
