@@ -84,6 +84,24 @@ func _ready() -> void:
 	GameManager.qte_cancelled.connect(%QTE_Tinta.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Tinta.is_active = false)
 	
+	# NUEVO: el de las cajas que se mezclan ("¿Dónde quedó?")
+	GameManager.start_qte_cajas.connect(%QTE_Cajas.start_qte)
+	%QTE_Cajas.qte_finished.connect(GameManager.resolve_qte)
+	GameManager.qte_cancelled.connect(%QTE_Cajas.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Cajas.is_active = false)
+	
+	# NUEVO: el de embolsar los productos de la cinta
+	GameManager.start_qte_embolsar.connect(%QTE_Embolsar.start_qte)
+	%QTE_Embolsar.qte_finished.connect(GameManager.resolve_qte)
+	GameManager.qte_cancelled.connect(%QTE_Embolsar.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_Embolsar.is_active = false)
+	
+	# NUEVO: el del reloj de la caja fuerte
+	GameManager.start_qte_caja_fuerte.connect(%QTE_CajaFuerte.start_qte)
+	%QTE_CajaFuerte.qte_finished.connect(GameManager.resolve_qte)
+	GameManager.qte_cancelled.connect(%QTE_CajaFuerte.hide)
+	GameManager.qte_cancelled.connect(func(): %QTE_CajaFuerte.is_active = false)
+	
 	GameManager.qte_cancelled.connect(%QTE_Minigame.hide)
 	GameManager.qte_cancelled.connect(func(): %QTE_Minigame.is_active = false)
 	
@@ -437,6 +455,9 @@ const ESCENAS_MINIJUEGOS: Dictionary = {
 	"mashing": "res://scenes/ui/qte_machaque.tscn",
 	"caida": "res://scenes/ui/qte_caida.tscn",
 	"tinta": "res://scenes/ui/qte_tinta.tscn",
+	"cajas": "res://scenes/ui/qte_cajas.tscn",
+	"embolsar": "res://scenes/ui/qte_embolsar.tscn",
+	"caja_fuerte": "res://scenes/ui/qte_caja_fuerte.tscn",
 }
 const ANCHO_RAYITA_MEDIO: int = 2 # La rayita negra que separa las dos mitades
 var minijuegos_coop: Dictionary = {} # "p1_" / "p2_" -> { "barrita": nodo, "colores": nodo, ... }

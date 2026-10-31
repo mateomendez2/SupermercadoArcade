@@ -66,6 +66,7 @@ func _ready() -> void:
 	GameManager.item_collected.connect(_on_item_juntado)
 	GameManager.item_dropped.connect(_on_item_perdido)
 	GameManager.time_updated.connect(_on_tiempo)
+	GameManager.tiempo_sumado.connect(_destello_tiempo_extra) # NUEVO: reloj verde de tiempo extra
 	#GameManager.lista_lista_para_pagar.connect(_mostrar_sello) # Sello "¡A LA CAJA!" desactivado
 	GameManager.lista_incompleta.connect(_ocultar_sello)
 
@@ -286,6 +287,18 @@ func _empezar_alerta() -> void:
 	tween_alerta = create_tween().set_loops()
 	tween_alerta.tween_property(caja_tiempo, "modulate", Color(1.0, 0.3, 0.25), 0.25)
 	tween_alerta.tween_property(caja_tiempo, "modulate", Color.WHITE, 0.25)
+
+# NUEVO: Agarraron un reloj verde: el reloj de la franja se pone verde y pega un saltito
+var tween_tiempo_extra: Tween
+func _destello_tiempo_extra(_segundos: float) -> void:
+	if tween_alerta and tween_alerta.is_valid(): return # Si sigue en los últimos segundos, manda el rojo
+	if tween_tiempo_extra: tween_tiempo_extra.kill()
+	caja_tiempo.modulate = Color(0.4, 1.6, 0.5)
+	caja_tiempo.pivot_offset = Vector2(_ancho_reloj() / 2.0, 9)
+	caja_tiempo.scale = Vector2(1.2, 1.2)
+	tween_tiempo_extra = create_tween().set_parallel(true)
+	tween_tiempo_extra.tween_property(caja_tiempo, "modulate", Color.WHITE, 0.6)
+	tween_tiempo_extra.tween_property(caja_tiempo, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func _frenar_alerta() -> void:
 	if tween_alerta: tween_alerta.kill()

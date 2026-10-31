@@ -1,0 +1,114 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/qte_cajas.gd" id="1_tinta"]
+[ext_resource type="Texture2D" uid="uid://b0ayn6j02rtn5" path="res://assets/Panel_QTE_Barra.png" id="2_panel"]
+[ext_resource type="Texture2D" uid="uid://ba5tkwlk3ib3h" path="res://assets/BotonAzul.png" id="3_azul"]
+[ext_resource type="Texture2D" uid="uid://c3l11b46ggaqp" path="res://assets/BotonRojoAnim.png" id="4_rojo"]
+[ext_resource type="Texture2D" uid="uid://cp65ce77te2tl" path="res://assets/BotonAmarillo.png" id="5_amarillo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_azul_hundido"]
+atlas = ExtResource("3_azul")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rojo_hundido"]
+atlas = ExtResource("4_rojo")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amarillo_hundido"]
+atlas = ExtResource("5_amarillo")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_azul_normal"]
+atlas = ExtResource("3_azul")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rojo_normal"]
+atlas = ExtResource("4_rojo")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_amarillo_normal"]
+atlas = ExtResource("5_amarillo")
+region = Rect2(0, 0, 32, 32)
+
+[node name="QTE_Cajas" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tinta")
+tex_azul_hundido = SubResource("AtlasTexture_azul_hundido")
+tex_rojo_hundido = SubResource("AtlasTexture_rojo_hundido")
+tex_amarillo_hundido = SubResource("AtlasTexture_amarillo_hundido")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.39215687)
+
+[node name="FondoCartel" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -91.0
+offset_right = 106.5
+offset_bottom = 91.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_panel")
+
+[node name="BotonAzul" type="TextureRect" parent="FondoCartel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 71.5
+offset_top = 119.0
+offset_right = 103.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_azul_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonRojo" type="TextureRect" parent="FondoCartel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 113.5
+offset_top = 119.0
+offset_right = 145.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_rojo_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BotonAmarillo" type="TextureRect" parent="FondoCartel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 155.5
+offset_top = 119.0
+offset_right = 187.5
+offset_bottom = 151.0
+texture = SubResource("AtlasTexture_amarillo_normal")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Regla" type="Label" parent="FondoCartel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 51.5
+offset_top = 23.0
+offset_right = 183.5
+offset_bottom = 45.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -4
+text = "¿Dónde quedó
+el producto?"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -25,7 +25,31 @@ const ALTO_FRANJA_MUNDO: int = 14
 @export var cam_limite_izquierdo: int = 0
 @export var cam_limite_derecho: int = 640
 
+# --- RELOJ VERDE DE TIEMPO EXTRA (NUEVO) ---
+# Cada tanto aparece un cronómetro verde en un lugar al azar del piso: si lo tocás, suma tiempo.
+# En el modo de 1 jugador sale recién desde el nivel 5 (GameManager.RELOJES_DESDE_EL_NIVEL);
+# en el de 2 jugadores, en todos. Con la casilla de abajo se puede apagar en un nivel.
+@export_group("Reloj de tiempo extra")
+@export var con_relojes_de_tiempo: bool = true
+@export var segundos_por_reloj: int = 25     # Cuánto tiempo suma cada uno
+@export var primer_reloj_a_los: float = 60.0 # Segundos de juego hasta que aparece el primero
+@export var reloj_cada_min: float = 60.0     # Después de agarrarlo, el próximo tarda entre esto...
+@export var reloj_cada_max: float = 60.0     # ...y esto
+@export var reloj_dura: float = 0.0          # Cuánto se queda si nadie lo agarra. 0 = se queda hasta que lo agarren
+@export_group("")
+const RelojesTiempo = preload("res://scripts/relojes_tiempo.gd")
+
 func _ready() -> void:
+	# NUEVO: Los relojes verdes de tiempo extra
+	if con_relojes_de_tiempo:
+		var relojes = RelojesTiempo.new()
+		relojes.name = "RelojesDeTiempo"
+		relojes.segundos_por_reloj = segundos_por_reloj
+		relojes.primer_reloj_a_los = primer_reloj_a_los
+		relojes.reloj_cada_min = reloj_cada_min
+		relojes.reloj_cada_max = reloj_cada_max
+		relojes.reloj_dura = reloj_dura
+		add_child(relojes)
 	# 0. AJUSTAMOS LA CÁMARA PRIMERO
 	var camara = jugador.get_node("Camera2D")
 	if camara:

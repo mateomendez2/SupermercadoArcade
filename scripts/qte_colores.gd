@@ -32,8 +32,17 @@ var intentos_restantes: int = 5
 
 @onready var fondo_oscuro: ColorRect = $Fondo
 
+# "Pling" de cada acierto (el último no suena, porque ahí ya suena la fanfarria de victoria)
+const RUTA_SONIDO_ACIERTO: String = "res://assets/audio/QteAcierto.wav"
+const VOLUMEN_ACIERTO: float = -8.0
+var sonido_acierto: AudioStreamPlayer
+
 func _ready() -> void:
 	hide()
+	sonido_acierto = AudioStreamPlayer.new()
+	sonido_acierto.volume_db = VOLUMEN_ACIERTO
+	if ResourceLoader.exists(RUTA_SONIDO_ACIERTO): sonido_acierto.stream = load(RUTA_SONIDO_ACIERTO)
+	add_child(sonido_acierto)
 	color_fondo_normal = fondo_oscuro.color
 	corazones = CorazonesQTE.new()
 	$FondoCartel.add_child(corazones)
@@ -127,6 +136,8 @@ func comprobar_boton(color_apretado: String) -> void:
 	if color_apretado == secuencia_correcta[indice_actual]:
 		_destello_fondo(FONDO_VERDE) # ¡Bien! Le pegaste a este de la secuencia
 		indice_actual += 1 
+		if indice_actual < secuencia_correcta.size():
+			_sonar_acierto(indice_actual)
 		
 		if indice_actual >= secuencia_correcta.size():
 			estado_juego = "TERMINADO"
@@ -216,6 +227,12 @@ func _destello_fondo(tono: Color) -> void:
 # ¿Se cerró el minijuego (te alejaste) o arrancó otro mientras esperábamos?
 func _se_cerro(mi_sesion: int) -> bool:
 	return mi_sesion != sesion or not visible
+
+# Cada acierto suena un poquito más agudo que el anterior
+func _sonar_acierto(numero: int) -> void:
+	if sonido_acierto == null or sonido_acierto.stream == null: return
+	sonido_acierto.pitch_scale = 1.0 + maxi(numero - 1, 0) * 0.05
+	sonido_acierto.play()
 
 func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
 	IconosMando.aplicar(self)

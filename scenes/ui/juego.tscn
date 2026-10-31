@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/qte_machaque.tscn" id="6_jvuow"]
 [ext_resource type="PackedScene" path="res://scenes/ui/qte_caida.tscn" id="7_caida"]
 [ext_resource type="PackedScene" path="res://scenes/ui/qte_tinta.tscn" id="8_tinta"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_cajas.tscn" id="9_cajas"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_embolsar.tscn" id="10_embolsar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/qte_caja_fuerte.tscn" id="11_caja_fuerte"]
 
 [node name="Main" type="Control" unique_id=1195027389]
 layout_mode = 3
@@ -148,6 +151,24 @@ offset_top = -1.0
 offset_bottom = -1.0
 
 [node name="QTE_Tinta" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("8_tinta")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+[node name="QTE_Cajas" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("9_cajas")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+[node name="QTE_Embolsar" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("10_embolsar")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_top = -1.0
+offset_bottom = -1.0
+[node name="QTE_CajaFuerte" parent="CanvasLayer/InterfazFlotante" instance=ExtResource("11_caja_fuerte")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

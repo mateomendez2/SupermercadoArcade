@@ -68,8 +68,17 @@ var capa: Control          # Donde viven los carriles, aros y círculos
 var aros: Dictionary = {}  # color -> TextureRect del aro
 var barra: ProgressBar
 
+# "Pling" de cada acierto (el último no suena, porque ahí ya suena la fanfarria de victoria)
+const RUTA_SONIDO_ACIERTO: String = "res://assets/audio/QteAcierto.wav"
+const VOLUMEN_ACIERTO: float = -8.0
+var sonido_acierto: AudioStreamPlayer
+
 func _ready() -> void:
 	hide()
+	sonido_acierto = AudioStreamPlayer.new()
+	sonido_acierto.volume_db = VOLUMEN_ACIERTO
+	if ResourceLoader.exists(RUTA_SONIDO_ACIERTO): sonido_acierto.stream = load(RUTA_SONIDO_ACIERTO)
+	add_child(sonido_acierto)
 	for color in COLORES:
 		tex_normal[color] = botones[color].texture
 	tex_hundido = {"azul": tex_azul_hundido, "rojo": tex_rojo_hundido, "amarillo": tex_amarillo_hundido}
@@ -128,6 +137,8 @@ func _armar_barra() -> void:
 	barra.position = Vector2(44.5, 50) # Dentro del blanco del cartel, arriba del carrito
 	barra.size = Vector2(13, 61)
 	barra.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# El relleno no puede salirse de la barra (con 3 de 6 quedaba en medio pixel y asomaba una rayita verde abajo)
+	barra.clip_contents = true
 
 	var fondo = StyleBoxFlat.new()
 	fondo.bg_color = Color8(60, 32, 16)
@@ -280,6 +291,8 @@ func _acierto(c: Dictionary) -> void:
 	barra.value = aciertos
 	if aciertos >= aciertos_para_ganar:
 		_ganar()
+	else:
+		_sonar_acierto(aciertos)
 
 func _error(color: String) -> void:
 	_destello_aro(color, Color(1.0, 0.3, 0.3))
@@ -352,6 +365,12 @@ func _destello_fondo(tono: Color) -> void:
 	fondo_oscuro.color = tono
 	tween_fondo = create_tween()
 	tween_fondo.tween_property(fondo_oscuro, "color", color_fondo_normal, 0.35)
+
+# Cada acierto suena un poquito más agudo que el anterior
+func _sonar_acierto(numero: int) -> void:
+	if sonido_acierto == null or sonido_acierto.stream == null: return
+	sonido_acierto.pitch_scale = 1.0 + maxi(numero - 1, 0) * 0.05
+	sonido_acierto.play()
 
 func _cambio_de_mando(_mando: int, _conectado: bool) -> void:
 	IconosMando.aplicar(self)

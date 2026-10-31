@@ -8,6 +8,9 @@ signal start_qte_colores
 signal start_qte_mashing
 signal start_qte_caida # NUEVO: el minijuego de los círculos que caen
 signal start_qte_tinta # NUEVO: el minijuego del truco del color
+signal start_qte_cajas # NUEVO: el de las cajas que se mezclan ("¿Dónde quedó?")
+signal start_qte_embolsar # NUEVO: el de embolsar los productos de la cinta
+signal start_qte_caja_fuerte # NUEVO: el del reloj de la caja fuerte
 signal lista_lista_para_pagar # Avisa que ya tenemos todo
 signal lista_incompleta       # Avisa que nos robaron algo y ya no tenemos todo
 
@@ -33,6 +36,7 @@ signal game_over_reached
 signal qte_cancelled # NUEVA SEÑAL
 
 signal item_dropped(item: ItemData) # ¡NUEVA! Avisa qué ítem se nos cayó
+signal tiempo_sumado(segundos: float) # NUEVO: agarraron un reloj verde de tiempo extra
 
 # --- CARTEL "NIVEL X" ---
 # La UI pone esto en true mientras la pantalla está en negro con el cartel.
@@ -51,6 +55,9 @@ const RUTAS_NIVELES: Array[String] = [
 	"res://scenes/levels/nivel_5.tscn", # 4 -> NIVEL 5
 	"res://scenes/levels/nivel_6.tscn", # 5 -> NIVEL 6
 ]
+# NUEVO: El reloj verde de tiempo extra, en el modo de 1 jugador, aparece recién desde este nivel
+# (en el modo de 2 jugadores aparece en todos). Cada nivel lo puede apagar desde su Inspector.
+const RELOJES_DESDE_EL_NIVEL: int = 5
 const GUARDAR_PROGRESO: bool = true  # false = cada vez que se abre el juego arranca con el nivel 1 solo
 const DESBLOQUEAR_TODO: bool = false # true = todos los niveles abiertos (para probar)
 const ARCHIVO_PROGRESO: String = "user://progreso.cfg"
@@ -136,6 +143,9 @@ func desbloquear_nivel_coop(indice: int) -> void:
 
 func _ready() -> void:
 	_cargar_progreso()
+	# NUEVO: Fondo negro entre pantalla y pantalla. Al cambiar de escena queda un cuadro vacío,
+	# y con el gris de Godot se veía un parpadeo gris; en negro se funde con el fundido a negro.
+	RenderingServer.set_default_clear_color(Color.BLACK)
 
 func esta_desbloqueado(indice: int) -> bool:
 	return DESBLOQUEAR_TODO or indice <= nivel_desbloqueado
@@ -259,21 +269,29 @@ func request_qte(gondola: Interactable, quien: Node = null) -> void:
 	elif gondola_actual.minijuego_guardado == "tinta":
 		print("Abriendo el Truco del Color...")
 		start_qte_tinta.emit()
+	elif gondola_actual.minijuego_guardado == "cajas":
+		print("Abriendo las Cajas...")
+		start_qte_cajas.emit()
+	elif gondola_actual.minijuego_guardado == "embolsar":
+		print("Abriendo Embolsar...")
+		start_qte_embolsar.emit()
+	elif gondola_actual.minijuego_guardado == "caja_fuerte":
+		print("Abriendo la Caja Fuerte...")
+		start_qte_caja_fuerte.emit()
 
-# Tira un dado de 5 caras y la góndola se acuerda qué minijuego le tocó
-func _elegir_minijuego(gondola: Interactable) -> void:
-	if gondola.minijuego_guardado != "": return
-	var dado = randi() % 5
-	if dado == 0:
-		gondola.minijuego_guardado = "barrita"
-	elif dado == 1:
-		gondola.minijuego_guardado = "colores"
-	elif dado == 2:
-		gondola.minijuego_guardado = "mashing"
-	elif dado == 3:
-		gondola.minijuego_guardado = "caida"
-	else:
-		gondola.minijuego_guardado = "tinta"
+# Todos los minijuegos que se pueden sortear
+const MINIJUEGOS: Array[String] = ["barrita", "colores", "mashing", "caida", "tinta", "cajas", "embolsar", "caja_fuerte"]
+# NUEVO: El último minijuego que le salió a cada uno ("" = modo 1 jugador, "p1_" / "p2_" = modo 2 jugadores).
+# Nunca salen dos iguales seguidos: A, B, A sí; A, A no.
+var ultimo_minijuego: Dictionary = {}
+
+# La góndola se acuerda qué minijuego le tocó. Si no tiene ninguno (o el que tiene es el mismo
+# que le acaba de salir a este jugador), se sortea otro, siempre distinto del último.
+func _elegir_minijuego(gondola: Interactable, quien: String = "") -> void:
+	var ultimo: String = ultimo_minijuego.get(quien, "")
+	if gondola.minijuego_guardado == "" or gondola.minijuego_guardado == ultimo:
+		gondola.minijuego_guardado = MINIJUEGOS.filter(func(m): return m != ultimo).pick_random()
+	ultimo_minijuego[quien] = gondola.minijuego_guardado
 
 # =====================================================================
 # MINIJUEGOS EN EL MODO 2 JUGADORES
@@ -289,7 +307,7 @@ func _pedir_qte_jugador(gondola: Interactable, p: String) -> void:
 	if gondolas_coop.has(p): return                # Ese jugador ya está con un minijuego
 	if gondolas_coop.values().has(gondola): return # Esa góndola la está jugando el otro
 	gondolas_coop[p] = gondola
-	_elegir_minijuego(gondola)
+	_elegir_minijuego(gondola, p)
 	start_qte_jugador.emit(p, gondola.minijuego_guardado)
 
 func resolve_qte_jugador(p: String, success: bool) -> void:
@@ -326,6 +344,12 @@ func resolve_qte(success: bool) -> void:
 			qte_failed.emit() 
 			
 	gondola_actual = null
+
+# NUEVO: Suma tiempo al reloj del nivel (lo usa el reloj verde de tiempo extra)
+func sumar_tiempo(segundos: float) -> void:
+	tiempo_restante += segundos
+	time_updated.emit(int(tiempo_restante))
+	tiempo_sumado.emit(segundos)
 
 func _process(delta: float) -> void:
 	if juego_activo:

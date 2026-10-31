@@ -26,10 +26,12 @@ func _ready() -> void:
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	fundido = ColorRect.new()
-	fundido.color = Color(0, 0, 0, 0)
+	fundido.color = Color(0, 0, 0, 1) # NUEVO: arranca en negro y se aclara (como las otras pantallas)
 	fundido.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(fundido)
 	fundido.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var entrada = create_tween()
+	entrada.tween_property(fundido, "color:a", 0.0, 0.25)
 
 # --- ESCUCHAMOS EL TABLERO ARCADE ---
 func _unhandled_input(event: InputEvent) -> void:
