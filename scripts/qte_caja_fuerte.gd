@@ -27,7 +27,7 @@ const CARPETA_ARTE: String = "res://assets/ui/qte/"
 const RUTA_SONIDO_CLIC: String = "res://assets/audio/CajaFuerteClic.wav"
 
 # --- REGLAS (se pueden cambiar desde el Inspector) ---
-@export var errores_maximos: int = 3
+@export var errores_maximos: int = 5
 @export var velocidad_aguja: float = 150.0    # Grados por segundo
 @export var aumento_por_acierto: float = 12.0 # La aguja se apura un poquito con cada toque bien hecho
 @export var ventana: float = 15.0             # Cuántos grados antes o después de la marca todavía vale
@@ -64,7 +64,7 @@ var tex_normal: Dictionary = {}
 var tex_hundido: Dictionary = {}
 
 var is_active: bool = false
-var intentos_restantes: int = 3 # Mismo nombre que en los otros minijuegos
+var intentos_restantes: int = 5 # Mismo nombre que en los otros minijuegos
 var sesion: int = 0 # Cambia cada vez que arranca, para no cerrar un minijuego nuevo por error
 
 var marcas: Array = []   # Cada una: {"color": String, "angulo": float, "usada": bool, "brillo": float, "temblor": float}

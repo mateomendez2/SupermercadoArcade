@@ -60,6 +60,9 @@ func start_qte() -> void:
 	intentos_restantes = 5
 	corazones.armar(intentos_restantes)
 	generar_secuencia()
+	# Los botones arrancan siempre levantados (si el minijuego se había cerrado con uno hundido, quedaba así)
+	for color in botones:
+		animar_hundimiento(color, false)
 	apagar_botones()
 	
 	indice_actual = 0
@@ -182,11 +185,12 @@ func efecto_dedo_jugador(color: String) -> void:
 	animar_hundimiento(color, true)
 	btn.modulate = Color(1.2, 1.2, 1.2, 1.0) # Ilumina un poquito
 	
+	var mi_sesion = sesion
 	await get_tree().create_timer(0.15).timeout
-	if not is_active: return
-	
+	if mi_sesion != sesion: return # Arrancó otro minijuego: ese ya acomodó los botones
 	animar_hundimiento(color, false)
-	btn.modulate = Color.WHITE
+	# Vuelve a su color normal (salvo que ya esté mostrando la secuencia, que tiene los botones apagados)
+	if estado_juego != "MOSTRANDO": btn.modulate = Color.WHITE
 
 func terminar_juego(victoria: bool) -> void:
 	is_active = false

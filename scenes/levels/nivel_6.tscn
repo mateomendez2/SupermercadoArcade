@@ -33,7 +33,7 @@
 [ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="85_letrero"]
 [ext_resource type="Texture2D" uid="uid://beapymxo4xtui" path="res://assets/guias/plano_nivel_6.png" id="90_guia"]
 [ext_resource type="Script" uid="uid://b3s6g6qplfm4a" path="res://scripts/guia_plano.gd" id="91_guia"]
-[ext_resource type="Script" path="res://scripts/exterior.gd" id="95_exterior"]
+[ext_resource type="Script" uid="uid://bt8txj521o54" path="res://scripts/exterior.gd" id="95_exterior"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_l3e3j")
@@ -1137,8 +1137,10 @@ z_index = 5
 tile_map_data = PackedByteArray("AAAKAP7/AQAbAAgAAAALAP7/AQAbAAgAAAA=")
 tile_set = SubResource("TileSet_lx63y")
 
-[node name="Exterior" type="Node2D" parent="."]
+[node name="Exterior" type="Node2D" parent="." unique_id=2053938796]
 z_index = -2
+texture_filter = 1
+texture_repeat = 2
 script = ExtResource("95_exterior")
 estilo = 1
 
@@ -1207,7 +1209,7 @@ position = Vector2(368, 336)
 position = Vector2(432, 400)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.7203636
+frame_progress = 0.5190415
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-32, 0)
@@ -1236,7 +1238,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(340045204, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("16_b0rsq")
-frame_progress = 0.97259825
+frame_progress = 0.7712762
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(340045204, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, 96)
@@ -1251,7 +1253,7 @@ position = Vector2(96, 192)
 position = Vector2(432, 80)
 
 [node name="AnimatedSprite2D" parent="MovingNPC3/Hitbox" parent_id_path=PackedInt32Array(906841359, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.7203636
+frame_progress = 0.5190415
 
 [node name="Punto1" parent="MovingNPC3/Ruta" parent_id_path=PackedInt32Array(906841359, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, 160)
@@ -1293,6 +1295,7 @@ position = Vector2(256, 231)
 
 [node name="NPCQuieto5" parent="." unique_id=626611571 instance=ExtResource("13_n0g3k")]
 position = Vector2(16, 39)
+personaje = 1
 
 [node name="CanastoDecorativo3" parent="." unique_id=1182730379 instance=ExtResource("12_kmyeq")]
 position = Vector2(80, 176)
@@ -1304,25 +1307,31 @@ region_rect = Rect2(96, 344, 32, 40)
 [node name="NPCQuieto" parent="." unique_id=1327256732 instance=ExtResource("13_n0g3k")]
 position = Vector2(16, 232)
 mirando = 3
+personaje = 3
 
 [node name="NPCQuieto7" parent="." unique_id=990184143 instance=ExtResource("13_n0g3k")]
 position = Vector2(80, 392)
 mirando = 2
+personaje = 1
 
 [node name="NPCQuieto2" parent="." unique_id=747199091 instance=ExtResource("13_n0g3k")]
 position = Vector2(240, 328)
 mirando = 0
+personaje = 2
 
 [node name="NPCQuieto6" parent="." unique_id=103307877 instance=ExtResource("13_n0g3k")]
 position = Vector2(336, 328)
+personaje = 3
 
 [node name="NPCQuieto3" parent="." unique_id=1495449637 instance=ExtResource("13_n0g3k")]
 position = Vector2(400, 200)
 mirando = 2
+personaje = 0
 
 [node name="NPCQuieto8" parent="." unique_id=381893258 instance=ExtResource("13_n0g3k")]
 position = Vector2(240, 168)
 mirando = 0
+personaje = 1
 
 [node name="CheckoutDesk" parent="." unique_id=1181652669 instance=ExtResource("14_mhtff")]
 position = Vector2(128, 32)

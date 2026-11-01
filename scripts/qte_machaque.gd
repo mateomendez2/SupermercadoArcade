@@ -53,6 +53,9 @@ func start_qte() -> void:
 	sesion += 1
 	progreso = 20.0 
 	barra_progreso.value = progreso
+	# Los botones arrancan siempre levantados y con su color normal
+	for color in ["azul", "rojo", "amarillo"]:
+		_levantar(color)
 	
 	cambiar_color_al_azar()
 	show()
@@ -126,16 +129,17 @@ func animar_hundimiento(color: String) -> void:
 	
 	# Pausa de 0.05 seg (Súper rápida para que puedas machacar sin que se trabe)
 	await get_tree().create_timer(0.05).timeout
-	if not is_active: return
-	
-	# Lo vuelve a levantar
+	# Lo vuelve a levantar (siempre, aunque el minijuego haya terminado: así no queda hundido)
+	_levantar(color)
+
+# El botón levantado y con su color de siempre (antes quedaba más oscuro después de apretarlo)
+func _levantar(color: String) -> void:
+	var btn = botones[color]
 	match color:
 		"azul": btn.texture = tex_azul_normal
 		"rojo": btn.texture = tex_rojo_normal
 		"amarillo": btn.texture = tex_amarillo_normal
-		
-	# Lo vuelve a oscurecer un poquito
-	btn.modulate = Color(0.8, 0.8, 0.8, 1.0) 
+	btn.modulate = Color.WHITE
 
 func terminar_juego(victoria: bool) -> void:
 	is_active = false

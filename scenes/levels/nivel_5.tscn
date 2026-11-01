@@ -31,7 +31,7 @@
 [ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="85_letrero"]
 [ext_resource type="Texture2D" uid="uid://cnpu0e6w2e17j" path="res://assets/guias/plano_nivel_5.png" id="90_guia"]
 [ext_resource type="Script" uid="uid://b3s6g6qplfm4a" path="res://scripts/guia_plano.gd" id="91_guia"]
-[ext_resource type="Script" path="res://scripts/exterior.gd" id="95_exterior"]
+[ext_resource type="Script" uid="uid://bt8txj521o54" path="res://scripts/exterior.gd" id="95_exterior"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_l3e3j")
@@ -1136,10 +1136,11 @@ z_index = 5
 tile_map_data = PackedByteArray("AAAGAP7/AQAbAAgAAAAHAP7/AQAbAAgAAAA=")
 tile_set = SubResource("TileSet_lx63y")
 
-[node name="Exterior" type="Node2D" parent="."]
+[node name="Exterior" type="Node2D" parent="." unique_id=1839498720]
 z_index = -2
+texture_filter = 1
+texture_repeat = 2
 script = ExtResource("95_exterior")
-estilo = 0
 
 [node name="Player" parent="." unique_id=177984774 instance=ExtResource("7_noq3f")]
 unique_name_in_owner = true
@@ -1169,24 +1170,30 @@ position = Vector2(128, 7)
 
 [node name="NPCQuieto" parent="." unique_id=527351598 instance=ExtResource("11_cv7xs")]
 position = Vector2(112, 135)
+personaje = 3
 
 [node name="NPCQuieto2" parent="." unique_id=1283391790 instance=ExtResource("11_cv7xs")]
 position = Vector2(144, 360)
+personaje = 2
 
 [node name="NPCQuieto3" parent="." unique_id=1513283304 instance=ExtResource("11_cv7xs")]
 position = Vector2(48, 327)
 mirando = 3
+personaje = 0
 
 [node name="NPCQuieto9" parent="." unique_id=103512215 instance=ExtResource("11_cv7xs")]
 position = Vector2(400, 104)
 mirando = 3
+personaje = 2
 
 [node name="NPCQuieto6" parent="." unique_id=1898507925 instance=ExtResource("11_cv7xs")]
 position = Vector2(400, 39)
+personaje = 3
 
 [node name="NPCQuieto7" parent="." unique_id=462400026 instance=ExtResource("11_cv7xs")]
 position = Vector2(112, 73)
 mirando = 0
+personaje = 1
 
 [node name="HazardSpill" parent="." unique_id=1949423888 instance=ExtResource("12_pooh3")]
 position = Vector2(112, 240)
@@ -1446,7 +1453,7 @@ position = Vector2(224, 168)
 position = Vector2(48, 304)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.26300278
+frame_progress = 0.68370396
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, -64)
@@ -1463,7 +1470,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(587958613, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("26_ai61t")
-frame_progress = 0.08570406
+frame_progress = 0.506405
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(587958613, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, -64)

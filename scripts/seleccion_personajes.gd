@@ -51,6 +51,10 @@ var musica: AudioStreamPlayer
 
 func _ready() -> void:
 	preload("res://scripts/controles_coop.gd").armar()
+	# NUEVO: abajo en cada esquina, con qué botones juega cada uno (J1 a la izquierda, J2 a la derecha)
+	var AyudaControles = preload("res://scripts/ayuda_controles.gd")
+	AyudaControles.poner(self, "p1_", Vector2(76, 338), "j1")
+	AyudaControles.poner(self, "p2_", Vector2(408, 338), "j2")
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	_poner_musica()
@@ -146,8 +150,11 @@ func _process(_delta: float) -> void:
 	for j in 2:
 		var p: String = "p%d_" % (j + 1)
 		if listo[j]:
-			if Input.is_action_just_pressed(p + "btn_rojo"):
-				_arrepentirse(j)
+			# Ya eligió: con cualquiera de los botones se arrepiente (antes solo con el rojo)
+			for boton in ["btn_azul", "btn_rojo", "btn_amarillo", "interact"]:
+				if InputMap.has_action(p + boton) and Input.is_action_just_pressed(p + boton):
+					_arrepentirse(j)
+					break
 			continue
 		# Bajando se llega al botón "VOLVER" (y subiendo se vuelve a los ladrones)
 		if Input.is_action_just_pressed(p + "move_down") and not en_volver[j]:

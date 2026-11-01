@@ -1473,10 +1473,12 @@ texture = ExtResource("14_uq0th")
 
 [node name="NPCQuieto" parent="HeladeraObstaculo2" unique_id=1588230858 instance=ExtResource("13_n0g3k")]
 position = Vector2(-16, 32)
+personaje = 3
 
 [node name="NPCQuieto" parent="." unique_id=811585584 instance=ExtResource("13_n0g3k")]
 position = Vector2(48, 135)
 mirando = 3
+personaje = 2
 
 [node name="Interactable" parent="." unique_id=782219201 instance=ExtResource("16_kmyeq")]
 position = Vector2(64, 200)
@@ -1607,13 +1609,16 @@ position = Vector2(480, 104)
 
 [node name="NPCQuieto2" parent="." unique_id=1410222373 instance=ExtResource("13_n0g3k")]
 position = Vector2(208, 424)
+personaje = 0
 
 [node name="NPCQuieto6" parent="." unique_id=1882708856 instance=ExtResource("13_n0g3k")]
 position = Vector2(272, 489)
 mirando = 2
+personaje = 2
 
 [node name="NPCQuieto7" parent="." unique_id=304642586 instance=ExtResource("13_n0g3k")]
 position = Vector2(336, 455)
+personaje = 3
 
 [node name="CanastoDecorativo" parent="." unique_id=405200317 instance=ExtResource("12_kmyeq")]
 position = Vector2(272, 432)
@@ -1636,6 +1641,7 @@ position = Vector2(208, 496)
 [node name="NPCQuieto3" parent="." unique_id=1001670476 instance=ExtResource("13_n0g3k")]
 position = Vector2(336, 263)
 mirando = 2
+personaje = 0
 
 [node name="Interactable4" parent="." unique_id=1970217168 instance=ExtResource("23_lacao")]
 position = Vector2(352, 72)
@@ -1676,10 +1682,12 @@ region_rect = Rect2(512, 112, 32, 48)
 [node name="NPCQuieto4" parent="." unique_id=178585032 instance=ExtResource("13_n0g3k")]
 position = Vector2(624, 104)
 mirando = 2
+personaje = 0
 
 [node name="NPCQuieto8" parent="." unique_id=1932484444 instance=ExtResource("13_n0g3k")]
 position = Vector2(592, 136)
 mirando = 3
+personaje = 2
 
 [node name="HeladeraObstaculo3" parent="." unique_id=939981605 instance=ExtResource("14_id5uh")]
 position = Vector2(640, 455)
@@ -1687,6 +1695,7 @@ position = Vector2(640, 455)
 [node name="NPCQuieto5" parent="." unique_id=551481649 instance=ExtResource("13_n0g3k")]
 position = Vector2(656, 392)
 mirando = 0
+personaje = 1
 
 [node name="Interactable8" parent="." unique_id=1894447291 instance=ExtResource("28_htm13")]
 position = Vector2(448, 360)
@@ -1695,7 +1704,7 @@ position = Vector2(448, 360)
 position = Vector2(496, 208)
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.7703895
+frame_progress = 0.2315279
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1710,7 +1719,7 @@ position = Vector2(32, -128)
 position = Vector2(240, 368)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(128447766, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.36259428
+frame_progress = 0.8237328
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(128447766, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1729,10 +1738,10 @@ position = Vector2(-12, -51)
 flip_h = true
 
 [node name="Zona1" parent="CamaraSeguridad3" index="3"]
-position = Vector2(-39, 7)
+position = Vector2(-39, 4)
 
 [node name="Zona2" parent="CamaraSeguridad3" index="4"]
-position = Vector2(25, 5)
+position = Vector2(25, 4)
 
 [node name="CamaraSeguridad4" parent="." unique_id=1654922898 instance=ExtResource("39_3qnna")]
 position = Vector2(631, 204)
@@ -1751,10 +1760,10 @@ position = Vector2(25, 3)
 position = Vector2(9, 262)
 
 [node name="Zona1" parent="CamaraSeguridad2" index="3"]
-position = Vector2(32, -17)
+position = Vector2(39, 10)
 
 [node name="Zona2" parent="CamaraSeguridad2" index="4"]
-position = Vector2(12, -82)
+position = Vector2(7, -86)
 
 [node name="CamaraSeguridad" parent="." unique_id=283360233 instance=ExtResource("39_3qnna")]
 position = Vector2(166, 7)
@@ -1763,8 +1772,11 @@ position = Vector2(166, 7)
 position = Vector2(-12, -51)
 flip_h = true
 
+[node name="Zona1" parent="CamaraSeguridad" index="3"]
+position = Vector2(-54, 41)
+
 [node name="Zona2" parent="CamaraSeguridad" index="4"]
-position = Vector2(18, 65)
+position = Vector2(10, 73)
 
 [editable path="MuebleDecorativo4"]
 [editable path="MuebleDecorativo5"]

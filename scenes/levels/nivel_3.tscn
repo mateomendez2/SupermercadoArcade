@@ -29,7 +29,7 @@
 [ext_resource type="PackedScene" uid="uid://3oqadqlbkkpy" path="res://scenes/obstacles/mueble_decorativo.tscn" id="27_vl3x1"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/policia_quieto.tscn" id="28_6bwkx"]
 [ext_resource type="PackedScene" path="res://scenes/obstacles/npc_quieto.tscn" id="29_trcui"]
-[ext_resource type="Script" path="res://scripts/exterior.gd" id="95_exterior"]
+[ext_resource type="Script" uid="uid://bt8txj521o54" path="res://scripts/exterior.gd" id="95_exterior"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ew28"]
 texture = ExtResource("5_e73x4")
@@ -1076,8 +1076,10 @@ z_index = 5
 tile_map_data = PackedByteArray("AAAIAP7/AQAYAAgAAAAJAP7/AQAYAAgAAAA=")
 tile_set = SubResource("TileSet_lx63y")
 
-[node name="Exterior" type="Node2D" parent="."]
+[node name="Exterior" type="Node2D" parent="." unique_id=299181271]
 z_index = -2
+texture_filter = 1
+texture_repeat = 2
 script = ExtResource("95_exterior")
 estilo = 2
 
@@ -1116,7 +1118,7 @@ position = Vector2(144, 304)
 position = Vector2(336, 368)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.6871318
+frame_progress = 0.8564384
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-192, 0)
@@ -1408,10 +1410,12 @@ position = Vector2(336, 0)
 
 [node name="NPCQuieto" parent="." unique_id=1145991858 instance=ExtResource("29_trcui")]
 position = Vector2(16, 199)
+personaje = 2
 
 [node name="NPCQuieto2" parent="." unique_id=1901470664 instance=ExtResource("29_trcui")]
 position = Vector2(80, 360)
 mirando = 2
+personaje = 0
 
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]

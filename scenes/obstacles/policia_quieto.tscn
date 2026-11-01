@@ -127,6 +127,7 @@ animations = [{
 [node name="PoliciaQuieto" type="StaticBody2D"]
 script = ExtResource("1_quieto")
 mirando = 0
+personaje = 6
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9)

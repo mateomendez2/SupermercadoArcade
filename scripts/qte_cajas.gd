@@ -20,7 +20,7 @@ const HOJA_PRODUCTOS: Texture2D = preload("res://assets/ObjetosLista.png") # Por
 const RUTA_SONIDO_MEZCLA: String = "res://assets/audio/CajasMezcla.wav"
 
 # --- REGLAS (se pueden cambiar desde el Inspector) ---
-@export var errores_maximos: int = 3
+@export var errores_maximos: int = 5
 @export var cambios: int = 6                 # Cuántas veces se cambian de lugar en la primera mezcla
 @export var duracion_cambio: float = 0.30    # Lo que tarda cada cambio (menos = más rápido)
 @export var cambios_extra_por_error: int = 1 # Cada vez que le errás, la mezcla siguiente tiene más cambios...
@@ -53,7 +53,7 @@ var tex_normal: Dictionary = {}
 var tex_hundido: Dictionary = {}
 
 var is_active: bool = false
-var intentos_restantes: int = 3 # Mismo nombre que en los otros minijuegos
+var intentos_restantes: int = 5 # Mismo nombre que en los otros minijuegos
 var errores: int = 0
 var sesion: int = 0 # Cambia cada vez que arranca, para no cerrar un minijuego nuevo por error
 var estado: String = "pausa" # "pausa" (mirando o mezclando) o "eligiendo" (esperando que apriete)

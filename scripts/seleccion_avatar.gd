@@ -46,6 +46,8 @@ var tween_bote: Tween
 var posiciones_originales: Dictionary = {}
 
 func _ready() -> void:
+	# NUEVO: abajo en una esquina, con qué botones se juega (teclas o mando)
+	preload("res://scripts/ayuda_controles.gd").poner(self, "", Vector2(76, 338))
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	_poner_musica()

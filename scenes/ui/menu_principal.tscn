@@ -6,10 +6,138 @@
 [ext_resource type="Texture2D" uid="uid://0go5mlwem36t" path="res://assets/NubesMenuInicio.png" id="4_btxxm"]
 [ext_resource type="Texture2D" uid="uid://bqcb624psl3a0" path="res://assets/MenuInicio.png" id="5_uhagc"]
 [ext_resource type="Texture2D" uid="uid://bjjwggtkq28g8" path="res://assets/TituloMenuInicio.png" id="5_wb0q5"]
+[ext_resource type="Texture2D" path="res://assets/clientes/castano_arriba.png" id="6_chico"]
+[ext_resource type="Texture2D" path="res://assets/ladrones/ladrona_estatico_arriba.png" id="7_ladrona"]
+[ext_resource type="Texture2D" path="res://assets/ladrones/ladron_estatico_arriba.png" id="8_ladron"]
+[ext_resource type="Texture2D" path="res://assets/clientes/rubio_barriendo.png" id="9_barrendero"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q85j6"]
 shader = ExtResource("3_uhagc")
 shader_parameter/velocidad = 0.05
+
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chico1"]
+atlas = ExtResource("6_chico")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chico2"]
+atlas = ExtResource("6_chico")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chico3"]
+atlas = ExtResource("6_chico")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_chico"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chico1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chico2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chico3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 2.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladrona1"]
+atlas = ExtResource("7_ladrona")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladrona2"]
+atlas = ExtResource("7_ladrona")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladrona3"]
+atlas = ExtResource("7_ladrona")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ladrona"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladrona1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladrona2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladrona3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 2.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladron1"]
+atlas = ExtResource("8_ladron")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladron2"]
+atlas = ExtResource("8_ladron")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ladron3"]
+atlas = ExtResource("8_ladron")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ladron"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladron1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladron2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ladron3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 2.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_barre1"]
+atlas = ExtResource("9_barrendero")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_barre2"]
+atlas = ExtResource("9_barrendero")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_barre3"]
+atlas = ExtResource("9_barrendero")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_barre4"]
+atlas = ExtResource("9_barrendero")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_barrendero"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_barre1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_barre2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_barre3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_barre4")
+}],
+"loop": true,
+"name": &"barrer",
+"speed": 4.0
+}]
 
 [node name="MainMenu" type="Control" unique_id=2048693485]
 layout_mode = 3
@@ -57,6 +185,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("5_wb0q5")
+
+[node name="Barrendero" type="AnimatedSprite2D" parent="."]
+position = Vector2(251, 248)
+scale = Vector2(2.5, 2.5)
+sprite_frames = SubResource("SpriteFrames_barrendero")
+animation = &"barrer"
+autoplay = "barrer"
+
+[node name="ChicoDeEspalda" type="AnimatedSprite2D" parent="."]
+position = Vector2(110, 397)
+scale = Vector2(7, 7)
+sprite_frames = SubResource("SpriteFrames_chico")
+animation = &"idle_up"
+autoplay = "idle_up"
+
+[node name="LadronaDeEspalda" type="AnimatedSprite2D" parent="."]
+position = Vector2(366, 397)
+scale = Vector2(7, 7)
+sprite_frames = SubResource("SpriteFrames_ladrona")
+animation = &"idle_up"
+autoplay = "idle_up"
+frame = 1
+
+[node name="LadronDeEspalda" type="AnimatedSprite2D" parent="."]
+position = Vector2(484, 397)
+scale = Vector2(7, 7)
+sprite_frames = SubResource("SpriteFrames_ladron")
+animation = &"idle_up"
+autoplay = "idle_up"
+frame = 2
 
 [node name="TextoComenzar" type="Label" parent="." unique_id=1227215073]
 layout_mode = 1
