@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://c6ecul22o8yyi" path="res://scenes/objects/estante_gaseosa_verde.tscn" id="28_htm13"]
 [ext_resource type="PackedScene" path="res://scenes/objects/camara_seguridad.tscn" id="39_3qnna"]
 [ext_resource type="Texture2D" uid="uid://d4d7qfllhdkyf" path="res://assets/guias/plano_coop_1.png" id="90_guia"]
+[ext_resource type="PackedScene" uid="uid://bg1rx5irmcw1l" path="res://scenes/obstacles/letrero.tscn" id="90_letrero"]
 [ext_resource type="Script" uid="uid://b3s6g6qplfm4a" path="res://scripts/guia_plano.gd" id="91_guia"]
 [ext_resource type="Script" uid="uid://bt8txj521o54" path="res://scripts/exterior.gd" id="95_exterior"]
 [ext_resource type="Resource" uid="uid://dgaabpsalhngs" path="res://resources/items/banana.tres" id="c1_banana"]
@@ -1126,8 +1127,8 @@ tiempo_del_nivel = 180.0
 cajas_activas = 1
 cam_limite_arriba = -80
 cam_limite_abajo = 544
-cam_limite_izquierdo = -64
-cam_limite_derecho = 768
+cam_limite_izquierdo = -36
+cam_limite_derecho = 740
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1770697638]
 z_index = -1
@@ -1485,12 +1486,15 @@ position = Vector2(64, 200)
 
 [node name="Cartel_Amarillo" parent="." unique_id=1683338028 instance=ExtResource("20_8euqp")]
 position = Vector2(144, 212)
+oferta = 1
 
 [node name="Cartel_Amarillo2" parent="." unique_id=759154213 instance=ExtResource("20_8euqp")]
 position = Vector2(272, 404)
+oferta = 6
 
 [node name="Cartel_Amarillo5" parent="." unique_id=971155249 instance=ExtResource("20_8euqp")]
 position = Vector2(400, 500)
+oferta = 5
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("19_pywge")]
 position = Vector2(72, 260)
@@ -1577,6 +1581,21 @@ position = Vector2(240, 432)
 [node name="CheckoutDesk" parent="." unique_id=1181652669 instance=ExtResource("20_5p30w")]
 position = Vector2(192, 32)
 
+[node name="Letrero" parent="." unique_id=1947392158 instance=ExtResource("90_letrero")]
+z_index = 1
+position = Vector2(224, -32)
+region_rect = Rect2(320, 96, 128, 32)
+
+[node name="Label" type="Label" parent="Letrero" unique_id=486120497]
+offset_left = -59.0
+offset_top = -6.0
+offset_right = 59.0
+offset_bottom = 13.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "SECTOR COBRO"
+horizontal_alignment = 1
+
 [node name="CartelOfertas" parent="." unique_id=886368352 instance=ExtResource("21_hxuum")]
 position = Vector2(200, 16)
 
@@ -1609,12 +1628,11 @@ position = Vector2(480, 104)
 
 [node name="NPCQuieto2" parent="." unique_id=1410222373 instance=ExtResource("13_n0g3k")]
 position = Vector2(208, 424)
-personaje = 0
 
 [node name="NPCQuieto6" parent="." unique_id=1882708856 instance=ExtResource("13_n0g3k")]
 position = Vector2(272, 489)
 mirando = 2
-personaje = 2
+personaje = 5
 
 [node name="NPCQuieto7" parent="." unique_id=304642586 instance=ExtResource("13_n0g3k")]
 position = Vector2(336, 455)
@@ -1641,7 +1659,6 @@ position = Vector2(208, 496)
 [node name="NPCQuieto3" parent="." unique_id=1001670476 instance=ExtResource("13_n0g3k")]
 position = Vector2(336, 263)
 mirando = 2
-personaje = 0
 
 [node name="Interactable4" parent="." unique_id=1970217168 instance=ExtResource("23_lacao")]
 position = Vector2(352, 72)
@@ -1651,6 +1668,7 @@ position = Vector2(464, 212)
 
 [node name="Cartel_Amarillo4" parent="." unique_id=1344251518 instance=ExtResource("20_8euqp")]
 position = Vector2(560, 308)
+oferta = 7
 
 [node name="MuebleDecorativo13" parent="." unique_id=476304375 instance=ExtResource("13_mhtff")]
 position = Vector2(672, 296)
@@ -1673,6 +1691,21 @@ position = Vector2(512, 7)
 [node name="CheckoutDesk2" parent="." unique_id=481571250 instance=ExtResource("20_5p30w")]
 position = Vector2(672, 32)
 
+[node name="Letrero2" parent="." unique_id=1902517743 instance=ExtResource("90_letrero")]
+z_index = 1
+position = Vector2(640, -32)
+region_rect = Rect2(320, 96, 128, 32)
+
+[node name="Label" type="Label" parent="Letrero2" unique_id=1350284419]
+offset_left = -59.0
+offset_top = -6.0
+offset_right = 59.0
+offset_bottom = 13.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "SECTOR COBRO"
+horizontal_alignment = 1
+
 [node name="CartelOfertas2" parent="." unique_id=2113719065 instance=ExtResource("21_hxuum")]
 position = Vector2(680, 16)
 
@@ -1682,12 +1715,11 @@ region_rect = Rect2(512, 112, 32, 48)
 [node name="NPCQuieto4" parent="." unique_id=178585032 instance=ExtResource("13_n0g3k")]
 position = Vector2(624, 104)
 mirando = 2
-personaje = 0
 
 [node name="NPCQuieto8" parent="." unique_id=1932484444 instance=ExtResource("13_n0g3k")]
 position = Vector2(592, 136)
 mirando = 3
-personaje = 2
+personaje = 4
 
 [node name="HeladeraObstaculo3" parent="." unique_id=939981605 instance=ExtResource("14_id5uh")]
 position = Vector2(640, 455)
@@ -1704,7 +1736,7 @@ position = Vector2(448, 360)
 position = Vector2(496, 208)
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.2315279
+frame_progress = 0.15541513
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1719,7 +1751,7 @@ position = Vector2(32, -128)
 position = Vector2(240, 368)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(128447766, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.8237328
+frame_progress = 0.7476203
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(128447766, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1766,17 +1798,17 @@ position = Vector2(39, 10)
 position = Vector2(7, -86)
 
 [node name="CamaraSeguridad" parent="." unique_id=283360233 instance=ExtResource("39_3qnna")]
-position = Vector2(166, 7)
+position = Vector2(144, 6)
 
 [node name="Cabeza" parent="CamaraSeguridad" index="1"]
 position = Vector2(-12, -51)
 flip_h = true
 
 [node name="Zona1" parent="CamaraSeguridad" index="3"]
-position = Vector2(-54, 41)
+position = Vector2(-32, 42)
 
 [node name="Zona2" parent="CamaraSeguridad" index="4"]
-position = Vector2(10, 73)
+position = Vector2(32, 73)
 
 [editable path="MuebleDecorativo4"]
 [editable path="MuebleDecorativo5"]

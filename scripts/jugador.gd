@@ -35,6 +35,11 @@ var is_penalized: bool = false
 var knockback_vector: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	# Juego visto desde arriba: no hay "piso" ni "techo".
+	# (Con el modo de siempre, "Grounded", si otro personaje te tocaba desde abajo, Godot lo tomaba
+	#  como un piso que se mueve, y al caminar te arrastraba pegado. "Floating" es el modo para vista de arriba.)
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
+	wall_min_slide_angle = 0.0 # Que siga resbalando por las paredes y esquinas como antes
 	interaction_area.area_entered.connect(_on_area_entered)
 	interaction_area.area_exited.connect(_on_area_exited)
 	
@@ -88,7 +93,10 @@ func move_state(delta: float) -> void:
 	else:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 		update_animation(false) 
-		
+	
+	# Quieto del todo: no se llama a move_and_slide. Si no, cuando el otro jugador lo empuja,
+	# Godot lo "despega" un poquito cada cuadro y el que está quieto se va corriendo de a poco.
+	if velocity == Vector2.ZERO: return
 	move_and_slide()
 
 # --- MÁQUINA DE ANIMACIONES ---

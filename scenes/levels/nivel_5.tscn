@@ -1174,17 +1174,16 @@ personaje = 3
 
 [node name="NPCQuieto2" parent="." unique_id=1283391790 instance=ExtResource("11_cv7xs")]
 position = Vector2(144, 360)
-personaje = 2
+personaje = 5
 
 [node name="NPCQuieto3" parent="." unique_id=1513283304 instance=ExtResource("11_cv7xs")]
 position = Vector2(48, 327)
 mirando = 3
-personaje = 0
 
 [node name="NPCQuieto9" parent="." unique_id=103512215 instance=ExtResource("11_cv7xs")]
 position = Vector2(400, 104)
 mirando = 3
-personaje = 2
+personaje = 4
 
 [node name="NPCQuieto6" parent="." unique_id=1898507925 instance=ExtResource("11_cv7xs")]
 position = Vector2(400, 39)
@@ -1401,9 +1400,11 @@ region_rect = Rect2(224, 576, 32, 64)
 
 [node name="Cartel_Amarillo" parent="." unique_id=1683338028 instance=ExtResource("16_gghs6")]
 position = Vector2(16, 20)
+oferta = 1
 
 [node name="Cartel_Amarillo2" parent="." unique_id=755372604 instance=ExtResource("16_gghs6")]
 position = Vector2(432, 308)
+oferta = 6
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("17_q5qaj")]
 position = Vector2(73, 69)
@@ -1453,7 +1454,7 @@ position = Vector2(224, 168)
 position = Vector2(48, 304)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.68370396
+frame_progress = 0.10220769
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, -64)
@@ -1470,7 +1471,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(587958613, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("26_ai61t")
-frame_progress = 0.506405
+frame_progress = 0.92490876
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(587958613, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, -64)

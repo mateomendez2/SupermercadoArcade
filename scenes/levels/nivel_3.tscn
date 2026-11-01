@@ -1118,7 +1118,7 @@ position = Vector2(144, 304)
 position = Vector2(336, 368)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.8564384
+frame_progress = 0.8075187
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-192, 0)
@@ -1282,30 +1282,8 @@ region_rect = Rect2(64, 288, 32, 32)
 [node name="Cartel_Amarillo" parent="." unique_id=1683338028 instance=ExtResource("24_o0o1h")]
 position = Vector2(112, 308)
 
-[node name="Label" type="Label" parent="Cartel_Amarillo" unique_id=131870513]
-offset_left = -12.0
-offset_top = -22.0
-offset_right = 14.0
-offset_bottom = 5.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = 0
-text = "20%
-off"
-horizontal_alignment = 1
-
 [node name="Cartel_Amarillo2" parent="." unique_id=103794299 instance=ExtResource("24_o0o1h")]
 position = Vector2(368, 224)
-
-[node name="Label" type="Label" parent="Cartel_Amarillo2" unique_id=1302477285]
-offset_left = -12.0
-offset_top = -22.0
-offset_right = 14.0
-offset_bottom = 5.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = 0
-text = "20%
-off"
-horizontal_alignment = 1
 
 [node name="mueble_mitad_decorativo" parent="." unique_id=969787911 instance=ExtResource("25_6d0ty")]
 position = Vector2(176, 329)
@@ -1410,12 +1388,11 @@ position = Vector2(336, 0)
 
 [node name="NPCQuieto" parent="." unique_id=1145991858 instance=ExtResource("29_trcui")]
 position = Vector2(16, 199)
-personaje = 2
+personaje = 5
 
 [node name="NPCQuieto2" parent="." unique_id=1901470664 instance=ExtResource("29_trcui")]
 position = Vector2(80, 360)
 mirando = 2
-personaje = 0
 
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]

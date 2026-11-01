@@ -1182,7 +1182,7 @@ position = Vector2(144, 336)
 position = Vector2(96, 144)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.36264852
+frame_progress = 0.7874965
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-48, 0)
@@ -1512,32 +1512,10 @@ position = Vector2(400, 112)
 
 [node name="Cartel_Amarillo2" parent="." unique_id=62277201 instance=ExtResource("24_sx4kv")]
 position = Vector2(272, 116)
-
-[node name="Label" type="Label" parent="Cartel_Amarillo2" unique_id=1323441527]
-offset_left = -13.0
-offset_top = -23.0
-offset_right = 13.0
-offset_bottom = 3.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = -4
-theme_override_font_sizes/font_size = 12
-text = "10%
-OFF"
-horizontal_alignment = 1
+oferta = 0
 
 [node name="Cartel_Amarillo3" parent="." unique_id=1683338028 instance=ExtResource("24_sx4kv")]
 position = Vector2(208, 244)
-
-[node name="Label" type="Label" parent="Cartel_Amarillo3" unique_id=1514778383]
-offset_left = -13.0
-offset_top = -23.0
-offset_right = 13.0
-offset_bottom = -3.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_constants/line_spacing = -4
-text = "20%
-off"
-horizontal_alignment = 1
 
 [node name="Interactable" parent="." unique_id=1647453037 instance=ExtResource("27_qxm3b")]
 position = Vector2(32, 296)
@@ -1575,7 +1553,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(2002729622, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("30_ltqrr")
-frame_progress = 0.37778667
+frame_progress = 0.80263466
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
@@ -1597,13 +1575,11 @@ position = Vector2(0, -160)
 
 [node name="NPCQuieto4" parent="." unique_id=1408664358 instance=ExtResource("31_5t0xn")]
 position = Vector2(16, 232)
-mirando = 0
-personaje = 3
+personaje = 2
 
 [node name="NPCQuieto3" parent="." unique_id=1162246013 instance=ExtResource("31_5t0xn")]
 position = Vector2(208, 360)
 mirando = 0
-personaje = 0
 
 [node name="NPCQuieto5" parent="." unique_id=1010910758 instance=ExtResource("31_5t0xn")]
 position = Vector2(176, 360)
@@ -1629,7 +1605,7 @@ position = Vector2(336, 0)
 
 [node name="NPCQuieto" parent="." unique_id=867988692 instance=ExtResource("31_5t0xn")]
 position = Vector2(16, 391)
-personaje = 1
+personaje = 4
 
 [editable path="MovingNPC"]
 [editable path="CartelOfertas2"]
