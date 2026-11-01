@@ -17,21 +17,25 @@ const RUTA_LETRAS: String = "res://assets/ui/titulos/volver.png"
 
 # pantalla: la pantalla donde va. debajo_de: el nodo que tiene que quedar por encima (el fundido negro).
 # y: a qué altura va (si se arma solo).
-static func armar(pantalla: Control, debajo_de: Node, y: float) -> Button:
-	var boton: Button = pantalla.get_node_or_null("BotonVolver") as Button
+# (Opcional, para otros botones con el mismo estilo, como JUGAR y SALIR del menú principal:
+#  nombre del nodo, dibujo de las letras, tamaño y centro en X. Si no se ponen, es el "VOLVER" de siempre.)
+static func armar(pantalla: Control, debajo_de: Node, y: float, nombre: String = "BotonVolver",
+		ruta_letras: String = RUTA_LETRAS, tamano: Vector2 = TAMANO, centro_x: float = -1.0) -> Button:
+	var boton: Button = pantalla.get_node_or_null(nombre) as Button
 	if boton == null:
 		boton = Button.new()
-		boton.name = "BotonVolver"
-		boton.size = TAMANO
-		boton.position = Vector2(round((pantalla.get_viewport_rect().size.x - TAMANO.x) / 2.0), y)
+		boton.name = nombre
+		boton.size = tamano
+		if centro_x < 0.0: centro_x = pantalla.get_viewport_rect().size.x / 2.0
+		boton.position = Vector2(round(centro_x - tamano.x / 2.0), y)
 		pantalla.add_child(boton)
 		if debajo_de: pantalla.move_child(boton, debajo_de.get_index())
 	boton.text = ""
-	# Las letras "VOLVER" son un dibujo (assets/ui/titulos/volver.png)
-	if boton.get_node_or_null("Letras") == null and ResourceLoader.exists(RUTA_LETRAS):
+	# Las letras ("VOLVER", etc.) son un dibujo (assets/ui/titulos/volver.png)
+	if boton.get_node_or_null("Letras") == null and ResourceLoader.exists(ruta_letras):
 		var letras = TextureRect.new()
 		letras.name = "Letras"
-		letras.texture = load(RUTA_LETRAS)
+		letras.texture = load(ruta_letras)
 		letras.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var tam: Vector2 = letras.texture.get_size()
 		letras.set_anchors_preset(Control.PRESET_CENTER)

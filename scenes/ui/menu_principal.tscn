@@ -215,25 +215,3 @@ sprite_frames = SubResource("SpriteFrames_ladron")
 animation = &"idle_up"
 autoplay = "idle_up"
 frame = 2
-
-[node name="TextoComenzar" type="Label" parent="." unique_id=1227215073]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -220.0
-offset_top = -104.0
-offset_right = 220.0
-offset_bottom = -57.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.98039216, 1, 0.5882353, 1)
-theme_override_colors/font_outline_color = Color(0.7490196, 0.21176471, 0.047058824, 1)
-theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 24
-text = "Presiona cualquier botón
-para comenzar"
-horizontal_alignment = 1
-vertical_alignment = 1
