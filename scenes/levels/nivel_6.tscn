@@ -1209,7 +1209,7 @@ position = Vector2(368, 336)
 position = Vector2(432, 400)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.19728276
+frame_progress = 0.5020754
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-32, 0)
@@ -1229,8 +1229,8 @@ position = Vector2(-160, -65)
 [node name="Punto6" type="Marker2D" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="5" unique_id=1243032867]
 position = Vector2(-160, -128)
 
-[node name="ObstacleBox" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="6" unique_id=741651537 instance=ExtResource("9_ptwxj")]
-position = Vector2(-160, 0)
+[node name="ObstacleBox8" parent="." unique_id=741651537 instance=ExtResource("9_ptwxj")]
+position = Vector2(272, 400)
 
 [node name="MovingNPC2" parent="." unique_id=340045204 instance=ExtResource("10_a82ra")]
 position = Vector2(112, 112)
@@ -1238,7 +1238,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(340045204, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("16_b0rsq")
-frame_progress = 0.44951737
+frame_progress = 0.75431085
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(340045204, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, 96)
@@ -1253,7 +1253,7 @@ position = Vector2(96, 192)
 position = Vector2(432, 80)
 
 [node name="AnimatedSprite2D" parent="MovingNPC3/Hitbox" parent_id_path=PackedInt32Array(906841359, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.19728276
+frame_progress = 0.5020754
 
 [node name="Punto1" parent="MovingNPC3/Ruta" parent_id_path=PackedInt32Array(906841359, 608753318) index="0" unique_id=1225420983]
 position = Vector2(0, 160)
