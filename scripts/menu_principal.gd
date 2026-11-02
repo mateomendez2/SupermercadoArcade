@@ -13,6 +13,10 @@ const BotonVolver = preload("res://scripts/boton_volver.gd")
 @export var boton_jugar_y: float = 290.0      # Altura del de JUGAR
 @export var separacion: float = 48.0          # Cuánto más abajo va SALIR
 @export var tamano_boton: Vector2 = Vector2(150, 40)
+@export_group("Firma del estudio")
+@export var firma: String = "© 2026 SANGUCHITO STUDIO" # Chiquito, arriba a la derecha (en el cielo)
+@export var firma_tamano_letra: int = 16
+@export var firma_margen: Vector2 = Vector2(8, 4)   # Separación del borde de arriba a la derecha
 @export_group("")
 
 # --- MÚSICA DEL MENÚ ---
@@ -38,6 +42,17 @@ const ACCIONES_ELEGIR: Array[String] = ["ui_accept", "interact", "btn_azul", "bt
 const ACCIONES_ARRIBA: Array[String] = ["ui_up", "move_up", "p1_move_up", "p2_move_up"]
 const ACCIONES_ABAJO: Array[String] = ["ui_down", "move_down", "p1_move_down", "p2_move_down"]
 
+# --- LETRA NÍTIDA ---
+# El juego se dibuja chiquito (576x432) y después se agranda: así el pixel art queda con pixeles grandes,
+# pero una letra "normal" como la Anton se ve pixelada. En esta pantalla se dibuja todo directo
+# al tamaño de la ventana ("canvas_items"): la letra queda nítida y el pixel art se ve igual.
+# Al salir de la pantalla se vuelve al modo de siempre.
+func _enter_tree() -> void:
+	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+
+func _exit_tree() -> void:
+	get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+
 func _ready() -> void:
 	# Música del menú en loop: es una sola para todas las pantallas del menú (vive en GameManager),
 	# así sigue de corrido al pasar a las otras pantallas. Se apaga sola cuando arranca un nivel.
@@ -45,6 +60,7 @@ func _ready() -> void:
 
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
+	_poner_firma()
 	fundido = ColorRect.new()
 	fundido.name = "Fundido"
 	fundido.color = Color(0, 0, 0, 1) # Arranca en negro y se aclara (como las otras pantallas)
@@ -128,3 +144,20 @@ func _apretar() -> void:
 	# JUGAR: pasamos a la pantalla de elegir modo (1 o 2 jugadores). La música sigue de corrido
 	await t.finished
 	get_tree().change_scene_to_file("res://scenes/ui/seleccion_modo.tscn")
+
+# "© 2026 SANGUCHITO STUDIO" con la letra de la presentación (Anton), blanca con sombrita
+func _poner_firma() -> void:
+	if firma == "": return
+	var l := Label.new()
+	l.name = "FirmaEstudio"
+	l.text = firma
+	l.add_theme_font_override("font", load("res://assets/font/Anton-Regular.ttf"))
+	l.add_theme_font_size_override("font_size", firma_tamano_letra)
+	l.add_theme_color_override("font_color", Color.WHITE)
+	l.add_theme_color_override("font_shadow_color", Color8(20, 12, 30, 200))
+	l.add_theme_constant_override("shadow_offset_x", 1)
+	l.add_theme_constant_override("shadow_offset_y", 1)
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(l)
+	l.reset_size()
+	l.position = Vector2(round(get_viewport_rect().size.x - l.size.x - firma_margen.x), firma_margen.y)
