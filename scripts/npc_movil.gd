@@ -29,6 +29,7 @@ const ESPERA_MAXIMA_GUARDIA: float = 2.0
 
 func _ready() -> void:
 	_aplicar_variante()
+	preload("res://scripts/sombra.gd").poner(get_node_or_null("%Hitbox/AnimatedSprite2D")) # Sombrita a los pies
 	if Engine.is_editor_hint(): return # En el editor solo mostramos el dibujo, no camina
 	ultima_posicion = hitbox.position # Anotamos dónde arranca
 	iniciar_patrullaje()

@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://drcsftcyv36pn" path="res://assets/personajeagarraderecha.png" id="8_xrqxk"]
 [ext_resource type="Texture2D" uid="uid://clnj6vuj3y4x0" path="res://assets/personajeagarraarriba.png" id="9_g66nw"]
 [ext_resource type="AudioStream" uid="uid://2nqg0ynecw7a" path="res://assets/audio/SonidoRecoger.wav" id="14_k4v7y"]
+[ext_resource type="Texture2D" path="res://assets/personajeaturdido.png" id="20_aturdido"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_inhyd"]
 atlas = ExtResource("2_qgnko")
@@ -207,8 +208,34 @@ region = Rect2(64, 0, 32, 32)
 atlas = ExtResource("5_6eyoc")
 region = Rect2(96, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_aturdido_0"]
+atlas = ExtResource("20_aturdido")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aturdido_1"]
+atlas = ExtResource("20_aturdido")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aturdido_2"]
+atlas = ExtResource("20_aturdido")
+region = Rect2(64, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_xhtjm"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aturdido_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aturdido_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aturdido_2")
+}],
+"loop": true,
+"name": &"aturdido",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_inhyd")

@@ -49,6 +49,7 @@ static var frames_armados: Dictionary = {} # personaje -> SpriteFrames (se arman
 
 func _ready() -> void:
 	_actualizar()
+	preload("res://scripts/sombra.gd").poner(sprite) # Sombrita a los pies
 	if not Engine.is_editor_hint():
 		# Cada uno arranca en un momento distinto de la animación, así no "respiran" todos juntos
 		sprite.frame = randi() % sprite.sprite_frames.get_frame_count(sprite.animation)

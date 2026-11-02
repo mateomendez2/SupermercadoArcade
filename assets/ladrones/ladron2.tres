@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" path="res://assets/ladrones/ladron2_agarra_arriba.png" id="10"]
 [ext_resource type="Texture2D" path="res://assets/ladrones/ladron2_agarra_izquierda.png" id="11"]
 [ext_resource type="Texture2D" path="res://assets/ladrones/ladron2_agarra_derecha.png" id="12"]
+[ext_resource type="Texture2D" path="res://assets/ladrones/ladron2_aturdido.png" id="aturdido_tex"]
 
 [sub_resource type="AtlasTexture" id="idle_down_0"]
 atlas = ExtResource("1")
@@ -205,8 +206,34 @@ region = Rect2(64, 0, 32, 32)
 atlas = ExtResource("12")
 region = Rect2(96, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="aturdido_0"]
+atlas = ExtResource("aturdido_tex")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="aturdido_1"]
+atlas = ExtResource("aturdido_tex")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="aturdido_2"]
+atlas = ExtResource("aturdido_tex")
+region = Rect2(64, 0, 32, 32)
+
 [resource]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("aturdido_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("aturdido_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("aturdido_2")
+}],
+"loop": true,
+"name": &"aturdido",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("idle_down_0")

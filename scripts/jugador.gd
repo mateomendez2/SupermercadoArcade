@@ -32,6 +32,14 @@ var eje_actual: String = "" # "x" (costados) o "y" (arriba/abajo)
 var x_antes: float = 0.0
 var y_antes: float = 0.0
 var is_penalized: bool = false
+# NUEVO: cuando te choca un empleado (npc_movil) quedás "noqueado": animación de mareado y sin moverte
+var aturdido: bool = false
+@export var tiempo_aturdido: float = 3.0         # Cuánto queda noqueado sin poder moverse
+@export var tiempo_protegido_despues: float = 1.0 # Después, un ratito en que otro choque no le saca nada (sin parpadear)
+# Pajaritos mientras está mareado (dura 3 s; si el noqueo durara más, vuelve a empezar)
+const RUTA_SONIDO_MAREADO: String = "res://assets/audio/Mareado.wav"
+@export var volumen_pajaritos: float = -6.0
+var sonido_mareado: AudioStreamPlayer
 var knockback_vector: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
@@ -40,6 +48,12 @@ func _ready() -> void:
 	#  como un piso que se mueve, y al caminar te arrastraba pegado. "Floating" es el modo para vista de arriba.)
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	wall_min_slide_angle = 0.0 # Que siga resbalando por las paredes y esquinas como antes
+	preload("res://scripts/sombra.gd").poner(anim_sprite) # Sombrita a los pies
+	sonido_mareado = AudioStreamPlayer.new()
+	sonido_mareado.stream = load(RUTA_SONIDO_MAREADO)
+	sonido_mareado.volume_db = volumen_pajaritos
+	sonido_mareado.finished.connect(func(): if aturdido: sonido_mareado.play())
+	add_child(sonido_mareado)
 	interaction_area.area_entered.connect(_on_area_entered)
 	interaction_area.area_exited.connect(_on_area_exited)
 	
@@ -65,6 +79,9 @@ func move_state(delta: float) -> void:
 		velocity = knockback_vector
 		move_and_slide() 
 		return 
+	if aturdido:
+		velocity = Vector2.ZERO # Noqueado: no se mueve (la animación de mareado sigue sola)
+		return
 	
 	# 1. Leemos la palanca y la redondeamos: cada eje queda en -1, 0 o 1
 	var p: String = prefijo_acciones
@@ -123,7 +140,7 @@ func update_animation(is_moving: bool) -> void:
 
 # --- INPUT DE INTERACCIÓN ---
 func _unhandled_input(event: InputEvent) -> void:
-	if is_frozen or atrapado: return 
+	if is_frozen or atrapado or aturdido: return 
 	
 	# Modo 2 jugadores: mientras juega su minijuego, sus botones son para el minijuego (no para agarrar otra vez).
 	# Si no, el personaje (que está en su mitad de la pantalla) se "come" la tecla antes que el minijuego.
@@ -181,33 +198,41 @@ func _on_item_recolectado(_item: ItemData) -> void:
 	update_animation(false) 
 
 # --- SISTEMA DE PENALIZACIÓN CORREGIDO ---
+# Te chocó un empleado (lo llama npc_movil.gd, que además te saca el último ítem).
+# Rebota apenitas para atrás, queda noqueado (animación "aturdido") y quieto unos segundos, y después sigue normal.
+# (duracion: el tiempo total en que otro choque no te saca nada; nunca menos que noqueado + protegido)
 func apply_penalty(duracion: float, pos_enemigo: Vector2 = Vector2.ZERO) -> void:
 	if is_penalized: return 
 	
 	is_penalized = true
+	aturdido = true
+	velocity = Vector2.ZERO
 	
-	# --- EFECTO KNOCKBACK (FÍSICO) ---
+	# --- EFECTO KNOCKBACK (FÍSICO): el golpe lo despega del empleado ---
 	if pos_enemigo != Vector2.ZERO:
-		# ¡CAMBIO AQUI! Ponemos el signo MENOS al principio del paréntesis para que rebote hacia atrás
 		var direccion_empuje = -(pos_enemigo - global_position).normalized()
-		
 		knockback_vector = direccion_empuje * 400.0
-		
 		var kb_tween = create_tween()
 		kb_tween.tween_property(self, "knockback_vector", Vector2.ZERO, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	# ---------------------------------
 	
-	speed = default_speed / 2.0
+	# Mareado (de frente, con las estrellitas). Si algún personaje no la tuviera, queda quieto mirando para abajo
+	anim_sprite.flip_h = false
+	if anim_sprite.sprite_frames.has_animation(&"aturdido"):
+		anim_sprite.play(&"aturdido")
+	else:
+		anim_sprite.play(&"idle_down")
+	sonido_mareado.play() # Pajaritos
 	
-	var blink_tween = create_tween().set_loops()
-	blink_tween.tween_property(anim_sprite, "modulate:a", 0.3, 0.15) 
-	blink_tween.tween_property(anim_sprite, "modulate:a", 1.0, 0.15) 
+	await get_tree().create_timer(tiempo_aturdido).timeout
+	aturdido = false
+	sonido_mareado.stop()
+	# Vuelve a caminar normal (si no lo está llevando el guardia ni está en otra cosa)
+	if not atrapado and not is_frozen:
+		update_animation(false)
 	
-	await get_tree().create_timer(duracion).timeout
-	
-	speed = default_speed
-	blink_tween.kill() 
-	anim_sprite.modulate.a = 1.0 
+	var resto: float = maxf(tiempo_protegido_despues, duracion - tiempo_aturdido)
+	await get_tree().create_timer(resto).timeout
 	is_penalized = false
 
 var perdidos_seguidos: int = 0 # Si se le caen varios juntos, salen para lados distintos

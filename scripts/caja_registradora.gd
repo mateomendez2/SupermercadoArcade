@@ -27,6 +27,7 @@ var tween_rebote: Tween
 
 func _ready() -> void:
 	_aplicar_variante()
+	preload("res://scripts/sombra.gd").poner(get_node_or_null("SpriteCajero")) # Sombrita a los pies del cajero
 	if Engine.is_editor_hint(): return # En el editor solo mostramos el dibujo del cajero
 
 	# Modo 2 jugadores (ROBO): la caja es de adorno; para ganar hay que escaparse por la puerta (salida_coop.gd)

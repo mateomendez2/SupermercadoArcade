@@ -128,6 +128,7 @@ func _ready() -> void:
 	sprite.position = Vector2(0, -9) # Igual que los jugadores
 	sprite.play("idle_down")
 	add_child(sprite)
+	preload("res://scripts/sombra.gd").poner(sprite) # Sombrita a los pies
 	cara = Sprite2D.new()
 	cara.position = Vector2(0, -32) # Justo arriba de la gorra
 	cara.z_index = 20

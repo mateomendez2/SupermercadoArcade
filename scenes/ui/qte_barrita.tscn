@@ -49,7 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.39215687)
+color = Color(0, 0, 0, 0.6509804)
 
 [node name="FondoCartel" type="TextureRect" parent="." unique_id=2013166559]
 layout_mode = 1

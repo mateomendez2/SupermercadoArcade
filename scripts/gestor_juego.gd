@@ -58,7 +58,8 @@ const RUTAS_NIVELES: Array[String] = [
 # NUEVO: El reloj verde de tiempo extra, en el modo de 1 jugador, aparece recién desde este nivel
 # (en el modo de 2 jugadores aparece en todos). Cada nivel lo puede apagar desde su Inspector.
 const RELOJES_DESDE_EL_NIVEL: int = 5
-const GUARDAR_PROGRESO: bool = true  # false = cada vez que se abre el juego arranca con el nivel 1 solo
+const GUARDAR_PROGRESO: bool = false # false = cada vez que se abre el juego arranca con el nivel 1 solo (los demás con candado).
+                                     # (Mientras el juego está abierto, ganar un nivel igual abre el siguiente.) true = se acuerda entre partidas
 const DESBLOQUEAR_TODO: bool = false # true = todos los niveles abiertos (para probar)
 const ARCHIVO_PROGRESO: String = "user://progreso.cfg"
 
