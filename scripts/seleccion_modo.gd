@@ -4,10 +4,13 @@ extends Control
 ##   1 JUGADOR  - COMPRA -> pantalla de niveles (la de siempre)
 ##   2 JUGADORES - ROBO  -> pantalla de niveles del modo 2 jugadores (y de ahí, a elegir los ladrones)
 ## Se mueve con el joystick / flechas / WASD y se elige con cualquier botón.
+## Bajando se llega al botón "VOLVER" (vuelve a la pantalla de inicio, donde está SALIR).
 ## Los nodos Titulo y Opciones se pueden mover desde el editor.
 
 const RUTA_NIVELES: String = "res://scenes/ui/seleccion_niveles.tscn"
 const RUTA_NIVELES_COOP: String = "res://scenes/ui/seleccion_niveles_coop.tscn"
+const RUTA_INICIO: String = "res://scenes/ui/menu_principal.tscn"
+const BotonVolver = preload("res://scripts/boton_volver.gd")
 const CARPETA_LETRAS: String = "res://assets/ui/modo/"
 const TituloDibujado = preload("res://scripts/titulo_dibujado.gd") # Títulos con letras dibujadas
 
@@ -16,6 +19,7 @@ const TituloDibujado = preload("res://scripts/titulo_dibujado.gd") # Títulos co
 @export var tamano_tarjeta: Vector2 = Vector2(236, 168)
 @export var escala_personajes: int = 3 # Qué tan grandes se ven los muñequitos adentro de la tarjeta
 @export var margen_abajo_letras: float = 8.0 # Cuánto separa "COMPRA" / "ROBO" del borde de abajo de la tarjeta
+@export var boton_volver_y: float = 316.0 # Altura del botón "VOLVER" (si se arma solo)
 
 # --- COLORES DE CADA TARJETA ---
 const COLOR_COMPRA: Color = Color8(247, 122, 18)        # Naranja (como las de los niveles)
@@ -50,10 +54,13 @@ var sonido: AudioStreamPlayer
 var musica: AudioStreamPlayer
 var tween_bote: Tween
 var posiciones_originales: Dictionary = {}
+var boton_volver: Button
+var en_volver: bool = false # true = está elegido "VOLVER" (no una tarjeta)
+var y_volver: float = 0.0
 
 func _ready() -> void:
 	# NUEVO: abajo en una esquina, con qué botones se juega (teclas o mando)
-	preload("res://scripts/ayuda_controles.gd").poner(self, "", Vector2(242, 330))
+	preload("res://scripts/ayuda_controles.gd").poner(self, "", Vector2(76, 338)) # A la izquierda (como en elegir personaje)
 	sonido = AudioStreamPlayer.new()
 	add_child(sonido)
 	_poner_musica()
@@ -63,6 +70,9 @@ func _ready() -> void:
 		var tarjeta = _crear_tarjeta(i)
 		opciones.add_child(tarjeta)
 		tarjetas.append(tarjeta)
+
+	_armar_boton_volver()
+	y_volver = boton_volver.position.y
 
 	await get_tree().process_frame # Los contenedores acomodan las tarjetas
 	_marcar_seleccion(false)
@@ -144,6 +154,24 @@ func _estilo(tarjeta: Panel, relleno: Color, borde: Color) -> void:
 # =====================================================================
 func _unhandled_input(event: InputEvent) -> void:
 	if eligiendo or not listo_para_tocar: return
+	# Bajando se llega al botón "VOLVER"; subiendo se vuelve a las tarjetas
+	if event.is_action_pressed("move_down") or event.is_action_pressed("ui_down"):
+		get_viewport().set_input_as_handled()
+		if not en_volver:
+			en_volver = true
+			_marcar_seleccion()
+		return
+	if event.is_action_pressed("move_up") or event.is_action_pressed("ui_up"):
+		get_viewport().set_input_as_handled()
+		if en_volver:
+			en_volver = false
+			_marcar_seleccion()
+		return
+	if en_volver:
+		if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
+			get_viewport().set_input_as_handled()
+			_volver()
+		return
 	var nueva = seleccion
 	if event.is_action_pressed("move_left") or event.is_action_pressed("ui_left"):
 		nueva = maxi(seleccion - 1, 0)
@@ -161,14 +189,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		_marcar_seleccion()
 
 func _mouse_encima(indice: int) -> void:
-	if eligiendo or indice == seleccion: return
+	if eligiendo or (indice == seleccion and not en_volver): return
 	seleccion = indice
+	en_volver = false
 	_marcar_seleccion()
 
 func _tocado_con_mouse(event: InputEvent, indice: int) -> void:
 	if eligiendo or not listo_para_tocar: return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		seleccion = indice
+		en_volver = false
 		_elegir()
 
 func _elegir() -> void:
@@ -189,22 +219,49 @@ func _elegir() -> void:
 func _marcar_seleccion(con_sonido: bool = true) -> void:
 	if con_sonido: _tocar(SONIDO_MOVER)
 	if tween_bote: tween_bote.kill()
+	boton_volver.position.y = y_volver
+	boton_volver.modulate = BotonVolver.ILUMINADO if en_volver else Color.WHITE
 	for i in tarjetas.size():
 		var tarjeta = tarjetas[i]
 		if not posiciones_originales.has(tarjeta):
 			posiciones_originales[tarjeta] = tarjeta.position
 		tarjeta.position = posiciones_originales[tarjeta]
-		var elegida = i == seleccion
+		var elegida = i == seleccion and not en_volver
 		var estilo: StyleBoxFlat = tarjeta.get_theme_stylebox("panel")
 		estilo.border_color = COLOR_SELECCION if elegida else tarjeta.get_meta("borde")
 		tarjeta.modulate = BRILLO_TARJETA if elegida else Color.WHITE
 		for sprite in muniecos[i]:
 			sprite.play("walk_down" if elegida else "idle_down")
-	var actual = tarjetas[seleccion]
-	var y_original: float = posiciones_originales[actual].y
+	var actual: Control = boton_volver if en_volver else tarjetas[seleccion]
+	var y_original: float = y_volver if en_volver else posiciones_originales[actual].y
 	tween_bote = create_tween().set_loops()
 	tween_bote.tween_method(func(v: float): actual.position.y = y_original - round(v), 0.0, ALTURA_BOTE, 0.35)
 	tween_bote.tween_method(func(v: float): actual.position.y = y_original - round(v), float(ALTURA_BOTE), 0.0, 0.35)
+
+# =====================================================================
+# BOTÓN "VOLVER" (vuelve a la pantalla de inicio, con la música de corrido)
+# =====================================================================
+func _armar_boton_volver() -> void:
+	boton_volver = BotonVolver.armar(self, fundido, boton_volver_y)
+	boton_volver.mouse_entered.connect(func():
+		if eligiendo or en_volver: return
+		en_volver = true
+		_marcar_seleccion())
+	boton_volver.pressed.connect(func():
+		if eligiendo or not listo_para_tocar: return
+		_volver())
+
+func _volver() -> void:
+	eligiendo = true
+	en_volver = true
+	_tocar(SONIDO_ELEGIR)
+	if tween_bote: tween_bote.kill()
+	var t = create_tween()
+	t.tween_property(boton_volver, "modulate", Color(1.8, 1.8, 1.8), 0.06)
+	t.tween_property(boton_volver, "modulate", BotonVolver.ILUMINADO, 0.12)
+	t.tween_property(fundido, "color:a", 1.0, 0.3)
+	await t.finished
+	get_tree().change_scene_to_file(RUTA_INICIO)
 
 func _tocar(sonido_nuevo: AudioStream) -> void:
 	sonido.stream = sonido_nuevo

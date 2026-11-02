@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://0go5mlwem36t" path="res://assets/NubesMenuInicio.png" id="4_btxxm"]
 [ext_resource type="Texture2D" uid="uid://bqcb624psl3a0" path="res://assets/MenuInicio.png" id="5_uhagc"]
 [ext_resource type="Texture2D" uid="uid://bjjwggtkq28g8" path="res://assets/TituloMenuInicio.png" id="5_wb0q5"]
-[ext_resource type="Texture2D" path="res://assets/protagonista_chico/chico_estatico_arriba.png" id="6_chico"]
+[ext_resource type="Texture2D" path="res://assets/personajeestaticoarriba.png" id="6_chico"]
 [ext_resource type="Texture2D" path="res://assets/ladrones/ladrona_estatico_arriba.png" id="7_ladrona"]
 [ext_resource type="Texture2D" path="res://assets/ladrones/ladron_estatico_arriba.png" id="8_ladron"]
 [ext_resource type="Texture2D" path="res://assets/clientes/rubio_barriendo.png" id="9_barrendero"]

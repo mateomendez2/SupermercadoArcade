@@ -151,4 +151,5 @@ position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_j1anm")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1234897305]
+position = Vector2(0, -4)
 region_rect = Rect2(544, 512, 32, 32)

@@ -38,9 +38,10 @@ func armar(cantidad: int) -> void:
 	var ancho_corazon: float = TEX_LLENO.get_width()
 	var alto_corazon: float = TEX_LLENO.get_height()
 	var ancho_total: float = (cantidad * ancho_corazon + (cantidad - 1) * SEPARACION) * ESCALA
-	# Centrados arriba del cartel
+	# Centrados arriba de la CAJA del cartel (sin contar el carrito que asoma abajo a la izquierda)
 	scale = Vector2(ESCALA, ESCALA)
-	position = Vector2(round((cartel.size.x - ancho_total) / 2.0), -alto_corazon * ESCALA - DISTANCIA_CARTEL)
+	var caja: Vector2 = _ancho_de_la_caja(cartel)
+	position = Vector2(round(caja.x + (caja.y - caja.x - ancho_total) / 2.0), -alto_corazon * ESCALA - DISTANCIA_CARTEL)
 
 	for i in cantidad:
 		var c = TextureRect.new()
@@ -50,6 +51,23 @@ func armar(cantidad: int) -> void:
 		c.pivot_offset = TEX_LLENO.get_size() / 2.0
 		add_child(c)
 		corazones.append(c)
+
+# Dónde empieza y termina la caja del cartel (x de izquierda y derecha), mirando la fila de arriba del dibujo:
+# ahí no está el carrito que sobresale. Si el cartel no tiene dibujo, usa todo el ancho.
+func _ancho_de_la_caja(cartel: Control) -> Vector2:
+	var tr := cartel as TextureRect
+	if tr == null or tr.texture == null: return Vector2(0, cartel.size.x)
+	var img: Image = tr.texture.get_image()
+	if img == null: return Vector2(0, cartel.size.x)
+	var izq: int = -1
+	var der: int = -1
+	for x in img.get_width():
+		if img.get_pixel(x, 0).a > 0.0:
+			if izq < 0: izq = x
+			der = x
+	if izq < 0: return Vector2(0, cartel.size.x)
+	var escala_x: float = cartel.size.x / float(img.get_width())
+	return Vector2(izq * escala_x, (der + 1) * escala_x)
 
 # Apaga el primer corazón lleno (de izquierda a derecha), con un saltito
 func perder_vida() -> void:

@@ -1182,7 +1182,7 @@ position = Vector2(144, 336)
 position = Vector2(96, 144)
 
 [node name="AnimatedSprite2D" parent="MovingNPC/Hitbox" parent_id_path=PackedInt32Array(1691588292, 1116084462) index="1" unique_id=1225584199]
-frame_progress = 0.7874965
+frame_progress = 0.5793267
 
 [node name="Punto1" parent="MovingNPC/Ruta" parent_id_path=PackedInt32Array(1691588292, 608753318) index="0" unique_id=1225420983]
 position = Vector2(-48, 0)
@@ -1265,7 +1265,7 @@ position = Vector2(224, 48)
 position = Vector2(419, 48)
 
 [node name="Baranda_NoPaso_Larga3" parent="." unique_id=1922374117 instance=ExtResource("19_xi8fa")]
-position = Vector2(288, 48)
+position = Vector2(352, 48)
 
 [node name="Baranda_NoPaso_Vertical" parent="." unique_id=1188214765 instance=ExtResource("20_p4x8a")]
 position = Vector2(195, -15)
@@ -1325,7 +1325,7 @@ position = Vector2(401, 29)
 region_rect = Rect2(288, 512, 32, 32)
 
 [node name="Canasto_Compras" parent="." unique_id=1673892507 instance=ExtResource("22_rhlbl")]
-position = Vector2(262, 42)
+position = Vector2(360, 42)
 
 [node name="Canasto_Compras2" parent="." unique_id=1801299192 instance=ExtResource("22_rhlbl")]
 position = Vector2(243, 47)
@@ -1334,7 +1334,7 @@ position = Vector2(243, 47)
 region_rect = Rect2(264, 520, 16, 24)
 
 [node name="Canasto_Compras3" parent="." unique_id=950854403 instance=ExtResource("22_rhlbl")]
-position = Vector2(296, 47)
+position = Vector2(384, 47)
 
 [node name="Canasto_Compras4" parent="." unique_id=1048681805 instance=ExtResource("22_rhlbl")]
 position = Vector2(206, -6)
@@ -1553,7 +1553,7 @@ variante = 1
 
 [node name="AnimatedSprite2D" parent="MovingNPC2/Hitbox" parent_id_path=PackedInt32Array(2002729622, 1116084462) index="1" unique_id=1225584199]
 sprite_frames = ExtResource("30_ltqrr")
-frame_progress = 0.80263466
+frame_progress = 0.5944648
 
 [node name="Punto1" parent="MovingNPC2/Ruta" parent_id_path=PackedInt32Array(2002729622, 608753318) index="0" unique_id=1225420983]
 position = Vector2(64, 0)
