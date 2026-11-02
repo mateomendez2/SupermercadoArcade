@@ -51,13 +51,7 @@ func _ready() -> void:
 	uni.append(_texto("Universidad Nacional de Rafaela", LETRA_TEXTOS, 18, Color.WHITE))
 	tarjetas.append(_tarjeta(uni))
 	# 3. Godot
-	var godot := _tarjeta([_texto("Hecho con", LETRA_TEXTOS, 13, color_textos), _logo(RUTA_LOGO_GODOT, Vector2(230, 80))])
-	# La licencia del logo de Godot (CC BY 4.0) pide nombrar a quien lo diseñó: va chiquito y en gris, abajo de todo
-	var credito := _texto("Logo de Godot: Andrea Calabró (CC BY 4.0)", LETRA_TEXTOS, 9, Color(0.5, 0.48, 0.55))
-	credito.set_anchors_and_offsets_preset(Control.PRESET_CENTER_BOTTOM)
-	credito.position.y -= 8
-	godot.add_child(credito)
-	tarjetas.append(godot)
+	tarjetas.append(_tarjeta([_texto("Hecho con", LETRA_TEXTOS, 13, color_textos), _logo(RUTA_LOGO_GODOT, Vector2(230, 80))]))
 
 	_mostrar(0)
 
